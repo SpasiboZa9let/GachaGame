@@ -1,20 +1,29 @@
 ```html
 <!DOCTYPE html>
 <html lang="ru">
+
 <head>
+
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0"
+    >
 
     <title>Тридевятое царство</title>
 
     <!-- React -->
     <script src="https://unpkg.com/react@18/umd/react.development.js"></script>
+
     <script src="https://unpkg.com/react-dom@18/umd/react-dom.development.js"></script>
 
     <!-- Babel -->
     <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
 
+
     <style>
+
         * {
             box-sizing: border-box;
         }
@@ -32,31 +41,46 @@
             font-family: Arial, sans-serif;
         }
 
-        button {
-            font: inherit;
-        }
-
         #root {
             min-height: 100vh;
         }
+
     </style>
+
 </head>
+
 
 <body>
 
-<div id="root"></div>
+    <div id="root"></div>
 
-<!--
-    Babel будет обрабатывать JSX-файлы.
-    type="text/babel" нужен для запуска JSX без сборщика.
--->
 
-<script
-    type="text/babel"
-    data-type="module"
-    src="./app.js">
-</script>
+    <!-- Данные -->
+    <script
+        type="text/babel"
+        src="./data/cards.js">
+    </script>
+
+
+    <!-- Компоненты -->
+    <script
+        type="text/babel"
+        src="./components/Card.jsx">
+    </script>
+
+    <script
+        type="text/babel"
+        src="./components/Game.jsx">
+    </script>
+
+
+    <!-- Точка входа -->
+    <script
+        type="text/babel"
+        src="./app.js">
+    </script>
 
 </body>
+
 </html>
 ```
