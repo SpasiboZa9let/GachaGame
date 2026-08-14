@@ -4,22 +4,15 @@ function Hand({ cards, onCardClick }) {
 
         <div style={styles.hand}>
 
-            {cards.map(cardId => {
+            {cards.map(card => (
 
-                const card =
-                    CARDS[cardId];
+                <Card
+                    key={card.id}
+                    card={card}
+                    onClick={onCardClick}
+                />
 
-                return (
-
-                    <Card
-                        key={cardId}
-                        card={card}
-                        onClick={onCardClick}
-                    />
-
-                );
-
-            })}
+            ))}
 
         </div>
 
