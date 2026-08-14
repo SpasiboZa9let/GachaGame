@@ -1,11 +1,11 @@
 ```jsx
-const { useState } = React;
+import Game from "./components/Game.jsx";
 
-function App() {
-    return <Game />;
-}
+const root = ReactDOM.createRoot(
+    document.getElementById("root")
+);
 
-const root = ReactDOM.createRoot(document.getElementById("root"));
-
-root.render(<App />);
+root.render(
+    <Game />
+);
 ```
