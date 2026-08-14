@@ -4,38 +4,26 @@ function Card({ card, onClick }) {
         return null;
     }
 
-
     return (
 
         <div
             style={styles.card}
-            onClick={() =>
-                onClick && onClick(card)
-            }
+            onClick={() => onClick && onClick(card)}
         >
 
-            {/* =========================
-                СТОИМОСТЬ
-            ========================== */}
-
+            {/* Стоимость */}
             <div style={styles.cost}>
                 {card.cost}
             </div>
 
 
-            {/* =========================
-                НАЗВАНИЕ
-            ========================== */}
-
+            {/* Название */}
             <div style={styles.name}>
                 {card.name}
             </div>
 
 
-            {/* =========================
-                ИЗОБРАЖЕНИЕ
-            ========================== */}
-
+            {/* Арт */}
             <div style={styles.art}>
 
                 {card.image ? (
@@ -57,19 +45,13 @@ function Card({ card, onClick }) {
             </div>
 
 
-            {/* =========================
-                ОПИСАНИЕ
-            ========================== */}
-
+            {/* Описание */}
             <div style={styles.description}>
                 {card.description}
             </div>
 
 
-            {/* =========================
-                ХАРАКТЕРИСТИКИ
-            ========================== */}
-
+            {/* Характеристики */}
             <div style={styles.stats}>
 
                 <span>
@@ -85,39 +67,38 @@ function Card({ card, onClick }) {
         </div>
 
     );
-
 }
-
 
 
 const styles = {
 
     card: {
 
-        width: "150px",
+        width: "180px",
+        height: "260px",
 
-        height: "210px",
+        flex: "0 0 180px",
 
         background: "#292929",
 
         border: "2px solid #666",
+        borderRadius: "12px",
 
-        borderRadius: "10px",
-
-        padding: "10px",
+        padding: "8px",
 
         position: "relative",
 
         display: "flex",
-
         flexDirection: "column",
 
         gap: "6px",
 
         cursor: "pointer",
 
+        boxSizing: "border-box",
+
         boxShadow:
-            "0 4px 10px rgba(0,0,0,0.4)"
+            "0 4px 12px rgba(0,0,0,0.5)"
 
     },
 
@@ -126,13 +107,11 @@ const styles = {
 
         position: "absolute",
 
-        top: "5px",
+        top: "6px",
+        left: "6px",
 
-        left: "5px",
-
-        width: "28px",
-
-        height: "28px",
+        width: "30px",
+        height: "30px",
 
         borderRadius: "50%",
 
@@ -141,7 +120,6 @@ const styles = {
         display: "flex",
 
         alignItems: "center",
-
         justifyContent: "center",
 
         fontWeight: "bold",
@@ -153,24 +131,36 @@ const styles = {
 
     name: {
 
+        height: "24px",
+
         textAlign: "center",
 
         fontWeight: "bold",
 
-        marginTop: "3px"
+        fontSize: "14px",
+
+        lineHeight: "24px",
+
+        whiteSpace: "nowrap",
+
+        overflow: "hidden",
+
+        textOverflow: "ellipsis"
 
     },
 
 
     art: {
 
-        flex: 1,
+        width: "100%",
 
-        minHeight: "70px",
+        height: "125px",
+
+        flex: "0 0 125px",
 
         background: "#181818",
 
-        borderRadius: "5px",
+        borderRadius: "7px",
 
         display: "flex",
 
@@ -178,7 +168,9 @@ const styles = {
 
         justifyContent: "center",
 
-        overflow: "hidden"
+        overflow: "hidden",
+
+        border: "1px solid #444"
 
     },
 
@@ -198,20 +190,28 @@ const styles = {
 
     noArt: {
 
-        color: "#555"
+        color: "#555",
+
+        fontSize: "12px"
 
     },
 
 
     description: {
 
+        flex: "1",
+
         fontSize: "11px",
+
+        lineHeight: "14px",
 
         color: "#aaa",
 
-        minHeight: "25px",
+        textAlign: "center",
 
-        textAlign: "center"
+        overflow: "hidden",
+
+        padding: "2px"
 
     },
 
@@ -224,7 +224,9 @@ const styles = {
 
         fontWeight: "bold",
 
-        fontSize: "14px"
+        fontSize: "14px",
+
+        padding: "2px 5px"
 
     }
 
