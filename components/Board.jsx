@@ -1,4 +1,8 @@
-function Board({ units, onUnitClick }) {
+function Board({
+    units,
+    onUnitClick,
+    selectedUnitId
+}) {
 
     return (
 
@@ -17,24 +21,55 @@ function Board({ units, onUnitClick }) {
                     const card =
                         CARDS[unit.cardId];
 
+
+                    const selected =
+                        unit.instanceId ===
+                        selectedUnitId;
+
+
                     return (
 
                         <div
                             key={unit.instanceId}
-                            style={styles.unit}
+
                             onClick={() =>
                                 onUnitClick &&
                                 onUnitClick(unit)
                             }
+
+                            style={{
+                                ...styles.unit,
+
+                                border:
+                                    selected
+                                        ? "3px solid #ffd700"
+                                        : "2px solid #777",
+
+                                opacity:
+                                    unit.canAttack
+                                        ? 1
+                                        : 0.65
+                            }}
                         >
 
                             <div style={styles.name}>
                                 {card.name}
                             </div>
 
+
+                            <div style={styles.status}>
+
+                                {unit.canAttack
+                                    ? "⚔️ Готов"
+                                    : "💤 Ожидание"}
+
+                            </div>
+
+
                             <div>
                                 ⚔️ {unit.attack}
                             </div>
+
 
                             <div>
                                 ❤️ {unit.health}
@@ -85,11 +120,9 @@ const styles = {
 
         width: "120px",
 
-        height: "120px",
+        height: "130px",
 
         background: "#292929",
-
-        border: "2px solid #777",
 
         borderRadius: "10px",
 
@@ -101,7 +134,9 @@ const styles = {
 
         justifyContent: "space-between",
 
-        cursor: "pointer"
+        cursor: "pointer",
+
+        transition: "0.15s"
 
     },
 
@@ -111,6 +146,17 @@ const styles = {
         fontWeight: "bold",
 
         textAlign: "center"
+
+    },
+
+
+    status: {
+
+        fontSize: "11px",
+
+        textAlign: "center",
+
+        color: "#aaa"
 
     }
 
