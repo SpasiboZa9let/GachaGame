@@ -7,7 +7,15 @@ function Game() {
 
 
     /*
-        Разыграть карту.
+        ID выбранного атакующего.
+    */
+
+    const [selectedAttacker, setSelectedAttacker] =
+        React.useState(null);
+
+
+    /*
+        Разыгрывание карты.
     */
 
     function handleCardClick(card) {
@@ -36,10 +44,98 @@ function Game() {
 
 
     /*
+        Клик по своему существу.
+    */
+
+    function handlePlayerUnitClick(unit) {
+
+        /*
+            Если существо уже выбрано,
+            повторный клик снимает выбор.
+        */
+
+        if (
+            selectedAttacker ===
+            unit.instanceId
+        ) {
+
+            setSelectedAttacker(null);
+
+            return;
+
+        }
+
+
+        /*
+            Проверяем, может ли оно атаковать.
+        */
+
+        if (!unit.canAttack) {
+
+            console.log(
+                "Это существо пока не может атаковать."
+            );
+
+            return;
+
+        }
+
+
+        setSelectedAttacker(
+            unit.instanceId
+        );
+
+    }
+
+
+    /*
+        Клик по существу противника.
+    */
+
+    function handleOpponentUnitClick(unit) {
+
+        if (!selectedAttacker) {
+
+            return;
+
+        }
+
+
+        /*
+            Проводим атаку.
+        */
+
+        const newState =
+            attackUnit(
+                gameState,
+
+                "player",
+
+                selectedAttacker,
+
+                unit.instanceId
+            );
+
+
+        setGameState(newState);
+
+
+        /*
+            Сбрасываем выбор.
+        */
+
+        setSelectedAttacker(null);
+
+    }
+
+
+    /*
         Завершить ход.
     */
 
     function handleEndTurn() {
+
+        setSelectedAttacker(null);
 
         const newState =
             endTurn(gameState);
@@ -57,11 +153,6 @@ function Game() {
         gameState.opponent;
 
 
-    /*
-        Преобразуем ID карт руки
-        в объекты карт.
-    */
-
     const handCards =
         player.hand.map(
             cardId =>
@@ -74,13 +165,16 @@ function Game() {
         <div style={styles.game}>
 
 
-            {/* HEADER */}
+            {/* =========================
+                HEADER
+            ========================== */}
 
             <header style={styles.header}>
 
                 <h1>
                     Тридевятое царство
                 </h1>
+
 
                 <div>
 
@@ -93,7 +187,10 @@ function Game() {
             </header>
 
 
-            {/* ПРОТИВНИК */}
+
+            {/* =========================
+                ПРОТИВНИК
+            ========================== */}
 
             <section>
 
@@ -102,6 +199,7 @@ function Game() {
                     <strong>
                         Противник
                     </strong>
+
 
                     <span>
                         ❤️ {opponent.hp}
@@ -114,6 +212,12 @@ function Game() {
 
                     <Board
                         units={opponent.board}
+
+                        onUnitClick={
+                            handleOpponentUnitClick
+                        }
+
+                        selectedUnitId={null}
                     />
 
                 </div>
@@ -121,17 +225,36 @@ function Game() {
             </section>
 
 
-            {/* ЦЕНТР */}
+
+            {/* =========================
+                ИНДИКАТОР АТАКИ
+            ========================== */}
 
             <div style={styles.center}>
 
-                Ход игрока
+                {selectedAttacker ? (
 
+                    <span style={styles.attackMode}>
+
+                        ⚔️ Выберите цель
+
+                    </span>
+
+                ) : (
+
+                    <span>
+                        Ваш ход
+                    </span>
+
+                )}
 
             </div>
 
 
-            {/* ИГРОК */}
+
+            {/* =========================
+                ИГРОК
+            ========================== */}
 
             <section>
 
@@ -139,6 +262,15 @@ function Game() {
 
                     <Board
                         units={player.board}
+
+                        onUnitClick={
+                            handlePlayerUnitClick
+                        }
+
+                        selectedUnitId={
+                            selectedAttacker
+                        }
+
                     />
 
                 </div>
@@ -150,9 +282,11 @@ function Game() {
                         Игрок
                     </strong>
 
+
                     <span>
                         ❤️ {player.hp}
                     </span>
+
 
                     <span style={styles.mana}>
 
@@ -173,7 +307,10 @@ function Game() {
             </section>
 
 
-            {/* РУКА */}
+
+            {/* =========================
+                РУКА
+            ========================== */}
 
             <Hand
                 cards={handCards}
@@ -181,7 +318,10 @@ function Game() {
             />
 
 
-            {/* КНОПКА ХОДА */}
+
+            {/* =========================
+                КНОПКА ХОДА
+            ========================== */}
 
             <button
                 onClick={handleEndTurn}
@@ -198,6 +338,7 @@ function Game() {
     );
 
 }
+
 
 
 const styles = {
@@ -260,7 +401,18 @@ const styles = {
 
         textAlign: "center",
 
-        color: "#777"
+        color: "#777",
+
+        minHeight: "25px"
+
+    },
+
+
+    attackMode: {
+
+        color: "#ffd700",
+
+        fontWeight: "bold"
 
     },
 
