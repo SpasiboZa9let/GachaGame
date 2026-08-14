@@ -6,58 +6,26 @@ function Game() {
         );
 
 
-    /*
-        ID выбранного атакующего существа.
-    */
-
     const [selectedAttacker, setSelectedAttacker] =
         React.useState(null);
 
 
     /*
-        Получаем каталог карт.
-    */
-
-    const cards =
-        window.CARDS || [];
-
-
-    /*
-        Разыгрывание карты из руки.
+        Разыгрывание карты
     */
 
     function handleCardClick(card) {
-
-        if (!card) {
-            return;
-        }
-
 
         if (
             gameState.activePlayer !==
             "player"
         ) {
-
             return;
-
         }
 
 
-        /*
-            Проверяем наличие маны.
-        */
-
-        if (
-            card.cost >
-            gameState.player.mana
-        ) {
-
-            console.log(
-                "Недостаточно маны."
-            );
-
+        if (!card) {
             return;
-
         }
 
 
@@ -75,7 +43,7 @@ function Game() {
 
 
     /*
-        Клик по своему существу.
+        Клик по своему существу
     */
 
     function handlePlayerUnitClick(unit) {
@@ -84,11 +52,6 @@ function Game() {
             return;
         }
 
-
-        /*
-            Если существо уже выбрано —
-            снимаем выбор.
-        */
 
         if (
             selectedAttacker ===
@@ -102,10 +65,6 @@ function Game() {
         }
 
 
-        /*
-            Проверяем возможность атаки.
-        */
-
         if (!unit.canAttack) {
 
             console.log(
@@ -117,10 +76,6 @@ function Game() {
         }
 
 
-        /*
-            Выбираем атакующего.
-        */
-
         setSelectedAttacker(
             unit.instanceId
         );
@@ -129,7 +84,7 @@ function Game() {
 
 
     /*
-        Клик по существу противника.
+        Клик по существу противника
     */
 
     function handleOpponentUnitClick(unit) {
@@ -139,21 +94,10 @@ function Game() {
         }
 
 
-        /*
-            Если атакующий не выбран —
-            ничего не делаем.
-        */
-
         if (!selectedAttacker) {
-
             return;
-
         }
 
-
-        /*
-            Проводим атаку.
-        */
 
         const newState =
             attackUnit(
@@ -167,17 +111,13 @@ function Game() {
         setGameState(newState);
 
 
-        /*
-            Сбрасываем выбранного атакующего.
-        */
-
         setSelectedAttacker(null);
 
     }
 
 
     /*
-        Завершение хода.
+        Завершение хода
     */
 
     function handleEndTurn() {
@@ -194,10 +134,6 @@ function Game() {
     }
 
 
-    /*
-        Состояния игроков.
-    */
-
     const player =
         gameState.player;
 
@@ -207,192 +143,196 @@ function Game() {
 
 
     /*
-        Преобразуем ID карт в реальные объекты карт.
+        Преобразуем ID карт
+        из руки в полноценные объекты карт.
     */
 
     const handCards =
-        (player.hand || [])
-            .map(cardId => {
-
-                /*
-                    Если hand уже содержит объект карты,
-                    используем его напрямую.
-                */
-
-                if (
-                    typeof cardId ===
-                    "object"
-                ) {
-
-                    return cardId;
-
-                }
-
-
-                /*
-                    Если hand содержит ID —
-                    ищем карту в каталоге.
-                */
-
-                return cards.find(
-                    card =>
-                        card.id === cardId
-                );
-
-            })
-            .filter(Boolean);
+        player.hand
+            .map(cardId => CARDS[cardId])
+            .filter(card => card);
 
 
     return (
 
-    <div style={styles.game}>
-
-        {/* =========================
-            HEADER
-        ========================== */}
-
-        <header style={styles.header}>
-
-            <h1 style={styles.title}>
-                Тридевятое царство
-            </h1>
-
-            <div style={styles.turn}>
-                Ход: {gameState.turn}
-            </div>
-
-        </header>
+        <div style={styles.game}>
 
 
-        {/* =========================
-            ПРОТИВНИК
-        ========================== */}
+            {/* =========================
+                HEADER
+            ========================== */}
 
-        <section style={styles.playerSection}>
+            <header style={styles.header}>
 
-            <div style={styles.hero}>
+                <h1>
+                    Тридевятое царство
+                </h1>
 
-                <strong>
-                    ПРОТИВНИК
-                </strong>
-
-                <span>
-                    ❤️ {opponent.hp}
-                </span>
-
-            </div>
-
-
-            <div style={styles.board}>
-
-                <Board
-                    units={opponent.board}
-
-                    onUnitClick={
-                        handleOpponentUnitClick
-                    }
-
-                    selectedUnitId={null}
-                />
-
-            </div>
-
-        </section>
-
-
-        {/* =========================
-            ЦЕНТР
-        ========================== */}
-
-        <div style={styles.center}>
-
-            {selectedAttacker ? (
-
-                <div style={styles.attackMode}>
-                    ⚔️ ВЫБЕРИТЕ ЦЕЛЬ
-                </div>
-
-            ) : (
 
                 <div>
-                    Ход игрока
+
+                    Ход:
+                    {" "}
+                    {gameState.turn}
+
                 </div>
 
-            )}
+            </header>
+
+
+
+            {/* =========================
+                ПРОТИВНИК
+            ========================== */}
+
+            <section>
+
+                <div style={styles.hero}>
+
+                    <strong>
+                        Противник
+                    </strong>
+
+
+                    <span>
+                        ❤️ {opponent.hp}
+                    </span>
+
+                </div>
+
+
+                <div style={styles.board}>
+
+                    <Board
+                        units={opponent.board}
+
+                        onUnitClick={
+                            handleOpponentUnitClick
+                        }
+
+                        selectedUnitId={
+                            null
+                        }
+                    />
+
+                </div>
+
+            </section>
+
+
+
+            {/* =========================
+                ЦЕНТР
+            ========================== */}
+
+            <div style={styles.center}>
+
+                {selectedAttacker ? (
+
+                    <span style={styles.attackMode}>
+
+                        ⚔️ Выберите цель
+
+                    </span>
+
+                ) : (
+
+                    <span>
+
+                        {gameState.activePlayer === "player"
+                            ? "Ваш ход"
+                            : "Ход противника"}
+
+                    </span>
+
+                )}
+
+            </div>
+
+
+
+            {/* =========================
+                ИГРОК
+            ========================== */}
+
+            <section>
+
+                <div style={styles.board}>
+
+                    <Board
+                        units={player.board}
+
+                        onUnitClick={
+                            handlePlayerUnitClick
+                        }
+
+                        selectedUnitId={
+                            selectedAttacker
+                        }
+
+                    />
+
+                </div>
+
+
+                <div style={styles.hero}>
+
+                    <strong>
+                        Игрок
+                    </strong>
+
+
+                    <span>
+                        ❤️ {player.hp}
+                    </span>
+
+
+                    <span style={styles.mana}>
+
+                        🔵
+                        {" "}
+                        {player.mana}
+                        {" / "}
+                        {player.maxMana}
+
+                    </span>
+
+                </div>
+
+            </section>
+
+
+
+            {/* =========================
+                РУКА
+            ========================== */}
+
+            <Hand
+                cards={handCards}
+                onCardClick={handleCardClick}
+            />
+
+
+
+            {/* =========================
+                КНОПКА ХОДА
+            ========================== */}
+
+            <button
+                onClick={handleEndTurn}
+                style={styles.endTurn}
+            >
+
+                Завершить ход
+
+            </button>
+
 
         </div>
 
+    );
 
-        {/* =========================
-            ИГРОК
-        ========================== */}
-
-        <section style={styles.playerSection}>
-
-            <div style={styles.board}>
-
-                <Board
-                    units={player.board}
-
-                    onUnitClick={
-                        handlePlayerUnitClick
-                    }
-
-                    selectedUnitId={
-                        selectedAttacker
-                    }
-                />
-
-            </div>
-
-
-            <div style={styles.hero}>
-
-                <strong>
-                    ИГРОК
-                </strong>
-
-                <span>
-                    ❤️ {player.hp}
-                </span>
-
-                <span style={styles.mana}>
-
-                    🔵 {player.mana}
-                    {" / "}
-                    {player.maxMana}
-
-                </span>
-
-            </div>
-
-        </section>
-
-
-        {/* =========================
-            РУКА
-        ========================== */}
-
-        <Hand
-            cards={handCards}
-            onCardClick={handleCardClick}
-        />
-
-
-        {/* =========================
-            КНОПКА
-        ========================== */}
-
-        <button
-            onClick={handleEndTurn}
-            style={styles.endTurn}
-        >
-            Завершить ход
-        </button>
-
-    </div>
-
-);
+}
 
 
 
@@ -402,11 +342,6 @@ const styles = {
 
         minHeight: "100vh",
 
-        background:
-            "radial-gradient(circle at center, #292929, #101010)",
-
-        color: "#eee",
-
         padding: "20px",
 
         boxSizing: "border-box",
@@ -415,7 +350,8 @@ const styles = {
 
         flexDirection: "column",
 
-        gap: "12px"
+        gap: "15px"
+
     },
 
 
@@ -427,35 +363,10 @@ const styles = {
 
         alignItems: "center",
 
-        paddingBottom: "10px",
+        borderBottom: "1px solid #444",
 
-        borderBottom: "1px solid #444"
-    },
+        paddingBottom: "10px"
 
-
-    title: {
-
-        margin: 0,
-
-        fontSize: "24px"
-    },
-
-
-    turn: {
-
-        color: "#aaa",
-
-        fontSize: "14px"
-    },
-
-
-    playerSection: {
-
-        display: "flex",
-
-        flexDirection: "column",
-
-        gap: "8px"
     },
 
 
@@ -463,44 +374,38 @@ const styles = {
 
         display: "flex",
 
-        alignItems: "center",
-
         gap: "20px",
 
-        padding: "5px 10px",
+        alignItems: "center",
 
-        color: "#ddd"
+        padding: "10px"
+
     },
 
 
     board: {
 
-        minHeight: "130px",
+        background: "#202020",
 
-        background:
-            "rgba(20,20,20,0.8)",
+        border: "1px solid #444",
 
-        border:
+        borderRadius: "10px",
 
-            "1px solid #444",
+        padding: "10px",
 
-        borderRadius: "12px",
+        overflowX: "auto"
 
-        padding: "10px"
     },
 
 
     center: {
 
-        height: "35px",
+        textAlign: "center",
 
-        display: "flex",
+        color: "#777",
 
-        alignItems: "center",
+        minHeight: "25px"
 
-        justifyContent: "center",
-
-        color: "#777"
     },
 
 
@@ -508,18 +413,15 @@ const styles = {
 
         color: "#ffd700",
 
-        fontWeight: "bold",
+        fontWeight: "bold"
 
-        animation:
-            "pulse 1s infinite"
     },
 
 
     mana: {
 
-        color: "#55aaff",
+        color: "#55aaff"
 
-        fontWeight: "bold"
     },
 
 
@@ -527,21 +429,20 @@ const styles = {
 
         alignSelf: "center",
 
-        padding: "12px 35px",
+        padding: "12px 30px",
 
-        border: "1px solid #666",
+        border: "none",
 
         borderRadius: "8px",
 
-        background: "#333",
+        background: "#444",
 
         color: "#fff",
 
         cursor: "pointer",
 
-        fontSize: "16px",
+        fontSize: "16px"
 
-        marginBottom: "10px"
     }
 
 };
