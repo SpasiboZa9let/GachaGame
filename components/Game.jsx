@@ -7,7 +7,7 @@ function Game() {
 
 
     /*
-        ID выбранного атакующего.
+        ID выбранного атакующего существа.
     */
 
     const [selectedAttacker, setSelectedAttacker] =
@@ -15,15 +15,46 @@ function Game() {
 
 
     /*
-        Разыгрывание карты.
+        Получаем каталог карт.
+    */
+
+    const cards =
+        window.CARDS || [];
+
+
+    /*
+        Разыгрывание карты из руки.
     */
 
     function handleCardClick(card) {
+
+        if (!card) {
+            return;
+        }
+
 
         if (
             gameState.activePlayer !==
             "player"
         ) {
+
+            return;
+
+        }
+
+
+        /*
+            Проверяем наличие маны.
+        */
+
+        if (
+            card.cost >
+            gameState.player.mana
+        ) {
+
+            console.log(
+                "Недостаточно маны."
+            );
 
             return;
 
@@ -49,9 +80,14 @@ function Game() {
 
     function handlePlayerUnitClick(unit) {
 
+        if (!unit) {
+            return;
+        }
+
+
         /*
-            Если существо уже выбрано,
-            повторный клик снимает выбор.
+            Если существо уже выбрано —
+            снимаем выбор.
         */
 
         if (
@@ -67,7 +103,7 @@ function Game() {
 
 
         /*
-            Проверяем, может ли оно атаковать.
+            Проверяем возможность атаки.
         */
 
         if (!unit.canAttack) {
@@ -81,6 +117,10 @@ function Game() {
         }
 
 
+        /*
+            Выбираем атакующего.
+        */
+
         setSelectedAttacker(
             unit.instanceId
         );
@@ -93,6 +133,16 @@ function Game() {
     */
 
     function handleOpponentUnitClick(unit) {
+
+        if (!unit) {
+            return;
+        }
+
+
+        /*
+            Если атакующий не выбран —
+            ничего не делаем.
+        */
 
         if (!selectedAttacker) {
 
@@ -108,11 +158,8 @@ function Game() {
         const newState =
             attackUnit(
                 gameState,
-
                 "player",
-
                 selectedAttacker,
-
                 unit.instanceId
             );
 
@@ -121,7 +168,7 @@ function Game() {
 
 
         /*
-            Сбрасываем выбор.
+            Сбрасываем выбранного атакующего.
         */
 
         setSelectedAttacker(null);
@@ -130,20 +177,26 @@ function Game() {
 
 
     /*
-        Завершить ход.
+        Завершение хода.
     */
 
     function handleEndTurn() {
 
         setSelectedAttacker(null);
 
+
         const newState =
             endTurn(gameState);
+
 
         setGameState(newState);
 
     }
 
+
+    /*
+        Состояния игроков.
+    */
 
     const player =
         gameState.player;
@@ -153,11 +206,41 @@ function Game() {
         gameState.opponent;
 
 
+    /*
+        Преобразуем ID карт в реальные объекты карт.
+    */
+
     const handCards =
-        player.hand.map(
-            cardId =>
-                CARDS[cardId]
-        );
+        (player.hand || [])
+            .map(cardId => {
+
+                /*
+                    Если hand уже содержит объект карты,
+                    используем его напрямую.
+                */
+
+                if (
+                    typeof cardId ===
+                    "object"
+                ) {
+
+                    return cardId;
+
+                }
+
+
+                /*
+                    Если hand содержит ID —
+                    ищем карту в каталоге.
+                */
+
+                return cards.find(
+                    card =>
+                        card.id === cardId
+                );
+
+            })
+            .filter(Boolean);
 
 
     return (
@@ -176,7 +259,7 @@ function Game() {
                 </h1>
 
 
-                <div>
+                <div style={styles.turn}>
 
                     Ход:
                     {" "}
@@ -211,7 +294,9 @@ function Game() {
                 <div style={styles.board}>
 
                     <Board
-                        units={opponent.board}
+                        units={
+                            opponent.board || []
+                        }
 
                         onUnitClick={
                             handleOpponentUnitClick
@@ -227,14 +312,18 @@ function Game() {
 
 
             {/* =========================
-                ИНДИКАТОР АТАКИ
+                ЦЕНТР
             ========================== */}
 
             <div style={styles.center}>
 
                 {selectedAttacker ? (
 
-                    <span style={styles.attackMode}>
+                    <span
+                        style={
+                            styles.attackMode
+                        }
+                    >
 
                         ⚔️ Выберите цель
 
@@ -243,7 +332,11 @@ function Game() {
                 ) : (
 
                     <span>
-                        Ваш ход
+                        {gameState.activePlayer ===
+                        "player"
+                            ? "Ваш ход"
+                            : "Ход противника"
+                        }
                     </span>
 
                 )}
@@ -261,7 +354,9 @@ function Game() {
                 <div style={styles.board}>
 
                     <Board
-                        units={player.board}
+                        units={
+                            player.board || []
+                        }
 
                         onUnitClick={
                             handlePlayerUnitClick
@@ -353,7 +448,13 @@ const styles = {
 
         flexDirection: "column",
 
-        gap: "15px"
+        gap: "15px",
+
+        boxSizing: "border-box",
+
+        background: "#101010",
+
+        color: "#fff"
 
     },
 
@@ -369,6 +470,13 @@ const styles = {
         borderBottom: "1px solid #444",
 
         paddingBottom: "10px"
+
+    },
+
+
+    turn: {
+
+        color: "#aaa"
 
     },
 
@@ -392,7 +500,13 @@ const styles = {
 
         border: "1px solid #444",
 
-        borderRadius: "10px"
+        borderRadius: "10px",
+
+        minHeight: "120px",
+
+        padding: "10px",
+
+        boxSizing: "border-box"
 
     },
 
@@ -403,7 +517,13 @@ const styles = {
 
         color: "#777",
 
-        minHeight: "25px"
+        minHeight: "25px",
+
+        display: "flex",
+
+        justifyContent: "center",
+
+        alignItems: "center"
 
     },
 
@@ -419,7 +539,9 @@ const styles = {
 
     mana: {
 
-        color: "#55aaff"
+        color: "#55aaff",
+
+        fontWeight: "bold"
 
     },
 
@@ -430,7 +552,7 @@ const styles = {
 
         padding: "12px 30px",
 
-        border: "none",
+        border: "1px solid #666",
 
         borderRadius: "8px",
 
