@@ -173,42 +173,45 @@ function Game() {
     */
 
     const handCards =
-        (player.hand || [])
-            .map(card => {
+    (player.hand || [])
+        .map(card => {
 
-                /*
-                    Если это уже объект карты.
-                */
+            /*
+                Если в руке уже полноценный
+                объект карты — используем его.
+            */
 
-                if (
-                    card &&
-                    typeof card === "object"
-                ) {
+            if (
+                card &&
+                typeof card === "object"
+            ) {
 
-                    return card;
+                return card;
 
-                }
-
-
-                /*
-                    Если это ID —
-                    ищем карту в CARDS.
-                */
-
-                if (
-                    typeof card === "string" ||
-                    typeof card === "number"
-                ) {
-
-                    return CARDS[card];
-
-                }
+            }
 
 
-                return null;
+            /*
+                Если в руке находится ID,
+                ищем карту внутри массива CARDS.
+            */
 
-            })
-            .filter(Boolean);
+            if (
+                typeof card === "string" ||
+                typeof card === "number"
+            ) {
+
+                return CARDS.find(
+                    item => item.id === card
+                );
+
+            }
+
+
+            return null;
+
+        })
+        .filter(Boolean);
 
 
     /*
