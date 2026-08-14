@@ -1,6 +1,4 @@
 
-import Game from "./components/Game.jsx";
-
 const root = ReactDOM.createRoot(
     document.getElementById("root")
 );
@@ -8,4 +6,4 @@ const root = ReactDOM.createRoot(
 root.render(
     <Game />
 );
-```
+
