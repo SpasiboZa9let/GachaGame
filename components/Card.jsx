@@ -148,14 +148,7 @@ const styles = {
     },
 
 
-    image: {
-
-        width: "100%",
-        height: "100%",
-
-        objectFit: "cover"
-
-    },
+    image: "./assets/cards/baba_yaga.png",
 
 
     noArt: {
