@@ -1,40 +1,61 @@
 ```jsx
 import React from "react";
 
+import CARDS from "../data/cards.js";
+import Card from "./Card.jsx";
+
+
 function Game() {
 
     const [playerMana, setPlayerMana] = React.useState(1);
     const [playerMaxMana, setPlayerMaxMana] = React.useState(1);
+
 
     const player = {
         name: "Игрок",
         hp: 30
     };
 
+
     const opponent = {
         name: "Противник",
         hp: 30
     };
 
-    const testCards = [
-        {
-            id: "baba_yaga",
-            name: "Баба-Яга",
-            cost: 5,
-            attack: 6,
-            health: 7
-        },
-        {
-            id: "shaman",
-            name: "Шаман",
-            cost: 3,
-            attack: 3,
-            health: 4
-        }
+
+    /*
+        Пока это тестовая рука.
+
+        Позже она будет находиться
+        внутри GameState и управляться engine.js.
+    */
+
+    const playerHand = [
+        CARDS.baba_yaga,
+        CARDS.shaman
     ];
 
+
+    /*
+        Пока просто проверяем,
+        что нажатие на карту работает.
+    */
+
+    function handleCardClick(card) {
+
+        console.log("Выбрана карта:", card);
+
+    }
+
+
     return (
+
         <div style={styles.game}>
+
+
+            {/* =========================
+                HEADER
+            ========================= */}
 
             <header style={styles.header}>
 
@@ -47,6 +68,7 @@ function Game() {
                 </div>
 
             </header>
+
 
 
             {/* =========================
@@ -67,6 +89,7 @@ function Game() {
 
                 </div>
 
+
                 <div style={styles.board}>
 
                     <div style={styles.emptyBoard}>
@@ -78,17 +101,17 @@ function Game() {
             </section>
 
 
+
             {/* =========================
                 ЦЕНТР
             ========================= */}
 
             <div style={styles.divider}>
 
-                <div style={styles.enemyMana}>
-                    Мана противника: 1 / 1
-                </div>
+                Мана противника: 1 / 1
 
             </div>
+
 
 
             {/* =========================
@@ -96,6 +119,7 @@ function Game() {
             ========================= */}
 
             <section style={styles.playerArea}>
+
 
                 <div style={styles.board}>
 
@@ -108,21 +132,26 @@ function Game() {
 
                 <div style={styles.hero}>
 
+
                     <div style={styles.heroName}>
                         {player.name}
                     </div>
+
 
                     <div style={styles.hp}>
                         ❤️ {player.hp}
                     </div>
 
+
                     <div style={styles.mana}>
                         🔵 {playerMana} / {playerMaxMana}
                     </div>
 
+
                 </div>
 
             </section>
+
 
 
             {/* =========================
@@ -131,187 +160,145 @@ function Game() {
 
             <section style={styles.hand}>
 
-                {testCards.map(card => (
 
-                    <div
+                {playerHand.map(card => (
+
+                    <Card
                         key={card.id}
-                        style={styles.card}
-                    >
-
-                        <div style={styles.cardCost}>
-                            {card.cost}
-                        </div>
-
-                        <div style={styles.cardName}>
-                            {card.name}
-                        </div>
-
-                        <div style={styles.cardArt}>
-                            <span>
-                                АРТ
-                            </span>
-                        </div>
-
-                        <div style={styles.cardStats}>
-
-                            <span>
-                                ⚔️ {card.attack}
-                            </span>
-
-                            <span>
-                                ❤️ {card.health}
-                            </span>
-
-                        </div>
-
-                    </div>
+                        card={card}
+                        onClick={handleCardClick}
+                    />
 
                 ))}
 
+
             </section>
+
 
         </div>
     );
 }
 
 
-/* ==================================================
-   СТИЛИ
-================================================== */
 
 const styles = {
 
     game: {
         minHeight: "100vh",
+
         padding: "20px",
+
         display: "flex",
         flexDirection: "column",
+
         gap: "15px"
     },
 
+
     header: {
         display: "flex",
+
         justifyContent: "space-between",
         alignItems: "center",
+
         borderBottom: "1px solid #444",
+
         paddingBottom: "10px"
     },
+
 
     turn: {
         color: "#aaa"
     },
 
+
     playerArea: {
         display: "flex",
+
         flexDirection: "column",
+
         gap: "10px"
     },
 
+
     hero: {
         display: "flex",
+
         alignItems: "center",
+
         gap: "15px"
     },
 
+
     heroName: {
         fontWeight: "bold",
+
         fontSize: "18px"
     },
+
 
     hp: {
         fontWeight: "bold"
     },
 
+
     mana: {
         color: "#61a9ff"
     },
 
-    enemyMana: {
-        color: "#777"
-    },
 
     board: {
         minHeight: "150px",
+
         border: "1px solid #444",
+
         borderRadius: "10px",
+
         background: "#202020",
+
         padding: "15px"
     },
 
+
     emptyBoard: {
         height: "120px",
+
         display: "flex",
+
         alignItems: "center",
         justifyContent: "center",
+
         color: "#555"
     },
+
 
     divider: {
         display: "flex",
+
         justifyContent: "center",
-        padding: "5px"
+
+        padding: "5px",
+
+        color: "#777"
     },
+
 
     hand: {
         minHeight: "230px",
+
         display: "flex",
+
         justifyContent: "center",
+
         alignItems: "flex-end",
+
         gap: "15px",
+
         padding: "20px",
+
         borderTop: "1px solid #333",
+
         background: "#111"
-    },
-
-    card: {
-        width: "150px",
-        height: "210px",
-        background: "#292929",
-        border: "2px solid #666",
-        borderRadius: "10px",
-        padding: "10px",
-        position: "relative",
-        display: "flex",
-        flexDirection: "column",
-        gap: "8px",
-        cursor: "pointer",
-        boxShadow: "0 4px 10px rgba(0,0,0,0.4)"
-    },
-
-    cardCost: {
-        position: "absolute",
-        top: "6px",
-        left: "6px",
-        width: "28px",
-        height: "28px",
-        borderRadius: "50%",
-        background: "#3478db",
-        display: "flex",
-        alignItems: "center",
-        justifyContent: "center",
-        fontWeight: "bold"
-    },
-
-    cardName: {
-        textAlign: "center",
-        fontWeight: "bold",
-        marginTop: "5px"
-    },
-
-    cardArt: {
-        flex: 1,
-        background: "#181818",
-        borderRadius: "5px",
-        display: "flex",
-        alignItems: "center",
-        justifyContent: "center",
-        color: "#555"
-    },
-
-    cardStats: {
-        display: "flex",
-        justifyContent: "space-between",
-        fontWeight: "bold"
     }
 
 };
