@@ -11,20 +11,18 @@ function Game() {
 
 
     /*
-        Разыгрывание карты
+        =========================
+        РАЗЫГРЫВАНИЕ КАРТЫ
+        =========================
     */
 
     function handleCardClick(card) {
 
-        if (
-            gameState.activePlayer !==
-            "player"
-        ) {
+        if (!card) {
             return;
         }
 
-
-        if (!card) {
+        if (gameState.activePlayer !== "player") {
             return;
         }
 
@@ -43,7 +41,9 @@ function Game() {
 
 
     /*
-        Клик по своему существу
+        =========================
+        КЛИК ПО СВОЕМУ СУЩЕСТВУ
+        =========================
     */
 
     function handlePlayerUnitClick(unit) {
@@ -52,6 +52,10 @@ function Game() {
             return;
         }
 
+
+        /*
+            Повторный клик снимает выбор.
+        */
 
         if (
             selectedAttacker ===
@@ -64,6 +68,10 @@ function Game() {
 
         }
 
+
+        /*
+            Проверяем возможность атаки.
+        */
 
         if (!unit.canAttack) {
 
@@ -84,7 +92,9 @@ function Game() {
 
 
     /*
-        Клик по существу противника
+        =========================
+        КЛИК ПО СУЩЕСТВУ ПРОТИВНИКА
+        =========================
     */
 
     function handleOpponentUnitClick(unit) {
@@ -117,7 +127,9 @@ function Game() {
 
 
     /*
-        Завершение хода
+        =========================
+        ЗАВЕРШЕНИЕ ХОДА
+        =========================
     */
 
     function handleEndTurn() {
@@ -134,6 +146,12 @@ function Game() {
     }
 
 
+    /*
+        =========================
+        ДАННЫЕ ИГРОКОВ
+        =========================
+    */
+
     const player =
         gameState.player;
 
@@ -143,25 +161,77 @@ function Game() {
 
 
     /*
-        Преобразуем ID карт
-        из руки в полноценные объекты карт.
+        =========================
+        КАРТЫ В РУКЕ
+        =========================
+
+        В руке могут находиться:
+        1. ID карты
+        2. уже готовый объект карты
+
+        Обрабатываем оба варианта.
     */
 
     const handCards =
-    player.hand
-        .map(card => {
+        (player.hand || [])
+            .map(card => {
 
-            // Если в руке уже полноценный объект карты
-            if (typeof card === "object") {
-                return card;
-            }
+                /*
+                    Если это уже объект карты.
+                */
 
-            // Если в руке находится ID карты
-            return CARDS[card];
+                if (
+                    card &&
+                    typeof card === "object"
+                ) {
 
-        })
-        .filter(card => card);
+                    return card;
 
+                }
+
+
+                /*
+                    Если это ID —
+                    ищем карту в CARDS.
+                */
+
+                if (
+                    typeof card === "string" ||
+                    typeof card === "number"
+                ) {
+
+                    return CARDS[card];
+
+                }
+
+
+                return null;
+
+            })
+            .filter(Boolean);
+
+
+    /*
+        Временно выводим количество карт
+        в консоль для диагностики.
+    */
+
+    console.log(
+        "Карты в руке:",
+        player.hand
+    );
+
+    console.log(
+        "Готовые карты:",
+        handCards
+    );
+
+
+    /*
+        =========================
+        RENDER
+        =========================
+    */
 
     return (
 
@@ -214,15 +284,13 @@ function Game() {
                 <div style={styles.board}>
 
                     <Board
-                        units={opponent.board}
+                        units={opponent.board || []}
 
                         onUnitClick={
                             handleOpponentUnitClick
                         }
 
-                        selectedUnitId={
-                            null
-                        }
+                        selectedUnitId={null}
                     />
 
                 </div>
@@ -249,9 +317,11 @@ function Game() {
 
                     <span>
 
-                        {gameState.activePlayer === "player"
-                            ? "Ваш ход"
-                            : "Ход противника"}
+                        {
+                            gameState.activePlayer === "player"
+                                ? "Ваш ход"
+                                : "Ход противника"
+                        }
 
                     </span>
 
@@ -270,7 +340,7 @@ function Game() {
                 <div style={styles.board}>
 
                     <Board
-                        units={player.board}
+                        units={player.board || []}
 
                         onUnitClick={
                             handlePlayerUnitClick
@@ -279,7 +349,6 @@ function Game() {
                         selectedUnitId={
                             selectedAttacker
                         }
-
                     />
 
                 </div>
