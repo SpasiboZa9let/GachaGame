@@ -1,6 +1,11 @@
-function Hand({ cards = [], onCardClick }) {
+function Hand({ cards, onCardClick }) {
+
+    if (!cards) {
+        return null;
+    }
 
     return (
+
         <div style={styles.hand}>
 
             {cards.map((card, index) => {
@@ -10,16 +15,19 @@ function Hand({ cards = [], onCardClick }) {
                 }
 
                 return (
+
                     <Card
                         key={card.id || index}
                         card={card}
                         onClick={onCardClick}
                     />
+
                 );
 
             })}
 
         </div>
+
     );
 }
 
@@ -30,19 +38,23 @@ const styles = {
 
         display: "flex",
 
-        justifyContent: "center",
+        flexDirection: "row",
 
-        alignItems: "flex-end",
+        flexWrap: "wrap",
+
+        alignItems: "flex-start",
+
+        justifyContent: "center",
 
         gap: "12px",
 
-        padding: "20px",
+        width: "100%",
 
-        minHeight: "230px",
+        padding: "15px",
 
-        background: "#151515",
+        boxSizing: "border-box",
 
-        borderTop: "2px solid #333"
+        overflowX: "auto"
 
     }
 
