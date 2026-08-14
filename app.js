@@ -1,4 +1,4 @@
-```jsx
+
 import Game from "./components/Game.jsx";
 
 const root = ReactDOM.createRoot(
