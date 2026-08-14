@@ -39,6 +39,3 @@ const CARDS = {
 
 };
 
-
-export default CARDS;
-
