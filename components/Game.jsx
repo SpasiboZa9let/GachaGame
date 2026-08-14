@@ -148,9 +148,19 @@ function Game() {
     */
 
     const handCards =
-        player.hand
-            .map(cardId => CARDS[cardId])
-            .filter(card => card);
+    player.hand
+        .map(card => {
+
+            // Если в руке уже полноценный объект карты
+            if (typeof card === "object") {
+                return card;
+            }
+
+            // Если в руке находится ID карты
+            return CARDS[card];
+
+        })
+        .filter(card => card);
 
 
     return (
