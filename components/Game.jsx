@@ -1,5 +1,8 @@
 ```jsx
+import React from "react";
+
 function Game() {
+
     const [playerMana, setPlayerMana] = React.useState(1);
     const [playerMaxMana, setPlayerMaxMana] = React.useState(1);
 
@@ -34,18 +37,26 @@ function Game() {
         <div style={styles.game}>
 
             <header style={styles.header}>
-                <h1>Тридевятое царство</h1>
+
+                <h1>
+                    Тридевятое царство
+                </h1>
+
                 <div style={styles.turn}>
                     Ход: игрок
                 </div>
+
             </header>
 
 
-            {/* ПРОТИВНИК */}
+            {/* =========================
+                ПРОТИВНИК
+            ========================= */}
 
             <section style={styles.playerArea}>
 
                 <div style={styles.hero}>
+
                     <div style={styles.heroName}>
                         {opponent.name}
                     </div>
@@ -53,27 +64,36 @@ function Game() {
                     <div style={styles.hp}>
                         ❤️ {opponent.hp}
                     </div>
+
                 </div>
 
                 <div style={styles.board}>
+
                     <div style={styles.emptyBoard}>
                         Поле противника
                     </div>
+
                 </div>
 
             </section>
 
 
-            {/* ЦЕНТР */}
+            {/* =========================
+                ЦЕНТР
+            ========================= */}
 
             <div style={styles.divider}>
-                <div style={styles.mana}>
+
+                <div style={styles.enemyMana}>
                     Мана противника: 1 / 1
                 </div>
+
             </div>
 
 
-            {/* ИГРОК */}
+            {/* =========================
+                ИГРОК
+            ========================= */}
 
             <section style={styles.playerArea}>
 
@@ -84,6 +104,7 @@ function Game() {
                     </div>
 
                 </div>
+
 
                 <div style={styles.hero}>
 
@@ -104,7 +125,9 @@ function Game() {
             </section>
 
 
-            {/* РУКА */}
+            {/* =========================
+                РУКА
+            ========================= */}
 
             <section style={styles.hand}>
 
@@ -124,12 +147,21 @@ function Game() {
                         </div>
 
                         <div style={styles.cardArt}>
-                            <span>Арт</span>
+                            <span>
+                                АРТ
+                            </span>
                         </div>
 
                         <div style={styles.cardStats}>
-                            <span>⚔️ {card.attack}</span>
-                            <span>❤️ {card.health}</span>
+
+                            <span>
+                                ⚔️ {card.attack}
+                            </span>
+
+                            <span>
+                                ❤️ {card.health}
+                            </span>
+
                         </div>
 
                     </div>
@@ -142,6 +174,10 @@ function Game() {
     );
 }
 
+
+/* ==================================================
+   СТИЛИ
+================================================== */
 
 const styles = {
 
@@ -188,6 +224,10 @@ const styles = {
 
     mana: {
         color: "#61a9ff"
+    },
+
+    enemyMana: {
+        color: "#777"
     },
 
     board: {
@@ -273,6 +313,9 @@ const styles = {
         justifyContent: "space-between",
         fontWeight: "bold"
     }
-};
-```
 
+};
+
+
+export default Game;
+```
