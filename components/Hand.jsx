@@ -1,7 +1,17 @@
 function Hand({ cards, onCardClick }) {
 
     if (!cards || cards.length === 0) {
-        return null;
+
+        return (
+
+            <div style={styles.emptyHand}>
+
+                Рука пуста
+
+            </div>
+
+        );
+
     }
 
 
@@ -15,12 +25,20 @@ function Hand({ cards, onCardClick }) {
                     return null;
                 }
 
+
                 return (
 
                     <Card
-                        key={card.id || index}
+                        key={
+                            card.id ||
+                            index
+                        }
+
                         card={card}
-                        onClick={onCardClick}
+
+                        onClick={
+                            onCardClick
+                        }
                     />
 
                 );
@@ -32,6 +50,7 @@ function Hand({ cards, onCardClick }) {
     );
 
 }
+
 
 
 const styles = {
@@ -59,6 +78,25 @@ const styles = {
         boxSizing: "border-box",
 
         overflowX: "auto"
+
+    },
+
+
+    emptyHand: {
+
+        width: "100%",
+
+        minHeight: "100px",
+
+        display: "flex",
+
+        alignItems: "center",
+
+        justifyContent: "center",
+
+        color: "#666",
+
+        fontSize: "14px"
 
     }
 
