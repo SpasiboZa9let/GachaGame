@@ -245,194 +245,154 @@ function Game() {
 
     return (
 
-        <div style={styles.game}>
+    <div style={styles.game}>
+
+        {/* =========================
+            HEADER
+        ========================== */}
+
+        <header style={styles.header}>
+
+            <h1 style={styles.title}>
+                Тридевятое царство
+            </h1>
+
+            <div style={styles.turn}>
+                Ход: {gameState.turn}
+            </div>
+
+        </header>
 
 
-            {/* =========================
-                HEADER
-            ========================== */}
+        {/* =========================
+            ПРОТИВНИК
+        ========================== */}
 
-            <header style={styles.header}>
+        <section style={styles.playerSection}>
 
-                <h1>
-                    Тридевятое царство
-                </h1>
+            <div style={styles.hero}>
 
+                <strong>
+                    ПРОТИВНИК
+                </strong>
 
-                <div style={styles.turn}>
-
-                    Ход:
-                    {" "}
-                    {gameState.turn}
-
-                </div>
-
-            </header>
-
-
-
-            {/* =========================
-                ПРОТИВНИК
-            ========================== */}
-
-            <section>
-
-                <div style={styles.hero}>
-
-                    <strong>
-                        Противник
-                    </strong>
-
-
-                    <span>
-                        ❤️ {opponent.hp}
-                    </span>
-
-                </div>
-
-
-                <div style={styles.board}>
-
-                    <Board
-                        units={
-                            opponent.board || []
-                        }
-
-                        onUnitClick={
-                            handleOpponentUnitClick
-                        }
-
-                        selectedUnitId={null}
-                    />
-
-                </div>
-
-            </section>
-
-
-
-            {/* =========================
-                ЦЕНТР
-            ========================== */}
-
-            <div style={styles.center}>
-
-                {selectedAttacker ? (
-
-                    <span
-                        style={
-                            styles.attackMode
-                        }
-                    >
-
-                        ⚔️ Выберите цель
-
-                    </span>
-
-                ) : (
-
-                    <span>
-                        {gameState.activePlayer ===
-                        "player"
-                            ? "Ваш ход"
-                            : "Ход противника"
-                        }
-                    </span>
-
-                )}
+                <span>
+                    ❤️ {opponent.hp}
+                </span>
 
             </div>
 
 
+            <div style={styles.board}>
 
-            {/* =========================
-                ИГРОК
-            ========================== */}
+                <Board
+                    units={opponent.board}
 
-            <section>
+                    onUnitClick={
+                        handleOpponentUnitClick
+                    }
 
-                <div style={styles.board}>
+                    selectedUnitId={null}
+                />
 
-                    <Board
-                        units={
-                            player.board || []
-                        }
+            </div>
 
-                        onUnitClick={
-                            handlePlayerUnitClick
-                        }
+        </section>
 
-                        selectedUnitId={
-                            selectedAttacker
-                        }
 
-                    />
+        {/* =========================
+            ЦЕНТР
+        ========================== */}
 
+        <div style={styles.center}>
+
+            {selectedAttacker ? (
+
+                <div style={styles.attackMode}>
+                    ⚔️ ВЫБЕРИТЕ ЦЕЛЬ
                 </div>
 
+            ) : (
 
-                <div style={styles.hero}>
-
-                    <strong>
-                        Игрок
-                    </strong>
-
-
-                    <span>
-                        ❤️ {player.hp}
-                    </span>
-
-
-                    <span style={styles.mana}>
-
-                        🔵
-
-                        {" "}
-
-                        {player.mana}
-
-                        {" / "}
-
-                        {player.maxMana}
-
-                    </span>
-
+                <div>
+                    Ход игрока
                 </div>
 
-            </section>
-
-
-
-            {/* =========================
-                РУКА
-            ========================== */}
-
-            <Hand
-                cards={handCards}
-                onCardClick={handleCardClick}
-            />
-
-
-
-            {/* =========================
-                КНОПКА ХОДА
-            ========================== */}
-
-            <button
-                onClick={handleEndTurn}
-                style={styles.endTurn}
-            >
-
-                Завершить ход
-
-            </button>
-
+            )}
 
         </div>
 
-    );
 
-}
+        {/* =========================
+            ИГРОК
+        ========================== */}
+
+        <section style={styles.playerSection}>
+
+            <div style={styles.board}>
+
+                <Board
+                    units={player.board}
+
+                    onUnitClick={
+                        handlePlayerUnitClick
+                    }
+
+                    selectedUnitId={
+                        selectedAttacker
+                    }
+                />
+
+            </div>
+
+
+            <div style={styles.hero}>
+
+                <strong>
+                    ИГРОК
+                </strong>
+
+                <span>
+                    ❤️ {player.hp}
+                </span>
+
+                <span style={styles.mana}>
+
+                    🔵 {player.mana}
+                    {" / "}
+                    {player.maxMana}
+
+                </span>
+
+            </div>
+
+        </section>
+
+
+        {/* =========================
+            РУКА
+        ========================== */}
+
+        <Hand
+            cards={handCards}
+            onCardClick={handleCardClick}
+        />
+
+
+        {/* =========================
+            КНОПКА
+        ========================== */}
+
+        <button
+            onClick={handleEndTurn}
+            style={styles.endTurn}
+        >
+            Завершить ход
+        </button>
+
+    </div>
+
+);
 
 
 
