@@ -1,41 +1,47 @@
 const CARDS = {
 
     baba_yaga: {
-        id: "baba_yaga",
-        name: "Баба-Яга",
 
-        type: "minion",
-        rarity: "SSR",
-        faction: "nav",
+        id: "baba_yaga",
+
+        name: "Баба-Яга",
 
         cost: 5,
 
-        attack: 6,
-        health: 7,
+        attack: 4,
 
-        description: "Здесь пока будет описание способности.",
+        health: 6,
 
-        effects: []
+        description:
+            "Старая хозяйка избушки.",
+
+        image:
+            "./assets/cards/baba_yaga.png"
+
     },
 
 
     shaman: {
+
         id: "shaman",
+
         name: "Шаман",
 
-        type: "minion",
-        rarity: "R",
-        faction: "magic",
+        cost: 2,
 
-        cost: 3,
+        attack: 2,
 
-        attack: 3,
-        health: 4,
+        health: 3,
 
-        description: "Здесь пока будет описание способности.",
+        description:
+            "Зовёт духов леса.",
 
-        effects: []
+        image:
+            "./assets/cards/shaman.png"
+
     }
 
 };
 
+
+export default CARDS;
