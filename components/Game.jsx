@@ -1,43 +1,72 @@
-
 function Game() {
 
-    const [playerMana, setPlayerMana] = React.useState(1);
-
-    const [playerMaxMana, setPlayerMaxMana] = React.useState(1);
-
-
-    const player = {
-
-        name: "Игрок",
-
-        hp: 30
-
-    };
+    const [gameState, setGameState] =
+        React.useState(
+            createInitialGameState()
+        );
 
 
-    const opponent = {
-
-        name: "Противник",
-
-        hp: 30
-
-    };
-
-
-    const playerHand = [
-
-        CARDS.baba_yaga,
-
-        CARDS.shaman
-
-    ];
-
+    /*
+        Разыграть карту.
+    */
 
     function handleCardClick(card) {
 
-        console.log("Выбрана карта:", card);
+        if (
+            gameState.activePlayer !==
+            "player"
+        ) {
+
+            return;
+
+        }
+
+
+        const newState =
+            playCard(
+                gameState,
+                "player",
+                card.id
+            );
+
+
+        setGameState(newState);
 
     }
+
+
+    /*
+        Завершить ход.
+    */
+
+    function handleEndTurn() {
+
+        const newState =
+            endTurn(gameState);
+
+        setGameState(newState);
+
+    }
+
+
+    const player =
+        gameState.player;
+
+
+    const opponent =
+        gameState.opponent;
+
+
+    /*
+        Преобразуем ID карт руки
+        в объекты карт.
+    */
+
+    const handCards =
+        player.hand.map(
+            cardId =>
+                CARDS[cardId]
+        );
 
 
     return (
@@ -45,96 +74,123 @@ function Game() {
         <div style={styles.game}>
 
 
+            {/* HEADER */}
+
             <header style={styles.header}>
 
                 <h1>
                     Тридевятое царство
                 </h1>
 
-                <div style={styles.turn}>
-                    Ход: игрок
+                <div>
+
+                    Ход:
+                    {" "}
+                    {gameState.turn}
+
                 </div>
 
             </header>
 
 
-            <section style={styles.playerArea}>
+            {/* ПРОТИВНИК */}
+
+            <section>
 
                 <div style={styles.hero}>
 
-                    <div style={styles.heroName}>
-                        {opponent.name}
-                    </div>
+                    <strong>
+                        Противник
+                    </strong>
 
-                    <div style={styles.hp}>
+                    <span>
                         ❤️ {opponent.hp}
-                    </div>
+                    </span>
 
                 </div>
 
 
                 <div style={styles.board}>
 
-                    <div style={styles.emptyBoard}>
-                        Поле противника
-                    </div>
+                    <Board
+                        units={opponent.board}
+                    />
 
                 </div>
 
             </section>
 
 
-            <div style={styles.divider}>
+            {/* ЦЕНТР */}
 
-                Мана противника: 1 / 1
+            <div style={styles.center}>
+
+                Ход игрока
+
 
             </div>
 
 
-            <section style={styles.playerArea}>
+            {/* ИГРОК */}
 
+            <section>
 
                 <div style={styles.board}>
 
-                    <div style={styles.emptyBoard}>
-                        Поле игрока
-                    </div>
+                    <Board
+                        units={player.board}
+                    />
 
                 </div>
 
 
                 <div style={styles.hero}>
 
-                    <div style={styles.heroName}>
-                        {player.name}
-                    </div>
+                    <strong>
+                        Игрок
+                    </strong>
 
-                    <div style={styles.hp}>
+                    <span>
                         ❤️ {player.hp}
-                    </div>
+                    </span>
 
-                    <div style={styles.mana}>
-                        🔵 {playerMana} / {playerMaxMana}
-                    </div>
+                    <span style={styles.mana}>
+
+                        🔵
+
+                        {" "}
+
+                        {player.mana}
+
+                        {" / "}
+
+                        {player.maxMana}
+
+                    </span>
 
                 </div>
 
             </section>
 
 
-            <section style={styles.hand}>
+            {/* РУКА */}
 
-                {playerHand.map(card => (
+            <Hand
+                cards={handCards}
+                onCardClick={handleCardClick}
+            />
 
-                    <Card
-                        key={card.id}
-                        card={card}
-                        onClick={handleCardClick}
-                    />
 
-                ))}
+            {/* КНОПКА ХОДА */}
 
-            </section>
+            <button
+                onClick={handleEndTurn}
+                style={styles.endTurn}
+            >
+
+                Завершить ход
+
+            </button>
 
 
         </div>
@@ -153,6 +209,7 @@ const styles = {
         padding: "20px",
 
         display: "flex",
+
         flexDirection: "column",
 
         gap: "15px"
@@ -165,6 +222,7 @@ const styles = {
         display: "flex",
 
         justifyContent: "space-between",
+
         alignItems: "center",
 
         borderBottom: "1px solid #444",
@@ -174,119 +232,64 @@ const styles = {
     },
 
 
-    turn: {
-
-        color: "#aaa"
-
-    },
-
-
-    playerArea: {
-
-        display: "flex",
-
-        flexDirection: "column",
-
-        gap: "10px"
-
-    },
-
-
     hero: {
 
         display: "flex",
 
+        gap: "20px",
+
         alignItems: "center",
 
-        gap: "15px"
-
-    },
-
-
-    heroName: {
-
-        fontWeight: "bold",
-
-        fontSize: "18px"
-
-    },
-
-
-    hp: {
-
-        fontWeight: "bold"
-
-    },
-
-
-    mana: {
-
-        color: "#61a9ff"
+        padding: "10px"
 
     },
 
 
     board: {
 
-        minHeight: "150px",
+        background: "#202020",
 
         border: "1px solid #444",
 
-        borderRadius: "10px",
-
-        background: "#202020",
-
-        padding: "15px"
+        borderRadius: "10px"
 
     },
 
 
-    emptyBoard: {
+    center: {
 
-        height: "120px",
-
-        display: "flex",
-
-        alignItems: "center",
-        justifyContent: "center",
-
-        color: "#555"
-
-    },
-
-
-    divider: {
-
-        display: "flex",
-
-        justifyContent: "center",
-
-        padding: "5px",
+        textAlign: "center",
 
         color: "#777"
 
     },
 
 
-    hand: {
+    mana: {
 
-        minHeight: "230px",
+        color: "#55aaff"
 
-        display: "flex",
+    },
 
-        justifyContent: "center",
 
-        alignItems: "flex-end",
+    endTurn: {
 
-        gap: "15px",
+        alignSelf: "center",
 
-        padding: "20px",
+        padding: "12px 30px",
 
-        borderTop: "1px solid #333",
+        border: "none",
 
-        background: "#111"
+        borderRadius: "8px",
+
+        background: "#444",
+
+        color: "#fff",
+
+        cursor: "pointer",
+
+        fontSize: "16px"
 
     }
 
 };
-
