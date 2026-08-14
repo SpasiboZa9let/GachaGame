@@ -1,4 +1,3 @@
-
 function Card({ card, onClick }) {
 
     if (!card) {
@@ -10,18 +9,32 @@ function Card({ card, onClick }) {
 
         <div
             style={styles.card}
-            onClick={() => onClick && onClick(card)}
+            onClick={() =>
+                onClick && onClick(card)
+            }
         >
+
+            {/* =========================
+                СТОИМОСТЬ
+            ========================== */}
 
             <div style={styles.cost}>
                 {card.cost}
             </div>
 
 
+            {/* =========================
+                НАЗВАНИЕ
+            ========================== */}
+
             <div style={styles.name}>
                 {card.name}
             </div>
 
+
+            {/* =========================
+                ИЗОБРАЖЕНИЕ
+            ========================== */}
 
             <div style={styles.art}>
 
@@ -44,10 +57,18 @@ function Card({ card, onClick }) {
             </div>
 
 
+            {/* =========================
+                ОПИСАНИЕ
+            ========================== */}
+
             <div style={styles.description}>
                 {card.description}
             </div>
 
+
+            {/* =========================
+                ХАРАКТЕРИСТИКИ
+            ========================== */}
 
             <div style={styles.stats}>
 
@@ -64,7 +85,9 @@ function Card({ card, onClick }) {
         </div>
 
     );
+
 }
+
 
 
 const styles = {
@@ -72,11 +95,13 @@ const styles = {
     card: {
 
         width: "150px",
+
         height: "210px",
 
         background: "#292929",
 
         border: "2px solid #666",
+
         borderRadius: "10px",
 
         padding: "10px",
@@ -84,13 +109,15 @@ const styles = {
         position: "relative",
 
         display: "flex",
+
         flexDirection: "column",
 
         gap: "6px",
 
         cursor: "pointer",
 
-        boxShadow: "0 4px 10px rgba(0,0,0,0.4)"
+        boxShadow:
+            "0 4px 10px rgba(0,0,0,0.4)"
 
     },
 
@@ -100,9 +127,11 @@ const styles = {
         position: "absolute",
 
         top: "5px",
+
         left: "5px",
 
         width: "28px",
+
         height: "28px",
 
         borderRadius: "50%",
@@ -110,10 +139,14 @@ const styles = {
         background: "#3478db",
 
         display: "flex",
+
         alignItems: "center",
+
         justifyContent: "center",
 
-        fontWeight: "bold"
+        fontWeight: "bold",
+
+        zIndex: 2
 
     },
 
@@ -140,7 +173,9 @@ const styles = {
         borderRadius: "5px",
 
         display: "flex",
+
         alignItems: "center",
+
         justifyContent: "center",
 
         overflow: "hidden"
@@ -148,7 +183,17 @@ const styles = {
     },
 
 
-    image: "./assets/cards/baba_yaga.png",
+    image: {
+
+        width: "100%",
+
+        height: "100%",
+
+        objectFit: "cover",
+
+        display: "block"
+
+    },
 
 
     noArt: {
