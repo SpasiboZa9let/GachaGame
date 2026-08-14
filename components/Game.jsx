@@ -402,20 +402,20 @@ const styles = {
 
         minHeight: "100vh",
 
+        background:
+            "radial-gradient(circle at center, #292929, #101010)",
+
+        color: "#eee",
+
         padding: "20px",
+
+        boxSizing: "border-box",
 
         display: "flex",
 
         flexDirection: "column",
 
-        gap: "15px",
-
-        boxSizing: "border-box",
-
-        background: "#101010",
-
-        color: "#fff"
-
+        gap: "12px"
     },
 
 
@@ -427,17 +427,35 @@ const styles = {
 
         alignItems: "center",
 
-        borderBottom: "1px solid #444",
+        paddingBottom: "10px",
 
-        paddingBottom: "10px"
+        borderBottom: "1px solid #444"
+    },
 
+
+    title: {
+
+        margin: 0,
+
+        fontSize: "24px"
     },
 
 
     turn: {
 
-        color: "#aaa"
+        color: "#aaa",
 
+        fontSize: "14px"
+    },
+
+
+    playerSection: {
+
+        display: "flex",
+
+        flexDirection: "column",
+
+        gap: "8px"
     },
 
 
@@ -445,46 +463,44 @@ const styles = {
 
         display: "flex",
 
-        gap: "20px",
-
         alignItems: "center",
 
-        padding: "10px"
+        gap: "20px",
 
+        padding: "5px 10px",
+
+        color: "#ddd"
     },
 
 
     board: {
 
-        background: "#202020",
+        minHeight: "130px",
 
-        border: "1px solid #444",
+        background:
+            "rgba(20,20,20,0.8)",
 
-        borderRadius: "10px",
+        border:
 
-        minHeight: "120px",
+            "1px solid #444",
 
-        padding: "10px",
+        borderRadius: "12px",
 
-        boxSizing: "border-box"
-
+        padding: "10px"
     },
 
 
     center: {
 
-        textAlign: "center",
-
-        color: "#777",
-
-        minHeight: "25px",
+        height: "35px",
 
         display: "flex",
 
+        alignItems: "center",
+
         justifyContent: "center",
 
-        alignItems: "center"
-
+        color: "#777"
     },
 
 
@@ -492,8 +508,10 @@ const styles = {
 
         color: "#ffd700",
 
-        fontWeight: "bold"
+        fontWeight: "bold",
 
+        animation:
+            "pulse 1s infinite"
     },
 
 
@@ -502,7 +520,6 @@ const styles = {
         color: "#55aaff",
 
         fontWeight: "bold"
-
     },
 
 
@@ -510,20 +527,21 @@ const styles = {
 
         alignSelf: "center",
 
-        padding: "12px 30px",
+        padding: "12px 35px",
 
         border: "1px solid #666",
 
         borderRadius: "8px",
 
-        background: "#444",
+        background: "#333",
 
         color: "#fff",
 
         cursor: "pointer",
 
-        fontSize: "16px"
+        fontSize: "16px",
 
+        marginBottom: "10px"
     }
 
 };
