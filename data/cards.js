@@ -1,47 +1,25 @@
-const CARDS = {
-
-    baba_yaga: {
-
+const CARDS = [
+    {
         id: "baba_yaga",
-
         name: "Баба-Яга",
-
         cost: 5,
-
         attack: 4,
-
         health: 6,
-
-        description:
-            "Старая хозяйка избушки.",
-
-        image:
-            "./assets/cards/baba_yaga.png"
-
+        faction: "Навь",
+        image: "./assets/cards/baba_yaga.png",
+        description: "Хозяйка избушки на курьих ножках."
     },
 
-
-    shaman: {
-
+    {
         id: "shaman",
-
         name: "Шаман",
-
-        cost: 2,
-
+        cost: 3,
         attack: 2,
-
-        health: 3,
-
-        description:
-            "Зовёт духов леса.",
-
-        image:
-            "./assets/cards/shaman.png"
-
+        health: 4,
+        faction: "Явь",
+        image: "./assets/cards/shaman.png",
+        description: "Знающий тайны духов и леса."
     }
+];
 
-};
-
-
-export default CARDS;
+window.CARDS = CARDS;
