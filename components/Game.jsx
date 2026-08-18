@@ -5,7 +5,6 @@ function Game() {
             () => createInitialGameState()
         );
 
-
     const [selectedAttacker, setSelectedAttacker] =
         React.useState(null);
 
@@ -13,14 +12,12 @@ function Game() {
     const player =
         gameState.player;
 
-
     const opponent =
         gameState.opponent;
 
 
     const playerHero =
         player.hero;
-
 
     const opponentHero =
         opponent.hero;
@@ -41,7 +38,9 @@ function Game() {
         }
 
 
-        if (gameState.gameOver) {
+        if (
+            gameState.gameOver
+        ) {
             return;
         }
 
@@ -76,7 +75,9 @@ function Game() {
         }
 
 
-        if (gameState.gameOver) {
+        if (
+            gameState.gameOver
+        ) {
             return;
         }
 
@@ -89,7 +90,9 @@ function Game() {
         }
 
 
-        if (selectedAttacker) {
+        if (
+            selectedAttacker
+        ) {
 
             if (
                 selectedAttacker ===
@@ -103,6 +106,7 @@ function Game() {
                 return;
 
             }
+
 
             return;
 
@@ -132,7 +136,9 @@ function Game() {
         }
 
 
-        if (gameState.gameOver) {
+        if (
+            gameState.gameOver
+        ) {
             return;
         }
 
@@ -145,7 +151,9 @@ function Game() {
         }
 
 
-        if (!selectedAttacker) {
+        if (
+            !selectedAttacker
+        ) {
             return;
         }
 
@@ -173,7 +181,9 @@ function Game() {
 
     function handleOpponentHeroClick() {
 
-        if (gameState.gameOver) {
+        if (
+            gameState.gameOver
+        ) {
             return;
         }
 
@@ -186,7 +196,16 @@ function Game() {
         }
 
 
-        if (!selectedAttacker) {
+        if (
+            !selectedAttacker
+        ) {
+            return;
+        }
+
+
+        if (
+            opponent.hp <= 0
+        ) {
             return;
         }
 
@@ -213,7 +232,9 @@ function Game() {
 
     function handleEndTurn() {
 
-        if (gameState.gameOver) {
+        if (
+            gameState.gameOver
+        ) {
             return;
         }
 
@@ -258,16 +279,19 @@ function Game() {
     }
 
 
-    /*
-        Последние сообщения журнала.
-    */
+    const winnerText =
 
-    const combatLog =
-        gameState.combatLog || [];
+        gameState.winner ===
+        "player"
 
+            ? "ПОБЕДА"
 
-    const visibleLog =
-        combatLog.slice(-8);
+            : gameState.winner ===
+              "opponent"
+
+                ? "ПОРАЖЕНИЕ"
+
+                : "";
 
 
     return (
@@ -281,57 +305,58 @@ function Game() {
 
             {gameState.gameOver && (
 
-                <div style={gameStyles.gameOver}>
+                <div
+                    style={
+                        gameStyles.gameOverOverlay
+                    }
+                >
 
                     <div
                         style={
-                            gameStyles.gameOverTitle
+                            gameStyles.gameOverBox
                         }
                     >
 
-                        {gameState.winner ===
-                        "player"
+                        <div
+                            style={
+                                gameStyles.gameOverTitle
+                            }
+                        >
+                            {winnerText}
+                        </div>
 
-                            ? "ПОБЕДА"
 
-                            : "ПОРАЖЕНИЕ"
+                        <div
+                            style={
+                                gameStyles.gameOverText
+                            }
+                        >
 
-                        }
+                            {gameState.winner ===
+                            "player"
+
+                                ? "Илья Муромец одержал победу."
+
+                                : "Василиса Премудрая одержала победу."}
+
+                        </div>
+
+
+                        <button
+                            onClick={
+                                handleRestart
+                            }
+
+                            style={
+                                gameStyles.restartButton
+                            }
+                        >
+
+                            Начать заново
+
+                        </button>
 
                     </div>
-
-
-                    <div
-                        style={
-                            gameStyles.gameOverText
-                        }
-                    >
-
-                        {gameState.winner ===
-                        "player"
-
-                            ? "Герой противника повержен."
-
-                            : "Ваш герой повержен."
-
-                        }
-
-                    </div>
-
-
-                    <button
-                        onClick={
-                            handleRestart
-                        }
-
-                        style={
-                            gameStyles.restartButton
-                        }
-                    >
-
-                        Начать заново
-
-                    </button>
 
                 </div>
 
@@ -348,79 +373,68 @@ function Game() {
                 }
             >
 
+
                 <div
-                    onClick={
-                        handleOpponentHeroClick
+                    style={
+                        gameStyles.heroRow
                     }
-
-                    style={{
-                        ...gameStyles.hero,
-
-                        cursor:
-                            selectedAttacker
-                                ? "crosshair"
-                                : "default",
-
-                        border:
-                            selectedAttacker
-                                ? "2px solid #ffd700"
-                                : "2px solid transparent"
-                    }}
                 >
 
-                    <strong>
-
-                        {opponentHero
-                            ? opponentHero.name
-                            : "Противник"}
-
-                    </strong>
-
-
-                    <span>
-
-                        ❤️ {opponent.hp}
-
-                    </span>
-
-
-                    <span>
-
-                        🛡️ {
-
-                            opponentHero
-                                ? opponentHero.defense
-                                : 0
-
-                        }
-
-                    </span>
-
-
-                    <span>
-
-                        ⚔️ Сила {
-
-                            opponentHero
-                                ? opponentHero.strength
-                                : 0
-
-                        }
-
-                    </span>
-
-
-                    <span
+                    <div
                         style={
-                            gameStyles.mana
+                            gameStyles.hero
+                        }
+
+                        onClick={
+                            handleOpponentHeroClick
                         }
                     >
 
-                        🔵 {opponent.mana}
-                        /
-                        {opponent.maxMana}
+                        <strong>
 
-                    </span>
+                            {opponentHero
+                                ? opponentHero.name
+                                : "Противник"}
+
+                        </strong>
+
+
+                        <span>
+
+                            ❤️ {opponent.hp}
+
+                        </span>
+
+
+                        <span>
+
+                            🛡️ {opponentHero
+                                ? opponentHero.defense
+                                : 0}
+
+                        </span>
+
+
+                        <span>
+
+                            ⚔️ Сила {opponentHero
+                                ? opponentHero.strength
+                                : 0}
+
+                        </span>
+
+
+                        <span
+                            style={
+                                gameStyles.mana
+                            }
+                        >
+
+                            🔵 {opponent.mana} / {opponent.maxMana}
+
+                        </span>
+
+                    </div>
 
                 </div>
 
@@ -452,30 +466,24 @@ function Game() {
                 }
             >
 
-                {gameState.gameOver ? (
+                {selectedAttacker ? (
 
                     <span
                         style={
                             gameStyles.attackMode
                         }
                     >
-                        Игра окончена
-                    </span>
 
-                ) : selectedAttacker ? (
-
-                    <span
-                        style={
-                            gameStyles.attackMode
-                        }
-                    >
                         Выберите цель для атаки
+
                     </span>
 
                 ) : (
 
                     <span>
+
                         Ход: {gameState.turn}
+
                     </span>
 
                 )}
@@ -489,7 +497,7 @@ function Game() {
 
             <div
                 style={
-                    gameStyles.combatLog
+                    gameStyles.log
                 }
             >
 
@@ -498,7 +506,9 @@ function Game() {
                         gameStyles.logTitle
                     }
                 >
+
                     Журнал боя
+
                 </div>
 
 
@@ -508,23 +518,24 @@ function Game() {
                     }
                 >
 
-                    {visibleLog.map(
-                        (message, index) => (
+                    {(gameState.combatLog || [])
+                        .slice(-5)
+                        .map(
+                            (message, index) => (
 
-                            <div
-                                key={
-                                    index
-                                }
+                                <div
+                                    key={index}
+                                    style={
+                                        gameStyles.logMessage
+                                    }
+                                >
 
-                                style={
-                                    gameStyles.logMessage
-                                }
-                            >
-                                {message}
-                            </div>
+                                    {message}
 
-                        )
-                    )}
+                                </div>
+
+                            )
+                        )}
 
                 </div>
 
@@ -540,6 +551,7 @@ function Game() {
                     gameStyles.playerSection
                 }
             >
+
 
                 <Board
                     units={
@@ -580,26 +592,18 @@ function Game() {
 
                     <span>
 
-                        🛡️ {
-
-                            playerHero
-                                ? playerHero.defense
-                                : 0
-
-                        }
+                        🛡️ {playerHero
+                            ? playerHero.defense
+                            : 0}
 
                     </span>
 
 
                     <span>
 
-                        ⚔️ Сила {
-
-                            playerHero
-                                ? playerHero.strength
-                                : 0
-
-                        }
+                        ⚔️ Сила {playerHero
+                            ? playerHero.strength
+                            : 0}
 
                     </span>
 
@@ -610,13 +614,12 @@ function Game() {
                         }
                     >
 
-                        🔵 {player.mana}
-                        /
-                        {player.maxMana}
+                        🔵 {player.mana} / {player.maxMana}
 
                     </span>
 
                 </div>
+
 
             </section>
 
@@ -642,7 +645,7 @@ function Game() {
 
 
             {/* =========================
-                КНОПКА ХОДА
+                ЗАВЕРШЕНИЕ ХОДА
             ========================== */}
 
             {!gameState.gameOver && (
@@ -656,7 +659,9 @@ function Game() {
                         gameStyles.endTurn
                     }
                 >
+
                     Завершить ход
+
                 </button>
 
             )}
@@ -674,15 +679,19 @@ const gameStyles = {
 
         width: "100%",
 
+        minHeight: "100vh",
+
         display: "flex",
 
         flexDirection: "column",
 
         alignItems: "center",
 
-        padding: "0 10px",
+        padding: "0 10px 20px 10px",
 
-        boxSizing: "border-box"
+        boxSizing: "border-box",
+
+        position: "relative"
 
     },
 
@@ -713,6 +722,17 @@ const gameStyles = {
     },
 
 
+    heroRow: {
+
+        display: "flex",
+
+        justifyContent: "center",
+
+        width: "100%"
+
+    },
+
+
     hero: {
 
         display: "flex",
@@ -733,8 +753,7 @@ const gameStyles = {
 
         borderRadius: "8px",
 
-        transition:
-            "border 0.15s ease"
+        cursor: "default"
 
     },
 
@@ -774,11 +793,13 @@ const gameStyles = {
     },
 
 
-    combatLog: {
+    log: {
 
-        width: "min(700px, 95%)",
+        width: "100%",
 
-        height: "130px",
+        maxWidth: "700px",
+
+        height: "110px",
 
         background: "#111",
 
@@ -803,10 +824,7 @@ const gameStyles = {
 
         color: "#888",
 
-        borderBottom:
-            "1px solid #333",
-
-        paddingBottom: "5px",
+        fontWeight: "bold",
 
         marginBottom: "5px"
 
@@ -815,15 +833,15 @@ const gameStyles = {
 
     logMessages: {
 
+        height: "75px",
+
+        overflowY: "auto",
+
         display: "flex",
 
         flexDirection: "column",
 
-        gap: "3px",
-
-        overflowY: "auto",
-
-        height: "90px"
+        gap: "3px"
 
     },
 
@@ -885,22 +903,39 @@ const gameStyles = {
     },
 
 
-    gameOver: {
+    gameOverOverlay: {
 
         position: "fixed",
 
-        top: "50%",
+        left: "0",
 
-        left: "50%",
+        top: "0",
 
-        transform:
-            "translate(-50%, -50%)",
+        width: "100%",
+
+        height: "100%",
+
+        background:
+            "rgba(0,0,0,0.75)",
+
+        display: "flex",
+
+        alignItems: "center",
+
+        justifyContent: "center",
+
+        zIndex: 1000
+
+    },
+
+
+    gameOverBox: {
 
         width: "min(420px, 90%)",
 
-        background: "#181818",
+        background: "#222",
 
-        border: "2px solid #555",
+        border: "1px solid #555",
 
         borderRadius: "12px",
 
@@ -908,20 +943,10 @@ const gameStyles = {
 
         boxSizing: "border-box",
 
-        display: "flex",
-
-        flexDirection: "column",
-
-        alignItems: "center",
-
-        justifyContent: "center",
-
-        gap: "15px",
-
-        zIndex: 1000,
+        textAlign: "center",
 
         boxShadow:
-            "0 10px 40px rgba(0,0,0,0.8)"
+            "0 10px 40px rgba(0,0,0,0.7)"
 
     },
 
@@ -932,6 +957,8 @@ const gameStyles = {
 
         fontWeight: "bold",
 
+        marginBottom: "15px",
+
         color: "#ffd700"
 
     },
@@ -939,18 +966,16 @@ const gameStyles = {
 
     gameOverText: {
 
-        color: "#aaa",
+        fontSize: "16px",
 
-        fontSize: "14px",
+        color: "#bbb",
 
-        textAlign: "center"
+        marginBottom: "25px"
 
     },
 
 
     restartButton: {
-
-        marginTop: "10px",
 
         padding: "12px 28px",
 
