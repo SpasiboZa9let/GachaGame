@@ -22,7 +22,11 @@ function Game() {
             return;
         }
 
-        if (gameState.activePlayer !== "player") {
+
+        if (
+            gameState.activePlayer !==
+            "player"
+        ) {
             return;
         }
 
@@ -53,10 +57,6 @@ function Game() {
         }
 
 
-        /*
-            Повторный клик снимает выбор.
-        */
-
         if (
             selectedAttacker ===
             unit.instanceId
@@ -68,10 +68,6 @@ function Game() {
 
         }
 
-
-        /*
-            Проверяем возможность атаки.
-        */
 
         if (!unit.canAttack) {
 
@@ -120,7 +116,6 @@ function Game() {
 
         setGameState(newState);
 
-
         setSelectedAttacker(null);
 
     }
@@ -134,6 +129,11 @@ function Game() {
 
     function handleEndTurn() {
 
+        console.log(
+            "🔥 КНОПКА ЗАВЕРШИТЬ ХОД"
+        );
+
+
         setSelectedAttacker(null);
 
 
@@ -145,12 +145,6 @@ function Game() {
 
     }
 
-
-    /*
-        =========================
-        ДАННЫЕ ИГРОКОВ
-        =========================
-    */
 
     const player =
         gameState.player;
@@ -164,88 +158,60 @@ function Game() {
         =========================
         КАРТЫ В РУКЕ
         =========================
-
-        В руке могут находиться:
-        1. ID карты
-        2. уже готовый объект карты
-
-        Обрабатываем оба варианта.
     */
 
     const handCards =
-    (player.hand || [])
-        .map(card => {
+        (player.hand || [])
+            .map(card => {
 
-            /*
-                Если в руке уже полноценный
-                объект карты — используем его.
-            */
+                if (
+                    card &&
+                    typeof card === "object"
+                ) {
 
-            if (
-                card &&
-                typeof card === "object"
-            ) {
+                    return card;
 
-                return card;
-
-            }
+                }
 
 
-            /*
-                Если в руке находится ID,
-                ищем карту внутри массива CARDS.
-            */
+                if (
+                    typeof card === "string" ||
+                    typeof card === "number"
+                ) {
 
-            if (
-                typeof card === "string" ||
-                typeof card === "number"
-            ) {
+                    return CARDS.find(
+                        item =>
+                            item.id === card
+                    );
 
-                return CARDS.find(
-                    item => item.id === card
-                );
-
-            }
+                }
 
 
-            return null;
+                return null;
 
-        })
-        .filter(Boolean);
+            })
+            .filter(Boolean);
 
-
-    /*
-        Временно выводим количество карт
-        в консоль для диагностики.
-    */
 
     console.log(
-        "Карты в руке:",
-        player.hand
+        "GAME STATE:",
+        "turn:",
+        gameState.turn,
+        "mana:",
+        player.mana,
+        "maxMana:",
+        player.maxMana
     );
 
-    console.log(
-        "Готовые карты:",
-        handCards
-    );
-
-
-    /*
-        =========================
-        RENDER
-        =========================
-    */
 
     return (
 
-        <div style={styles.game}>
+        <div style={gameStyles.game}>
 
 
-            {/* =========================
-                HEADER
-            ========================== */}
+            {/* HEADER */}
 
-            <header style={styles.header}>
+            <header style={gameStyles.header}>
 
                 <h1>
                     Тридевятое царство
@@ -264,13 +230,11 @@ function Game() {
 
 
 
-            {/* =========================
-                ПРОТИВНИК
-            ========================== */}
+            {/* ПРОТИВНИК */}
 
             <section>
 
-                <div style={styles.hero}>
+                <div style={gameStyles.hero}>
 
                     <strong>
                         Противник
@@ -284,33 +248,33 @@ function Game() {
                 </div>
 
 
-                <div style={styles.board}>
+                <Board
+                    units={
+                        opponent.board || []
+                    }
 
-                    <Board
-                        units={opponent.board || []}
+                    onUnitClick={
+                        handleOpponentUnitClick
+                    }
 
-                        onUnitClick={
-                            handleOpponentUnitClick
-                        }
-
-                        selectedUnitId={null}
-                    />
-
-                </div>
+                    selectedUnitId={null}
+                />
 
             </section>
 
 
 
-            {/* =========================
-                ЦЕНТР
-            ========================== */}
+            {/* ЦЕНТР */}
 
-            <div style={styles.center}>
+            <div style={gameStyles.center}>
 
                 {selectedAttacker ? (
 
-                    <span style={styles.attackMode}>
+                    <span
+                        style={
+                            gameStyles.attackMode
+                        }
+                    >
 
                         ⚔️ Выберите цель
 
@@ -321,8 +285,11 @@ function Game() {
                     <span>
 
                         {
-                            gameState.activePlayer === "player"
+                            gameState.activePlayer ===
+                            "player"
+
                                 ? "Ваш ход"
+
                                 : "Ход противника"
                         }
 
@@ -334,30 +301,26 @@ function Game() {
 
 
 
-            {/* =========================
-                ИГРОК
-            ========================== */}
+            {/* ИГРОК */}
 
             <section>
 
-                <div style={styles.board}>
+                <Board
+                    units={
+                        player.board || []
+                    }
 
-                    <Board
-                        units={player.board || []}
+                    onUnitClick={
+                        handlePlayerUnitClick
+                    }
 
-                        onUnitClick={
-                            handlePlayerUnitClick
-                        }
-
-                        selectedUnitId={
-                            selectedAttacker
-                        }
-                    />
-
-                </div>
+                    selectedUnitId={
+                        selectedAttacker
+                    }
+                />
 
 
-                <div style={styles.hero}>
+                <div style={gameStyles.hero}>
 
                     <strong>
                         Игрок
@@ -369,7 +332,11 @@ function Game() {
                     </span>
 
 
-                    <span style={styles.mana}>
+                    <span
+                        style={
+                            gameStyles.mana
+                        }
+                    >
 
                         🔵
                         {" "}
@@ -385,9 +352,7 @@ function Game() {
 
 
 
-            {/* =========================
-                РУКА
-            ========================== */}
+            {/* РУКА */}
 
             <Hand
                 cards={handCards}
@@ -396,13 +361,11 @@ function Game() {
 
 
 
-            {/* =========================
-                КНОПКА ХОДА
-            ========================== */}
+            {/* КНОПКА */}
 
             <button
                 onClick={handleEndTurn}
-                style={styles.endTurn}
+                style={gameStyles.endTurn}
             >
 
                 Завершить ход
@@ -417,12 +380,13 @@ function Game() {
 }
 
 
-
-const styles = {
+const gameStyles = {
 
     game: {
 
         minHeight: "100vh",
+
+        width: "100%",
 
         padding: "20px",
 
@@ -465,21 +429,6 @@ const styles = {
     },
 
 
-    board: {
-
-        background: "#202020",
-
-        border: "1px solid #444",
-
-        borderRadius: "10px",
-
-        padding: "10px",
-
-        overflowX: "auto"
-
-    },
-
-
     center: {
 
         textAlign: "center",
@@ -502,7 +451,9 @@ const styles = {
 
     mana: {
 
-        color: "#55aaff"
+        color: "#55aaff",
+
+        fontWeight: "bold"
 
     },
 
