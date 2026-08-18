@@ -1,40 +1,18 @@
 const CARDS = [
 
    {
-    id: "shaman",
-
-    name: "Шаман",
-
-    rarity: "uncommon",
-
-    faction: "nav",
-
-    cost: 3,
-
-    health: 1850,
-
-    attack: 740,
-
-    defense: 560,
-
-    strength: 6,
-
-    image: "./assets/cards/shaman.png",
-
-    abilities: [
-
-        {
-            id: "spirit_call",
-
-            name: "Призыв духов",
-
-            type: "buff"
-
-        }
-
-    ]
-
-}
+        id: "shaman",
+        name: "Шаман",
+        rarity: "uncommon",
+        faction: "nav",
+        cost: 3,
+        health: 1850,
+        attack: 740,
+        defense: 560,
+        strength: 6,
+        image: "./assets/cards/shaman.png",
+        abilities: []
+    },
     {
         id: "baba_yaga",
         name: "Баба-Яга",
