@@ -4,11 +4,16 @@ function Board({
     selectedUnitId
 }) {
 
+    const safeUnits = Array.isArray(units)
+        ? units.filter(Boolean)
+        : [];
+
+
     return (
 
         <div style={styles.board}>
 
-            {(!units || units.length === 0) ? (
+            {safeUnits.length === 0 ? (
 
                 <div style={styles.empty}>
                     Поле пусто
@@ -16,70 +21,65 @@ function Board({
 
             ) : (
 
-                units.map(unit => {
+                safeUnits.map(unit => {
 
-                    if (!unit) {
-                        return null;
-                    }
+                    const card = CARDS.find(
+                        item => item.id === unit.cardId
+                    );
 
-                    const card =
-                        CARDS.find(
-                            item =>
-                                item.id === unit.cardId
-                        );
 
                     if (!card) {
                         return null;
                     }
 
+
                     const selected =
                         unit.instanceId === selectedUnitId;
+
 
                     return (
 
                         <div
                             key={unit.instanceId}
-
-                            onClick={() =>
-                                onUnitClick &&
-                                onUnitClick(unit)
-                            }
+                            onClick={() => {
+                                if (onUnitClick) {
+                                    onUnitClick(unit);
+                                }
+                            }}
 
                             style={{
                                 ...styles.unit,
 
-                                border:
-                                    selected
-                                        ? "4px solid #ffd700"
-                                        : "2px solid #777",
+                                border: selected
+                                    ? "3px solid #ffd700"
+                                    : "2px solid #777",
 
                                 opacity:
                                     unit.canAttack
                                         ? 1
                                         : 0.65,
 
-                                boxShadow:
-                                    selected
-                                        ? "0 0 25px rgba(255,215,0,0.8)"
-                                        : "0 5px 15px rgba(0,0,0,0.6)"
+                                boxShadow: selected
+                                    ? "0 0 18px rgba(255,215,0,0.7)"
+                                    : "0 5px 12px rgba(0,0,0,0.5)"
                             }}
                         >
 
-                            {/* COST */}
+                            {/* СТОИМОСТЬ */}
 
                             <div style={styles.cost}>
                                 {card.cost}
                             </div>
 
 
-                            {/* NAME */}
+                            {/* НАЗВАНИЕ */}
 
                             <div style={styles.name}>
                                 {card.name}
                             </div>
 
 
-                            {/* IMAGE */}
+                            {/* ИЗОБРАЖЕНИЕ */}
 
                             <div style={styles.imageBox}>
 
@@ -102,7 +102,7 @@ function Board({
                             </div>
 
 
-                            {/* STATUS */}
+                            {/* СТАТУС */}
 
                             <div style={styles.status}>
 
@@ -113,7 +113,7 @@ function Board({
                             </div>
 
 
-                            {/* STATS */}
+                            {/* ХАРАКТЕРИСТИКИ */}
 
                             <div style={styles.stats}>
 
@@ -142,19 +142,36 @@ function Board({
 }
 
 
+
 const styles = {
 
     /*
-        САМО ПОЛЕ
+        =========================
+        ПОЛЕ
+        =========================
 
-        Только горизонтальный ряд.
+        КЛЮЧЕВОЕ:
+
+        display: flex
+        flex-direction: row
+        flex-wrap: nowrap
+
+        Поэтому:
+
+        [Баба-Яга] [Шаман] [Карта]
+
+        а не:
+
+        [Баба-Яга]
+        [Шаман]
+        [Карта]
     */
 
     board: {
 
         width: "100%",
 
-        minHeight: "300px",
+        minHeight: "210px",
 
         display: "flex",
 
@@ -166,15 +183,15 @@ const styles = {
 
         justifyContent: "flex-start",
 
-        gap: "20px",
+        gap: "16px",
 
         padding: "20px",
 
-        boxSizing: "border-box",
-
         overflowX: "auto",
 
-        overflowY: "hidden"
+        overflowY: "hidden",
+
+        boxSizing: "border-box"
 
     },
 
@@ -187,47 +204,45 @@ const styles = {
 
         color: "#555",
 
-        fontSize: "16px"
+        fontSize: "14px"
 
     },
 
 
     /*
+        =========================
         КАРТА НА ПОЛЕ
+        =========================
 
-        Теперь она РОВНО такого же
-        физического размера, как карта
-        в руке.
+        Фиксированный размер.
 
-        Никаких 120x165.
-        Никаких ограничений родителя.
+        Она НЕ должна растягиваться
+        вместе с контейнером.
     */
 
     unit: {
 
-        width: "180px",
-
-        minWidth: "180px",
-
-        maxWidth: "180px",
-
-        height: "260px",
-
-        minHeight: "260px",
-
-        maxHeight: "260px",
-
-        flex: "0 0 180px",
-
-        flexShrink: 0,
-
         position: "relative",
+
+        width: "150px",
+
+        minWidth: "150px",
+
+        maxWidth: "150px",
+
+        height: "195px",
+
+        minHeight: "195px",
+
+        maxHeight: "195px",
+
+        flex: "0 0 150px",
 
         background: "#292929",
 
-        borderRadius: "12px",
+        borderRadius: "10px",
 
-        padding: "8px",
+        padding: "7px",
 
         boxSizing: "border-box",
 
@@ -235,9 +250,9 @@ const styles = {
 
         flexDirection: "column",
 
-        cursor: "pointer",
+        flexShrink: 0,
 
-        overflow: "hidden",
+        cursor: "pointer",
 
         transition:
             "transform 0.15s ease, box-shadow 0.15s ease"
@@ -249,17 +264,19 @@ const styles = {
 
         position: "absolute",
 
-        top: "6px",
+        top: "5px",
 
-        left: "6px",
+        left: "5px",
 
-        width: "30px",
+        width: "26px",
 
-        height: "30px",
+        height: "26px",
 
         borderRadius: "50%",
 
         background: "#3478db",
+
+        color: "#fff",
 
         display: "flex",
 
@@ -267,28 +284,30 @@ const styles = {
 
         justifyContent: "center",
 
-        fontSize: "14px",
+        fontSize: "12px",
 
         fontWeight: "bold",
 
-        zIndex: 3
+        zIndex: 5
 
     },
 
 
     name: {
 
-        height: "25px",
+        width: "100%",
 
-        minHeight: "25px",
+        height: "24px",
 
-        lineHeight: "25px",
+        minHeight: "24px",
+
+        lineHeight: "24px",
 
         textAlign: "center",
 
         fontWeight: "bold",
 
-        fontSize: "14px",
+        fontSize: "13px",
 
         whiteSpace: "nowrap",
 
@@ -303,17 +322,21 @@ const styles = {
 
         width: "100%",
 
-        height: "150px",
+        height: "105px",
 
-        minHeight: "150px",
+        minHeight: "105px",
+
+        maxHeight: "105px",
 
         background: "#111",
 
         border: "1px solid #555",
 
-        borderRadius: "7px",
+        borderRadius: "6px",
 
-        overflow: "hidden"
+        overflow: "hidden",
+
+        flexShrink: 0
 
     },
 
@@ -343,35 +366,55 @@ const styles = {
 
         justifyContent: "center",
 
-        color: "#555"
+        color: "#555",
+
+        fontSize: "11px"
 
     },
 
 
     status: {
 
+        width: "100%",
+
+        height: "22px",
+
+        minHeight: "22px",
+
+        lineHeight: "22px",
+
         textAlign: "center",
 
-        fontSize: "11px",
+        fontSize: "10px",
 
         color: "#aaa",
 
-        paddingTop: "6px"
+        overflow: "hidden"
 
     },
 
 
     stats: {
 
+        width: "100%",
+
+        height: "25px",
+
+        minHeight: "25px",
+
         display: "flex",
 
         justifyContent: "space-between",
 
-        padding: "6px 5px",
+        alignItems: "center",
 
-        fontSize: "14px",
+        padding: "2px 5px",
 
-        fontWeight: "bold"
+        fontSize: "13px",
+
+        fontWeight: "bold",
+
+        boxSizing: "border-box"
 
     }
 
