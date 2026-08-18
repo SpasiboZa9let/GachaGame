@@ -24,7 +24,6 @@ function createInitialGameState() {
 
         },
 
-
         opponent: {
 
             hp: 30,
@@ -33,7 +32,9 @@ function createInitialGameState() {
             maxMana: 1,
 
             deck: [],
+
             hand: [],
+
             board: []
 
         }
@@ -44,35 +45,31 @@ function createInitialGameState() {
 
 
 /*
-    =========================
-    ПОИСК КАРТЫ
-    =========================
-
-    CARDS — массив объектов.
-
-    Поэтому ищем карту по её id.
+    Получить карту по ID
 */
 
 function getCardById(cardId) {
 
+    if (!Array.isArray(CARDS)) {
+        console.error("CARDS не является массивом");
+        return null;
+    }
+
     return CARDS.find(
         card => card.id === cardId
-    );
+    ) || null;
 
 }
 
 
 /*
-    =========================
-    СОЗДАНИЕ ЭКЗЕМПЛЯРА
-    =========================
+    Создание экземпляра существа
 */
 
 function createCardInstance(cardId) {
 
     const card =
         getCardById(cardId);
-
 
     if (!card) {
 
@@ -82,7 +79,6 @@ function createCardInstance(cardId) {
         );
 
         return null;
-
     }
 
 
@@ -93,26 +89,19 @@ function createCardInstance(cardId) {
             "_" +
             Date.now() +
             "_" +
-            Math.random(),
-
+            Math.random()
+                .toString(36)
+                .substring(2, 8),
 
         cardId: cardId,
 
+        attack: card.attack,
 
-        attack:
-            card.attack,
+        health: card.health,
 
-
-        health:
-            card.health,
-
-
-        maxHealth:
-            card.health,
-
+        maxHealth: card.health,
 
         canAttack: false,
-
 
         status: []
 
@@ -122,49 +111,44 @@ function createCardInstance(cardId) {
 
 
 /*
-    =========================
-    ПОЛУЧЕНИЕ КАРТЫ ИЗ РУКИ
-    =========================
+    Проверяем наличие карты в руке
 */
 
 function getCardFromHand(player, cardId) {
 
+    if (!player || !Array.isArray(player.hand)) {
+        return null;
+    }
+
     return player.hand.find(
-        id => {
-
-            if (
-                typeof id === "object"
-            ) {
-
-                return id.id === cardId;
-
-            }
-
-            return id === cardId;
-
-        }
-    );
+        id => id === cardId
+    ) || null;
 
 }
 
 
 /*
-    =========================
-    РАЗЫГРЫВАНИЕ КАРТЫ
-    =========================
+    Разыгрывание карты
 */
 
-function playCard(
-    state,
-    playerId,
-    cardId
-) {
+function playCard(state, playerId, cardId) {
 
     const player =
         state[playerId];
 
-
     if (!player) {
+        return state;
+    }
+
+
+    /*
+        Проверяем ход
+    */
+
+    if (
+        state.activePlayer !==
+        playerId
+    ) {
 
         return state;
 
@@ -172,8 +156,7 @@ function playCard(
 
 
     /*
-        Проверяем наличие карты
-        в руке.
+        Карта должна быть в руке
     */
 
     const cardInHand =
@@ -181,7 +164,6 @@ function playCard(
             player,
             cardId
         );
-
 
     if (!cardInHand) {
 
@@ -196,27 +178,19 @@ function playCard(
 
 
     /*
-        Получаем шаблон карты.
+        Получаем карту
     */
 
     const card =
         getCardById(cardId);
 
-
     if (!card) {
-
-        console.error(
-            "Шаблон карты не найден:",
-            cardId
-        );
-
         return state;
-
     }
 
 
     /*
-        Проверяем ману.
+        Проверяем ману
     */
 
     if (
@@ -234,8 +208,7 @@ function playCard(
 
 
     /*
-        Проверяем лимит существ
-        на поле.
+        Максимум 5 существ
     */
 
     if (
@@ -252,64 +225,40 @@ function playCard(
 
 
     /*
-        Создаём экземпляр карты.
+        Создаём экземпляр
     */
 
     const instance =
-        createCardInstance(cardId);
-
+        createCardInstance(
+            cardId
+        );
 
     if (!instance) {
-
         return state;
-
     }
 
 
     /*
-        Удаляем карту из руки.
+        Новое состояние
     */
 
-    const newHand =
-        player.hand.filter(
-            id => {
-
-                if (
-                    typeof id === "object"
-                ) {
-
-                    return id.id !== cardId;
-
-                }
-
-                return id !== cardId;
-
-            }
-        );
-
-
-    /*
-        Создаём новое состояние.
-    */
-
-    const newState = {
+    return {
 
         ...state,
-
 
         [playerId]: {
 
             ...player,
 
-
             mana:
                 player.mana -
                 card.cost,
 
-
             hand:
-                newHand,
-
+                player.hand.filter(
+                    id =>
+                        id !== cardId
+                ),
 
             board: [
 
@@ -322,8 +271,5 @@ function playCard(
         }
 
     };
-
-
-    return newState;
 
 }
