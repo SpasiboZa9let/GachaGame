@@ -1,168 +1,193 @@
-<!DOCTYPE html>
-<html lang="ru">
-
-<head>
-
-    <meta charset="UTF-8">
-
-    <meta
-        name="viewport"
-        content="width=device-width, initial-scale=1.0"
-    >
-
-    <title>Тридевятое царство</title>
+<!DOCTYPE html> <html lang="ru"> <head>
+<meta charset="UTF-8">
 
 
-    <!-- =========================
-         REACT
-    ========================== -->
-
-    <script src="https://unpkg.com/react@18/umd/react.development.js"></script>
-
-    <script src="https://unpkg.com/react-dom@18/umd/react-dom.development.js"></script>
+<meta
+    name="viewport"
+    content="width=device-width, initial-scale=1.0"
+>
 
 
-    <!-- =========================
-         BABEL
-    ========================== -->
-
-    <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
-
-
-    <!-- =========================
-         ОСНОВНЫЕ СТИЛИ
-    ========================== -->
-
-    <style>
-
-        * {
-            box-sizing: border-box;
-        }
-
-
-        html,
-        body {
-
-            margin: 0;
-            padding: 0;
-
-            min-height: 100%;
-
-        }
-
-
-        body {
-
-            background: #171717;
-
-            color: #eee;
-
-            font-family:
-                Arial,
-                Helvetica,
-                sans-serif;
-
-        }
-
-
-        button,
-        input {
-
-            font-family: inherit;
-
-        }
-
-
-        #root {
-
-            min-height: 100vh;
-
-        }
-
-    </style>
-
-</head>
-
-
-<body>
-
-
-    <!-- =========================
-         REACT ROOT
-    ========================== -->
-
-    <div id="root"></div>
+<title>Тридевятое царство</title>
 
 
 
-    <!-- =========================
-         DATA
-    ========================== -->
 
-    <script
-        type="text/babel"
-        src="./data/cards.js">
-    </script>
+<script src="https://unpkg.com/react@18/umd/react.development.js"></script>
 
 
+<script src="https://unpkg.com/react-dom@18/umd/react-dom.development.js"></script>
 
-    <!-- =========================
-         GAME LOGIC
-    ========================== -->
 
-    <script
-        type="text/babel"
-        src="./game/engine.js">
-    </script>
+<script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
 
-    <script
-        type="text/babel"
-        src="./game/turns.js">
-    </script>
 
-    <script
+
+
+<style>
+
+
+    * {
+        box-sizing: border-box;
+    }
+
+
+
+
+    html,
+    body {
+
+
+        margin: 0;
+        padding: 0;
+
+
+        min-height: 100%;
+
+
+    }
+
+
+
+
+    body {
+
+
+        background: #171717;
+
+
+        color: #eee;
+
+
+        font-family:
+            Arial,
+            Helvetica,
+            sans-serif;
+
+
+    }
+
+
+
+
+    button,
+    input {
+
+
+        font-family: inherit;
+
+
+    }
+
+
+
+
+    #root {
+
+
+        min-height: 100vh;
+
+
+    }
+
+
+</style>
+</head> <body>
+<div id="root"></div>
+
+
+
+
+
+
+<!-- =========================
+     DATA
+========================== -->
+
+
+<script
+    type="text/babel"
+    src="./data/cards.js">
+</script>
+
+
+<script
+    type="text/babel"
+    src="./data/heroes.js">
+</script>
+
+
+
+
+
+
+<!-- =========================
+     GAME LOGIC
+========================== -->
+
+
+<script
+    type="text/babel"
+    src="./game/engine.js">
+</script>
+
+
+<script
+    type="text/babel"
+    src="./game/turns.js">
+</script>
+
+
+<script
     type="text/babel"
     src="./game/combat.js">
-
-    </script>
-
-
-    <!-- =========================
-         COMPONENTS
-    ========================== -->
-
-    <script
-        type="text/babel"
-        src="./components/Card.jsx">
-    </script>
-
-    <script
-        type="text/babel"
-        src="./components/Board.jsx">
-    </script>
-
-    <script
-        type="text/babel"
-        src="./components/Hand.jsx">
-    </script>
-
-    <script
-        type="text/babel"
-        src="./components/Game.jsx">
-    </script>
+</script>
 
 
 
-    <!-- =========================
-         APPLICATION
-    ========================== -->
-
-    <script
-        type="text/babel"
-        src="./app.js">
-    </script>
 
 
-</body>
 
-</html>
+<!-- =========================
+     COMPONENTS
+========================== -->
+
+
+<script
+    type="text/babel"
+    src="./components/Card.jsx">
+</script>
+
+
+<script
+    type="text/babel"
+    src="./components/Board.jsx">
+</script>
+
+
+<script
+    type="text/babel"
+    src="./components/Hand.jsx">
+</script>
+
+
+<script
+    type="text/babel"
+    src="./components/Game.jsx">
+</script>
+
+
+
+
+
+
+<!-- =========================
+     APPLICATION
+========================== -->
+
+
+<script
+    type="text/babel"
+    src="./app.js">
+</script>
+</body> </html>
