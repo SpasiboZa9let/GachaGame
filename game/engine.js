@@ -10,6 +10,7 @@ function createInitialGameState() {
             hero => hero.id === "vasilisa_premudraya"
         );
 
+
     return {
 
         turn: 1,
@@ -23,6 +24,7 @@ function createInitialGameState() {
         combatLog: [
             "Бой начинается."
         ],
+
 
         player: {
 
@@ -40,12 +42,16 @@ function createInitialGameState() {
 
             hand: [
                 "baba_yaga",
-                "shaman"
+                "shaman",
+                "voin_pikhotinets",
+                "volk",
+                "viy"
             ],
 
             board: []
 
         },
+
 
         opponent: {
 
@@ -61,7 +67,13 @@ function createInitialGameState() {
 
             deck: [],
 
-            hand: [],
+            hand: [
+                "voin_pikhotinets",
+                "volk",
+                "zmey_gorynych",
+                "svetogor",
+                "viy"
+            ],
 
             board: []
 
@@ -73,10 +85,13 @@ function createInitialGameState() {
 
 
 /*
-    Добавляет сообщение в журнал боя.
+    Добавление сообщения в журнал боя.
 */
 
-function addCombatLog(state, message) {
+function addCombatLog(
+    state,
+    message
+) {
 
     return {
 
@@ -102,41 +117,19 @@ function checkGameOver(state) {
         return state;
     }
 
+
     if (state.gameOver) {
         return state;
     }
 
 
-    if (state.player.hp <= 0) {
+    /*
+        Победа игрока.
+    */
 
-        return {
-
-            ...state,
-
-            gameOver: true,
-
-            winner: "opponent",
-
-            player: {
-
-                ...state.player,
-
-                hp: 0
-
-            },
-
-            combatLog: [
-                ...(state.combatLog || []),
-                "Герой игрока повержен.",
-                "ПОРАЖЕНИЕ."
-            ]
-
-        };
-
-    }
-
-
-    if (state.opponent.hp <= 0) {
+    if (
+        state.opponent.hp <= 0
+    ) {
 
         return {
 
@@ -155,9 +148,52 @@ function checkGameOver(state) {
             },
 
             combatLog: [
+
                 ...(state.combatLog || []),
+
                 "Герой противника повержен.",
+
                 "ПОБЕДА."
+
+            ]
+
+        };
+
+    }
+
+
+    /*
+        Победа противника.
+    */
+
+    if (
+        state.player.hp <= 0
+    ) {
+
+        return {
+
+            ...state,
+
+            gameOver: true,
+
+            winner: "opponent",
+
+            player: {
+
+                ...state.player,
+
+                hp: 0
+
+            },
+
+            combatLog: [
+
+                ...(state.combatLog || []),
+
+                "Ваш герой повержен.",
+
+                "ПОРАЖЕНИЕ."
+
             ]
 
         };
@@ -176,7 +212,9 @@ function checkGameOver(state) {
 
 function getCardById(cardId) {
 
-    if (!Array.isArray(CARDS)) {
+    if (
+        !Array.isArray(CARDS)
+    ) {
 
         console.error(
             "CARDS не является массивом."
@@ -186,10 +224,14 @@ function getCardById(cardId) {
 
     }
 
+
     return (
+
         CARDS.find(
-            card => card.id === cardId
+            card =>
+                card.id === cardId
         ) || null
+
     );
 
 }
@@ -221,6 +263,7 @@ function createCardInstance(cardId) {
     return {
 
         instanceId:
+
             cardId +
             "_" +
             Date.now() +
@@ -229,19 +272,33 @@ function createCardInstance(cardId) {
                 .toString(36)
                 .substring(2, 8),
 
+
         cardId: cardId,
 
-        attack: card.attack,
 
-        health: card.health,
+        attack:
+            card.attack,
 
-        maxHealth: card.health,
 
-        defense: card.defense,
+        health:
+            card.health,
 
-        strength: card.strength,
 
-        canAttack: false,
+        maxHealth:
+            card.health,
+
+
+        defense:
+            card.defense,
+
+
+        strength:
+            card.strength,
+
+
+        canAttack:
+            false,
+
 
         status: []
 
@@ -254,7 +311,10 @@ function createCardInstance(cardId) {
     Поиск карты в руке.
 */
 
-function getCardFromHand(player, cardId) {
+function getCardFromHand(
+    player,
+    cardId
+) {
 
     if (
         !player ||
@@ -265,10 +325,14 @@ function getCardFromHand(player, cardId) {
 
     }
 
+
     return (
+
         player.hand.find(
-            id => id === cardId
+            id =>
+                id === cardId
         ) || null
+
     );
 
 }
@@ -284,8 +348,13 @@ function playCard(
     cardId
 ) {
 
-    if (!state || state.gameOver) {
+    if (
+        !state ||
+        state.gameOver
+    ) {
+
         return state;
+
     }
 
 
@@ -297,6 +366,11 @@ function playCard(
         return state;
     }
 
+
+    /*
+        Играть карту можно
+        только во время своего хода.
+    */
 
     if (
         state.activePlayer !==
@@ -336,6 +410,10 @@ function playCard(
     }
 
 
+    /*
+        Проверка маны.
+    */
+
     if (
         player.mana <
         card.cost
@@ -349,6 +427,11 @@ function playCard(
 
     }
 
+
+    /*
+        Максимум 5 существ
+        на поле.
+    */
 
     if (
         player.board.length >= 5
@@ -374,15 +457,28 @@ function playCard(
     }
 
 
+    /*
+        Удаляем карту из руки.
+    */
+
     const newHand =
         player.hand.filter(
-            id => id !== cardId
+            id =>
+                id !== cardId
         );
 
 
+    /*
+        Добавляем существо
+        на поле.
+    */
+
     const newBoard = [
+
         ...player.board,
+
         instance
+
     ];
 
 
@@ -411,15 +507,21 @@ function playCard(
 
     newState =
         addCombatLog(
+
             newState,
+
             (
                 playerId === "player"
                     ? "Вы"
-                    : "Противник"
+                    : "Василиса"
             ) +
+
             " разыграли карту «" +
+
             card.name +
+
             "»."
+
         );
 
 
@@ -440,29 +542,39 @@ function restartGame() {
 
 
 /*
-    Глобальные функции.
+    Экспортируем функции
+    в глобальную область,
+    поскольку проект использует
+    Babel без сборщика.
 */
 
 window.createInitialGameState =
     createInitialGameState;
 
+
 window.addCombatLog =
     addCombatLog;
+
 
 window.checkGameOver =
     checkGameOver;
 
+
 window.getCardById =
     getCardById;
+
 
 window.createCardInstance =
     createCardInstance;
 
+
 window.getCardFromHand =
     getCardFromHand;
 
+
 window.playCard =
     playCard;
+
 
 window.restartGame =
     restartGame;
