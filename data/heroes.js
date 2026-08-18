@@ -1,100 +1,57 @@
 const HEROES = [
 
-{
-    id: "ilya_muromets",
-    name: "Илья Муромец",
+    {
+        id: "ilya_muromets",
 
+        name: "Илья Муромец",
 
-    faction: "Явь",
+        image:
+            "./assets/heroes/ilya_muromets.png",
 
+        maxHealth: 10000,
 
-    level: 1,
+        attack: 0,
 
+        defense: 1400,
 
-    health: 10000,
-    maxHealth: 10000,
+        strength: 16,
 
+        level: 1,
 
-    defense: 1100,
+        xp: 0,
 
+        frame:
+            "warrior"
 
-    strength: 16,
-
-
-    strengthMultiplier: 10,
-
-
-    role: "Богатырь",
-
-
-    passive: {
-        name: "Богатырская стать",
-        description: "Богатырские существа получают бонус к атаке и защите."
     },
 
 
-    active: {
-        name: "Богатырский удар",
-        description: "Один раз за ход выбранное союзное существо получает бонус к атаке для следующей атаки."
-    },
+    {
+        id: "vasilisa_premudraya",
 
+        name: "Василиса Премудрая",
 
-    image: "./assets/heroes/ilya_muromets.png",
+        image:
+            "./assets/heroes/vasilisa_premudraya.png",
 
+        maxHealth: 9000,
 
-    description: "Богатырь прямого действия. Делает ставку на мощных существ и физическую силу."
-},
+        attack: 0,
 
+        defense: 900,
 
-{
-    id: "vasilisa_premudraya",
-    name: "Василиса Премудрая",
+        strength: 18,
 
+        level: 1,
 
-    faction: "Правь",
+        xp: 0,
 
+        frame:
+            "mage"
 
-    level: 1,
-
-
-    health: 9000,
-    maxHealth: 9000,
-
-
-    defense: 900,
-
-
-    strength: 15,
-
-
-    strengthMultiplier: 10,
-
-
-    role: "Маг",
-
-
-    passive: {
-        name: "Мудрость",
-
-
-        description: "Эффекты специальных способностей карт получают бонус к эффективности."
-    },
-
-
-    active: {
-        name: "Волшебное слово",
-
-
-        description: "Один раз за ход позволяет усилить эффект способности союзной карты или ослабить эффект способности вражеской карты."
-    },
-
-
-    image: "./assets/heroes/vasilisa_premudraya.png",
-
-
-    description: "Мудрая волшебница, полагающаяся на способности карт, контроль и хитрые решения."
-}
+    }
 
 ];
+
 
 window.HEROES = HEROES;
