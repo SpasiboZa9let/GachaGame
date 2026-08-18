@@ -1,249 +1,549 @@
 function createInitialGameState() {
 
-    return {
+const playerHero =
+    HEROES.find(
+        hero => hero.id === "ilya_muromets"
+    );
 
-        turn: 1,
 
-        activePlayer: "player",
+const opponentHero =
+    HEROES.find(
+        hero => hero.id === "vasilisa_premudraya"
+    );
 
-        player: {
 
-            hp: 30,
+return {
 
-            mana: 1,
 
-            maxMana: 1,
+    turn: 1,
 
-            deck: [],
 
-            hand: [
-                "baba_yaga",
-                "shaman"
-            ],
+    activePlayer: "player",
 
-            board: []
 
-        },
+    player: {
 
-        opponent: {
 
-            hp: 30,
+        hero: playerHero,
 
-            mana: 1,
 
-            maxMana: 1,
+        hp: playerHero
+            ? playerHero.maxHealth
+            : 10000,
 
-            deck: [],
 
-            hand: [
-                "shaman",
-                "baba_yaga"
-            ],
+        mana: 1,
+        maxMana: 1,
 
-            board: []
 
-        }
+        deck: [],
 
-    };
+
+        hand: [
+            "baba_yaga",
+            "shaman"
+        ],
+
+
+        board: []
+
+
+    },
+
+
+    opponent: {
+
+
+        hero: opponentHero,
+
+
+        hp: opponentHero
+            ? opponentHero.maxHealth
+            : 9000,
+
+
+        mana: 1,
+        maxMana: 1,
+
+
+        deck: [],
+
+
+        hand: [],
+
+
+        board: []
+
+
+    }
+
+
+};
 
 }
-
 
 function getCardById(cardId) {
 
-    if (!Array.isArray(CARDS)) {
+if (!Array.isArray(CARDS)) {
 
-        console.error(
-            "CARDS не является массивом"
-        );
 
-        return null;
+    console.error(
+        "CARDS не является массивом"
+    );
 
-    }
 
-    return CARDS.find(
-        card =>
-            card.id === cardId
-    ) || null;
+    return null;
+
 
 }
 
+
+return CARDS.find(
+    card => card.id === cardId
+) || null;
+
+}
 
 function createCardInstance(cardId) {
 
-    const card =
-        getCardById(cardId);
+const card =
+    getCardById(cardId);
 
-    if (!card) {
 
-        console.error(
-            "Карта не найдена:",
-            cardId
-        );
+if (!card) {
 
-        return null;
 
-    }
+    console.error(
+        "Карта не найдена:",
+        cardId
+    );
 
-    return {
 
-        instanceId:
-            cardId +
-            "_" +
-            Date.now() +
-            "_" +
-            Math.random()
-                .toString(36)
-                .substring(2, 8),
+    return null;
 
-        cardId:
-            cardId,
-
-        attack:
-            card.attack,
-
-        health:
-            card.health,
-
-        maxHealth:
-            card.health,
-
-        canAttack:
-            false,
-
-        status: []
-
-    };
 
 }
 
 
-function getCardFromHand(
-    player,
-    cardId
+
+
+return {
+
+
+    instanceId:
+        cardId +
+        "_" +
+        Date.now() +
+        "_" +
+        Math.random()
+            .toString(36)
+            .substring(2, 8),
+
+
+    cardId: cardId,
+
+
+    attack: card.attack,
+
+
+    health: card.health,
+
+
+    maxHealth: card.health,
+
+
+    defense: card.defense,
+
+
+    strength: card.strength,
+
+
+    canAttack: false,
+
+
+    status: []
+
+
+};
+
+}
+
+function getCardFromHand(player, cardId) {
+
+if (
+    !player ||
+    !Array.isArray(player.hand)
 ) {
 
-    if (
-        !player ||
-        !Array.isArray(player.hand)
-    ) {
-        return null;
-    }
 
-    return player.hand.find(
-        id =>
-            id === cardId
-    ) || null;
+    return null;
+
 
 }
 
+
+return player.hand.find(
+    id => id === cardId
+) || null;
+
+}
 
 function playCard(
-    state,
-    playerId,
-    cardId
+state,
+playerId,
+cardId
 ) {
 
-    const player =
-        state[playerId];
+const player =
+if (!card) {
+    return state;
+}
 
-    if (!player) {
-        return state;
-    }
 
-    if (
-        state.activePlayer !==
-        playerId
-    ) {
-        return state;
-    }
 
-    const cardInHand =
-        getCardFromHand(
-            player,
-            cardId
-        );
 
-    if (!cardInHand) {
+if (
+    player.mana <
+    card.cost
+) {
 
-        console.log(
-            "Карты нет в руке:",
-            cardId
-        );
 
-        return state;
+    console.log(
+        "Недостаточно маны."
+    );
 
-    }
 
-    const card =
-        getCardById(cardId);
+    return state;
 
-    if (!card) {
-        return state;
-    }
-
-    if (
-        player.mana <
-        card.cost
-    ) {
-
-        console.log(
-            "Недостаточно маны."
-        );
-
-        return state;
-
-    }
-
-    if (
-        player.board.length >= 5
-    ) {
-
-        console.log(
-            "На поле нет свободного места."
-        );
-
-        return state;
-
-    }
-
-    const instance =
-        createCardInstance(
-            cardId
-        );
-
-    if (!instance) {
-        return state;
-    }
-
-    return {
-
-        ...state,
-
-        [playerId]: {
-
-            ...player,
-
-            mana:
-                player.mana -
-                card.cost,
-
-            hand:
-                player.hand.filter(
-                    id =>
-                        id !== cardId
-                ),
-
-            board: [
-
-                ...player.board,
-
-                instance
-
-            ]
-
-        }
-
-    };
 
 }
+
+
+
+
+if (
+    player.board.length >= 5
+) {
+
+
+    console.log(
+        "На поле нет свободного места."
+    );
+
+
+    return state;
+
+
+}
+
+
+
+
+const instance =
+    createCardInstance(
+        cardId
+    );
+
+
+if (!instance) {
+    return state;
+}
+
+
+
+
+return {
+
+
+    ...state,
+
+
+    [playerId]: {
+
+
+        ...player,
+
+
+        mana:
+            player.mana -
+            card.cost,
+
+
+        hand:
+            player.hand.filter(
+                id =>
+                    id !== cardId
+            ),
+
+
+        board: [
+
+
+            ...player.board,
+
+
+            instance
+
+
+        ]
+
+
+    }
+
+
+};
+
+}
+
+window.createInitialGameState =
+createInitialGameState;
+
+window.getCardById =
+getCardById;
+
+window.createCardInstance =
+createCardInstance;
+
+window.getCardFromHand =
+getCardFromHand;
+
+window.playCard =
+playCard;
+
+Теперь полностью замени components/Game.jsx:
+
+function Game() {
+
+const [gameState, setGameState] =
+            )}
+
+
+        </div>
+
+
+
+
+
+
+        <section style={gameStyles.playerSection}>
+
+
+            <Board
+                units={
+                    player.board || []
+                }
+
+
+                onUnitClick={
+                    handlePlayerUnitClick
+                }
+
+
+                selectedUnitId={
+                    selectedAttacker
+                }
+            />
+
+
+
+
+            <div style={gameStyles.hero}>
+
+
+                <strong>
+
+
+                    {playerHero
+                        ? playerHero.name
+                        : "Игрок"}
+
+
+                </strong>
+
+
+                <span>
+                    ❤️ {player.hp}
+                </span>
+
+
+                <span>
+                    🛡️ {playerHero
+                        ? playerHero.defense
+                        : 0}
+                </span>
+
+
+                <span>
+                    ⚔️ Сила {playerHero
+                        ? playerHero.strength
+                        : 0}
+                </span>
+
+
+                <span
+                    style={
+                        gameStyles.mana
+                    }
+                >
+                    🔵 {player.mana} / {player.maxMana}
+                </span>
+
+
+            </div>
+
+
+        </section>
+
+
+
+
+
+
+        <div style={gameStyles.handWrapper}>
+
+
+            <Hand
+                cards={handCards}
+                onCardClick={handleCardClick}
+            />
+
+
+        </div>
+
+
+
+
+
+
+        <button
+            onClick={handleEndTurn}
+            style={gameStyles.endTurn}
+        >
+            Завершить ход
+        </button>
+
+
+    </div>
+
+
+);
+
+}
+
+const gameStyles = {
+
+game: {
+
+
+    height: "30px",
+
+
+    display: "flex",
+
+
+    alignItems: "center",
+
+
+    justifyContent: "center",
+
+
+    color: "#777"
+
+
+},
+
+
+
+
+attackMode: {
+
+
+    color: "#ffd700",
+
+
+    fontWeight: "bold"
+
+
+},
+
+
+
+
+mana: {
+
+
+    color: "#55aaff",
+
+
+    fontWeight: "bold"
+
+
+},
+
+
+
+
+handWrapper: {
+
+
+    width: "100%",
+
+
+    minHeight: "230px",
+
+
+    display: "flex",
+
+
+    alignItems: "flex-end",
+
+
+    justifyContent: "center",
+
+
+    paddingTop: "10px",
+
+
+    boxSizing: "border-box",
+
+
+    overflow: "hidden"
+
+
+},
+
+
+
+
+endTurn: {
+
+
+    alignSelf: "center",
+
+
+    padding: "12px 30px",
+
+
+    border: "none",
+
+
+    borderRadius: "8px",
+
+
+    background: "#444",
+
+
+    color: "#fff",
+
+
+    cursor: "pointer",
+
+
+    fontSize: "16px"
+
+
+}
+
+};
+
+window.Game = Game;
