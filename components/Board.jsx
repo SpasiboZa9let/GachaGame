@@ -4,126 +4,140 @@ function Board({
     selectedUnitId
 }) {
 
-    const safeUnits = Array.isArray(units)
-        ? units.filter(Boolean)
-        : [];
-
-
     return (
 
         <div style={styles.board}>
 
-            {safeUnits.length === 0 ? (
+            <div style={styles.cardsArea}>
 
-                <div style={styles.empty}>
-                    Поле пусто
-                </div>
+                {(!units || units.length === 0) ? (
 
-            ) : (
+                    <div style={styles.empty}>
+                        Поле пусто
+                    </div>
 
-                safeUnits.map(unit => {
+                ) : (
 
-                    const card = CARDS.find(
-                        item => item.id === unit.cardId
-                    );
+                    units.map(unit => {
+
+                        if (!unit) {
+                            return null;
+                        }
+
+                        const card =
+                            CARDS.find(
+                                item =>
+                                    item.id === unit.cardId
+                            );
+
+                        if (!card) {
+                            return null;
+                        }
+
+                        const selected =
+                            unit.instanceId === selectedUnitId;
+
+                        return (
+
+                            <div
+                                key={unit.instanceId}
+
+                                onClick={() =>
+                                    onUnitClick &&
+                                    onUnitClick(unit)
+                                }
+
+                                style={{
+                                    ...styles.unit,
+
+                                    border:
+                                        selected
+                                            ? "3px solid #ffd700"
+                                            : "2px solid #777",
+
+                                    opacity:
+                                        unit.canAttack
+                                            ? 1
+                                            : 0.65,
+
+                                    boxShadow:
+                                        selected
+                                            ? "0 0 15px rgba(255,215,0,0.6)"
+                                            : "0 5px 12px rgba(0,0,0,0.5)"
+                                }}
+                            >
+
+                                {/* СТОИМОСТЬ */}
+
+                                <div style={styles.cost}>
+                                    {card.cost}
+                                </div>
 
 
-                    if (!card) {
-                        return null;
-                    }
+                                {/* НАЗВАНИЕ */}
+
+                                <div style={styles.name}>
+                                    {card.name}
+                                </div>
 
 
-                    const selected =
-                        unit.instanceId === selectedUnitId;
+                                {/* ИЗОБРАЖЕНИЕ */}
+
+                                <div style={styles.imageBox}>
+
+                                    {card.image ? (
+
+                                        <img
+                                            src={card.image}
+                                            alt={card.name}
+                                            style={styles.image}
+                                        />
+
+                                    ) : (
+
+                                        <div style={styles.noImage}>
+                                            АРТ
+                                        </div>
+
+                                    )}
+
+                                </div>
 
 
-                    return (
+                                {/* СТАТУС */}
 
-                        <div
-                            key={unit.instanceId}
+                                <div style={styles.status}>
 
-                            onClick={() =>
-                                onUnitClick &&
-                                onUnitClick(unit)
-                            }
+                                    {unit.canAttack
+                                        ? "⚔️ Готов"
+                                        : "💤 Ожидание"}
 
-                            style={{
-                                ...styles.unit,
+                                </div>
 
-                                border: selected
-                                    ? "3px solid #ffd700"
-                                    : "2px solid #777",
 
-                                opacity:
-                                    unit.canAttack
-                                        ? 1
-                                        : 0.65,
+                                {/* ХАРАКТЕРИСТИКИ */}
 
-                                boxShadow: selected
-                                    ? "0 0 18px rgba(255,215,0,0.7)"
-                                    : "0 4px 10px rgba(0,0,0,0.5)"
-                            }}
-                        >
+                                <div style={styles.stats}>
 
-                            <div style={styles.cost}>
-                                {card.cost}
+                                    <span>
+                                        ⚔️ {unit.attack}
+                                    </span>
+
+                                    <span>
+                                        ❤️ {unit.health}
+                                    </span>
+
+                                </div>
+
                             </div>
 
+                        );
 
-                            <div style={styles.name}>
-                                {card.name}
-                            </div>
+                    })
 
+                )}
 
-                            <div style={styles.imageBox}>
-
-                                {card.image ? (
-
-                                    <img
-                                        src={card.image}
-                                        alt={card.name}
-                                        style={styles.image}
-                                    />
-
-                                ) : (
-
-                                    <div style={styles.noImage}>
-                                        АРТ
-                                    </div>
-
-                                )}
-
-                            </div>
-
-
-                            <div style={styles.status}>
-
-                                {unit.canAttack
-                                    ? "⚔️ Готов"
-                                    : "💤 Ожидание"}
-
-                            </div>
-
-
-                            <div style={styles.stats}>
-
-                                <span>
-                                    ⚔️ {unit.attack}
-                                </span>
-
-                                <span>
-                                    ❤️ {unit.health}
-                                </span>
-
-                            </div>
-
-                        </div>
-
-                    );
-
-                })
-
-            )}
+            </div>
 
         </div>
 
@@ -132,24 +146,56 @@ function Board({
 }
 
 
-
 const styles = {
 
     /*
-        ФИКСИРОВАННОЕ ИГРОВОЕ ПОЛЕ
+        ВНЕШНЯЯ ОБЛАСТЬ ПОЛЯ.
 
-        Никакого overflow-x.
-        Никакого скролла.
-
-        Карты всегда находятся
-        внутри одной сцены.
+        Фиксированная высота.
+        Карты не могут физически
+        вылезти за её границы.
     */
 
     board: {
 
         width: "100%",
 
-        height: "230px",
+        height: "210px",
+
+        minHeight: "210px",
+
+        maxHeight: "210px",
+
+        background: "#202020",
+
+        border: "1px solid #444",
+
+        borderRadius: "10px",
+
+        boxSizing: "border-box",
+
+        overflow: "hidden",
+
+        padding: "10px"
+
+    },
+
+
+    /*
+        ВНУТРЕННЯЯ ОБЛАСТЬ.
+
+        Карты лежат строго:
+        слева → направо.
+
+        Никакого переноса
+        и вертикального стека.
+    */
+
+    cardsArea: {
+
+        width: "100%",
+
+        height: "100%",
 
         display: "flex",
 
@@ -157,13 +203,13 @@ const styles = {
 
         flexWrap: "nowrap",
 
-        alignItems: "center",
+        alignItems: "flex-start",
 
-        justifyContent: "center",
+        justifyContent: "flex-start",
 
         gap: "12px",
 
-        padding: "15px",
+        padding: "8px 8px 12px 8px",
 
         boxSizing: "border-box",
 
@@ -174,49 +220,57 @@ const styles = {
 
     empty: {
 
-        color: "#555",
+        width: "100%",
 
-        fontSize: "14px",
+        height: "100%",
 
-        textAlign: "center"
+        display: "flex",
+
+        alignItems: "center",
+
+        justifyContent: "center",
+
+        color: "#555"
 
     },
 
 
     /*
-        Карта существа.
+        КАРТА НА ПОЛЕ.
 
-        5 таких карт спокойно
-        помещаются в игровое поле.
+        Она специально меньше карты
+        в руке.
     */
 
     unit: {
 
         position: "relative",
 
-        width: "140px",
+        width: "120px",
 
-        minWidth: "0",
+        minWidth: "120px",
 
-        height: "190px",
+        maxWidth: "120px",
 
-        minHeight: "190px",
+        height: "165px",
 
-        flex: "1 1 0",
+        minHeight: "165px",
 
-        maxWidth: "140px",
+        maxHeight: "165px",
 
         background: "#292929",
 
         borderRadius: "10px",
 
-        padding: "7px",
+        padding: "6px",
 
         boxSizing: "border-box",
 
         display: "flex",
 
         flexDirection: "column",
+
+        flexShrink: 0,
 
         cursor: "pointer",
 
@@ -230,13 +284,13 @@ const styles = {
 
         position: "absolute",
 
-        top: "5px",
+        top: "4px",
 
-        left: "5px",
+        left: "4px",
 
-        width: "25px",
+        width: "24px",
 
-        height: "25px",
+        height: "24px",
 
         borderRadius: "50%",
 
@@ -248,22 +302,22 @@ const styles = {
 
         justifyContent: "center",
 
-        fontWeight: "bold",
-
         fontSize: "12px",
 
-        zIndex: 5
+        fontWeight: "bold",
+
+        zIndex: 3
 
     },
 
 
     name: {
 
-        height: "24px",
+        height: "20px",
 
-        minHeight: "24px",
+        minHeight: "20px",
 
-        lineHeight: "24px",
+        lineHeight: "20px",
 
         textAlign: "center",
 
@@ -284,9 +338,9 @@ const styles = {
 
         width: "100%",
 
-        height: "100px",
+        height: "85px",
 
-        minHeight: "100px",
+        minHeight: "85px",
 
         background: "#111",
 
@@ -333,34 +387,24 @@ const styles = {
 
     status: {
 
-        height: "22px",
-
-        minHeight: "22px",
-
-        lineHeight: "22px",
-
         textAlign: "center",
 
         fontSize: "9px",
 
-        color: "#aaa"
+        color: "#aaa",
+
+        paddingTop: "3px"
 
     },
 
 
     stats: {
 
-        height: "25px",
-
-        minHeight: "25px",
-
         display: "flex",
 
         justifyContent: "space-between",
 
-        alignItems: "center",
-
-        padding: "2px 4px",
+        padding: "3px 4px",
 
         fontSize: "12px",
 
