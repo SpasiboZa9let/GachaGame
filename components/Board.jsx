@@ -41,11 +41,11 @@ function Board({
 
                         <div
                             key={unit.instanceId}
-                            onClick={() => {
-                                if (onUnitClick) {
-                                    onUnitClick(unit);
-                                }
-                            }}
+
+                            onClick={() =>
+                                onUnitClick &&
+                                onUnitClick(unit)
+                            }
 
                             style={{
                                 ...styles.unit,
@@ -61,25 +61,19 @@ function Board({
 
                                 boxShadow: selected
                                     ? "0 0 18px rgba(255,215,0,0.7)"
-                                    : "0 5px 12px rgba(0,0,0,0.5)"
+                                    : "0 4px 10px rgba(0,0,0,0.5)"
                             }}
                         >
-
-                            {/* СТОИМОСТЬ */}
 
                             <div style={styles.cost}>
                                 {card.cost}
                             </div>
 
 
-                            {/* НАЗВАНИЕ */}
-
                             <div style={styles.name}>
                                 {card.name}
                             </div>
 
-
-                            {/* ИЗОБРАЖЕНИЕ */}
 
                             <div style={styles.imageBox}>
 
@@ -102,8 +96,6 @@ function Board({
                             </div>
 
 
-                            {/* СТАТУС */}
-
                             <div style={styles.status}>
 
                                 {unit.canAttack
@@ -112,8 +104,6 @@ function Board({
 
                             </div>
 
-
-                            {/* ХАРАКТЕРИСТИКИ */}
 
                             <div style={styles.stats}>
 
@@ -146,32 +136,20 @@ function Board({
 const styles = {
 
     /*
-        =========================
-        ПОЛЕ
-        =========================
+        ФИКСИРОВАННОЕ ИГРОВОЕ ПОЛЕ
 
-        КЛЮЧЕВОЕ:
+        Никакого overflow-x.
+        Никакого скролла.
 
-        display: flex
-        flex-direction: row
-        flex-wrap: nowrap
-
-        Поэтому:
-
-        [Баба-Яга] [Шаман] [Карта]
-
-        а не:
-
-        [Баба-Яга]
-        [Шаман]
-        [Карта]
+        Карты всегда находятся
+        внутри одной сцены.
     */
 
     board: {
 
         width: "100%",
 
-        minHeight: "210px",
+        height: "230px",
 
         display: "flex",
 
@@ -181,62 +159,52 @@ const styles = {
 
         alignItems: "center",
 
-        justifyContent: "flex-start",
+        justifyContent: "center",
 
-        gap: "16px",
+        gap: "12px",
 
-        padding: "20px",
+        padding: "15px",
 
-        overflowX: "auto",
+        boxSizing: "border-box",
 
-        overflowY: "hidden",
-
-        boxSizing: "border-box"
+        overflow: "hidden"
 
     },
 
 
     empty: {
 
-        width: "100%",
-
-        textAlign: "center",
-
         color: "#555",
 
-        fontSize: "14px"
+        fontSize: "14px",
+
+        textAlign: "center"
 
     },
 
 
     /*
-        =========================
-        КАРТА НА ПОЛЕ
-        =========================
+        Карта существа.
 
-        Фиксированный размер.
-
-        Она НЕ должна растягиваться
-        вместе с контейнером.
+        5 таких карт спокойно
+        помещаются в игровое поле.
     */
 
     unit: {
 
         position: "relative",
 
-        width: "150px",
+        width: "140px",
 
-        minWidth: "150px",
+        minWidth: "0",
 
-        maxWidth: "150px",
+        height: "190px",
 
-        height: "195px",
+        minHeight: "190px",
 
-        minHeight: "195px",
+        flex: "1 1 0",
 
-        maxHeight: "195px",
-
-        flex: "0 0 150px",
+        maxWidth: "140px",
 
         background: "#292929",
 
@@ -249,8 +217,6 @@ const styles = {
         display: "flex",
 
         flexDirection: "column",
-
-        flexShrink: 0,
 
         cursor: "pointer",
 
@@ -268,15 +234,13 @@ const styles = {
 
         left: "5px",
 
-        width: "26px",
+        width: "25px",
 
-        height: "26px",
+        height: "25px",
 
         borderRadius: "50%",
 
         background: "#3478db",
-
-        color: "#fff",
 
         display: "flex",
 
@@ -284,9 +248,9 @@ const styles = {
 
         justifyContent: "center",
 
-        fontSize: "12px",
-
         fontWeight: "bold",
+
+        fontSize: "12px",
 
         zIndex: 5
 
@@ -294,8 +258,6 @@ const styles = {
 
 
     name: {
-
-        width: "100%",
 
         height: "24px",
 
@@ -307,7 +269,7 @@ const styles = {
 
         fontWeight: "bold",
 
-        fontSize: "13px",
+        fontSize: "12px",
 
         whiteSpace: "nowrap",
 
@@ -322,11 +284,9 @@ const styles = {
 
         width: "100%",
 
-        height: "105px",
+        height: "100px",
 
-        minHeight: "105px",
-
-        maxHeight: "105px",
+        minHeight: "100px",
 
         background: "#111",
 
@@ -334,9 +294,7 @@ const styles = {
 
         borderRadius: "6px",
 
-        overflow: "hidden",
-
-        flexShrink: 0
+        overflow: "hidden"
 
     },
 
@@ -368,14 +326,12 @@ const styles = {
 
         color: "#555",
 
-        fontSize: "11px"
+        fontSize: "10px"
 
     },
 
 
     status: {
-
-        width: "100%",
 
         height: "22px",
 
@@ -385,18 +341,14 @@ const styles = {
 
         textAlign: "center",
 
-        fontSize: "10px",
+        fontSize: "9px",
 
-        color: "#aaa",
-
-        overflow: "hidden"
+        color: "#aaa"
 
     },
 
 
     stats: {
-
-        width: "100%",
 
         height: "25px",
 
@@ -408,13 +360,11 @@ const styles = {
 
         alignItems: "center",
 
-        padding: "2px 5px",
+        padding: "2px 4px",
 
-        fontSize: "13px",
+        fontSize: "12px",
 
-        fontWeight: "bold",
-
-        boxSizing: "border-box"
+        fontWeight: "bold"
 
     }
 
