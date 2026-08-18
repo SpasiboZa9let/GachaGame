@@ -9,118 +9,31 @@ function canUnitAttack(unit) {
 }
 
 
-/*
-    Минимальный урон обычной атаки.
-
-    Существо всегда наносит хотя бы
-    1% от своей Attack.
-
-    Это нужно для того, чтобы маленькие
-    существа не становились абсолютно
-    бесполезными против очень высокой Defense.
-*/
-
-function calculateMinimumDamage(attack) {
-
-    if (
-        typeof attack !== "number" ||
-        attack <= 0
-    ) {
-
-        return 1;
-
-    }
-
-    return Math.max(
-        1,
-        Math.round(attack * 0.01)
-    );
-
-}
-
-
-/*
-    Расчёт обычного физического урона.
-
-    Формула:
-
-    Damage =
-    Attack × 100
-    /
-    (100 + Defense / 10)
-
-    Defense не вычитается напрямую.
-
-    Чем выше Defense,
-    тем сильнее уменьшается
-    входящий урон.
-*/
-
 function calculateDamage(attack, defense) {
 
-    const safeAttack =
-        typeof attack === "number" &&
-        attack > 0
-            ? attack
-            : 0;
+    attack =
+        Number(attack) || 0;
 
-    const safeDefense =
-        typeof defense === "number" &&
-        defense > 0
-            ? defense
-            : 0;
-
-
-    if (safeAttack <= 0) {
-        return 1;
-    }
+    defense =
+        Number(defense) || 0;
 
 
     const damage =
-        safeAttack *
+        attack *
         100 /
         (
             100 +
-            safeDefense / 10
-        );
-
-
-    const minimumDamage =
-        calculateMinimumDamage(
-            safeAttack
+            defense / 10
         );
 
 
     return Math.max(
-        minimumDamage,
-        Math.round(damage)
+        1,
+        Math.floor(damage)
     );
 
 }
 
-
-/*
-    Атака одного существа другим.
-
-    Оба существа одновременно
-    получают физический урон.
-
-    Атакующий:
-
-    Attack атакующего
-    ↓
-    Defense цели
-    ↓
-    урон цели
-
-    Защищающийся:
-
-    Attack цели
-    ↓
-    Defense атакующего
-    ↓
-    урон атакующему
-*/
 
 function attackUnit(
     state,
@@ -143,44 +56,26 @@ function attackUnit(
         state[opponentId];
 
 
-    if (
-        !player ||
-        !opponent
-    ) {
-
+    if (!player || !opponent) {
         return state;
-
     }
 
-
-    /*
-        Ищем атакующего.
-    */
 
     const attacker =
         player.board.find(
             unit =>
-                unit.instanceId ===
-                attackerId
+                unit.instanceId === attackerId
         );
 
-
-    /*
-        Ищем цель.
-    */
 
     const target =
         opponent.board.find(
             unit =>
-                unit.instanceId ===
-                targetId
+                unit.instanceId === targetId
         );
 
 
-    if (
-        !attacker ||
-        !target
-    ) {
+    if (!attacker || !target) {
 
         console.log(
             "Атакующий или цель не найдены."
@@ -191,15 +86,7 @@ function attackUnit(
     }
 
 
-    /*
-        Проверяем возможность атаки.
-    */
-
-    if (
-        !canUnitAttack(
-            attacker
-        )
-    ) {
+    if (!canUnitAttack(attacker)) {
 
         console.log(
             "Это существо пока не может атаковать."
@@ -211,8 +98,7 @@ function attackUnit(
 
 
     /*
-        Рассчитываем урон атакующего
-        по защищающемуся.
+        Урон атакующего по цели.
     */
 
     const damageToTarget =
@@ -223,10 +109,7 @@ function attackUnit(
 
 
     /*
-        Рассчитываем ответный удар.
-
-        Пока ответный удар происходит
-        всегда, если оба существа живы.
+        Ответный урон.
     */
 
     const damageToAttacker =
@@ -236,10 +119,6 @@ function attackUnit(
         );
 
 
-    /*
-        Новое здоровье атакующего.
-    */
-
     const attackerHealth =
         Math.max(
             0,
@@ -247,10 +126,6 @@ function attackUnit(
             damageToAttacker
         );
 
-
-    /*
-        Новое здоровье цели.
-    */
 
     const targetHealth =
         Math.max(
@@ -261,10 +136,7 @@ function attackUnit(
 
 
     /*
-        Обновляем поле атакующего.
-
-        После атаки существо больше
-        не может атаковать в этот ход.
+        Обновляем атакующего.
     */
 
     const newPlayerBoard =
@@ -303,7 +175,7 @@ function attackUnit(
 
 
     /*
-        Обновляем поле противника.
+        Обновляем цель.
     */
 
     const newOpponentBoard =
@@ -339,12 +211,89 @@ function attackUnit(
 
 
     /*
-        Возвращаем новое состояние игры.
+        Журнал боя.
     */
+
+    let newCombatLog =
+        [
+            ...(state.combatLog || [])
+        ];
+
+
+    const attackerCard =
+        window.getCardById
+            ? window.getCardById(
+                attacker.cardId
+            )
+            : null;
+
+
+    const targetCard =
+        window.getCardById
+            ? window.getCardById(
+                target.cardId
+            )
+            : null;
+
+
+    const attackerName =
+        attackerCard
+            ? attackerCard.name
+            : "Существо";
+
+
+    const targetName =
+        targetCard
+            ? targetCard.name
+            : "Существо";
+
+
+    newCombatLog.push(
+        attackerName +
+        " атакует " +
+        targetName +
+        " и наносит " +
+        damageToTarget +
+        " урона."
+    );
+
+
+    newCombatLog.push(
+        targetName +
+        " отвечает и наносит " +
+        damageToAttacker +
+        " урона."
+    );
+
+
+    if (targetHealth <= 0) {
+
+        newCombatLog.push(
+            targetName +
+            " погибает."
+        );
+
+    }
+
+
+    if (attackerHealth <= 0) {
+
+        newCombatLog.push(
+            attackerName +
+            " погибает."
+        );
+
+    }
+
 
     return {
 
         ...state,
+
+
+        combatLog:
+            newCombatLog,
+
 
         [playerId]: {
 
@@ -354,6 +303,7 @@ function attackUnit(
                 newPlayerBoard
 
         },
+
 
         [opponentId]: {
 
@@ -372,11 +322,10 @@ function attackUnit(
 window.canUnitAttack =
     canUnitAttack;
 
-window.calculateMinimumDamage =
-    calculateMinimumDamage;
 
 window.calculateDamage =
     calculateDamage;
+
 
 window.attackUnit =
     attackUnit;
