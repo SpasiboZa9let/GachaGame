@@ -6,11 +6,11 @@ function Board({
 
     return (
 
-        <div style={boardStyles.board}>
+        <div style={styles.board}>
 
             {(!units || units.length === 0) ? (
 
-                <div style={boardStyles.empty}>
+                <div style={styles.empty}>
                     Поле пусто
                 </div>
 
@@ -26,7 +26,8 @@ function Board({
                     const card =
                         CARDS.find(
                             item =>
-                                item.id === unit.cardId
+                                item.id ===
+                                unit.cardId
                         );
 
 
@@ -36,13 +37,17 @@ function Board({
 
 
                     const selected =
-                        unit.instanceId === selectedUnitId;
+                        unit.instanceId ===
+                        selectedUnitId;
 
 
                     return (
 
                         <div
-                            key={unit.instanceId}
+
+                            key={
+                                unit.instanceId
+                            }
 
                             onClick={() =>
                                 onUnitClick &&
@@ -50,11 +55,14 @@ function Board({
                             }
 
                             style={{
-                                ...boardStyles.unit,
+
+                                ...styles.unit,
 
                                 border:
                                     selected
+
                                         ? "3px solid #ffd700"
+
                                         : "2px solid #777",
 
                                 opacity:
@@ -64,35 +72,73 @@ function Board({
 
                                 boxShadow:
                                     selected
-                                        ? "0 0 15px rgba(255,215,0,0.6)"
+
+                                        ? "0 0 20px rgba(255,215,0,0.7)"
+
                                         : "0 5px 12px rgba(0,0,0,0.5)"
+
                             }}
+
                         >
 
-                            <div style={boardStyles.cost}>
+                            {/* COST */}
+
+                            <div
+                                style={styles.cost}
+                            >
+
                                 {card.cost}
+
                             </div>
 
 
-                            <div style={boardStyles.name}>
+                            {/* NAME */}
+
+                            <div
+                                style={styles.name}
+                            >
+
                                 {card.name}
+
                             </div>
 
 
-                            <div style={boardStyles.imageBox}>
+                            {/* IMAGE */}
+
+                            <div
+                                style={
+                                    styles.imageBox
+                                }
+                            >
 
                                 {card.image ? (
 
                                     <img
-                                        src={card.image}
-                                        alt={card.name}
-                                        style={boardStyles.image}
+
+                                        src={
+                                            card.image
+                                        }
+
+                                        alt={
+                                            card.name
+                                        }
+
+                                        style={
+                                            styles.image
+                                        }
+
                                     />
 
                                 ) : (
 
-                                    <div style={boardStyles.noImage}>
+                                    <div
+                                        style={
+                                            styles.noImage
+                                        }
+                                    >
+
                                         АРТ
+
                                     </div>
 
                                 )}
@@ -100,23 +146,43 @@ function Board({
                             </div>
 
 
-                            <div style={boardStyles.status}>
+                            {/* STATUS */}
 
-                                {unit.canAttack
-                                    ? "⚔️ Готов"
-                                    : "💤 Ожидание"}
+                            <div
+                                style={
+                                    styles.status
+                                }
+                            >
+
+                                {
+                                    unit.canAttack
+
+                                        ? "⚔️ Готов"
+
+                                        : "💤 Ожидание"
+                                }
 
                             </div>
 
 
-                            <div style={boardStyles.stats}>
+                            {/* STATS */}
+
+                            <div
+                                style={
+                                    styles.stats
+                                }
+                            >
 
                                 <span>
-                                    ⚔️ {unit.attack}
+                                    ⚔️ {
+                                        unit.attack
+                                    }
                                 </span>
 
                                 <span>
-                                    ❤️ {unit.health}
+                                    ❤️ {
+                                        unit.health
+                                    }
                                 </span>
 
                             </div>
@@ -136,9 +202,20 @@ function Board({
 }
 
 
-const boardStyles = {
+const styles = {
+
+    /*
+        ПОЛЕ
+
+        Жёстко задаём горизонтальное
+        направление.
+    */
 
     board: {
+
+        width: "100%",
+
+        minHeight: "230px",
 
         display: "flex",
 
@@ -150,19 +227,15 @@ const boardStyles = {
 
         justifyContent: "flex-start",
 
-        gap: "12px",
+        gap: "20px",
 
-        width: "100%",
-
-        minHeight: "200px",
-
-        padding: "15px",
-
-        boxSizing: "border-box",
+        padding: "20px",
 
         overflowX: "auto",
 
-        overflowY: "hidden"
+        overflowY: "hidden",
+
+        boxSizing: "border-box"
 
     },
 
@@ -178,29 +251,34 @@ const boardStyles = {
     },
 
 
+    /*
+        КАРТА НА ПОЛЕ
+
+        180 × 260 — карта в руке.
+
+        Здесь примерно в 1.5 раза
+        меньше, чтобы поле не раздувалось.
+    */
+
     unit: {
 
         position: "relative",
 
-        flex: "0 0 120px",
+        width: "135px",
 
-        width: "120px",
+        minWidth: "135px",
 
-        minWidth: "120px",
+        height: "195px",
 
-        maxWidth: "120px",
+        minHeight: "195px",
 
-        height: "165px",
-
-        minHeight: "165px",
-
-        maxHeight: "165px",
+        flexShrink: 0,
 
         background: "#292929",
 
         borderRadius: "10px",
 
-        padding: "6px",
+        padding: "7px",
 
         boxSizing: "border-box",
 
@@ -208,11 +286,7 @@ const boardStyles = {
 
         flexDirection: "column",
 
-        flexShrink: 0,
-
         cursor: "pointer",
-
-        overflow: "hidden",
 
         transition:
             "transform 0.15s ease, box-shadow 0.15s ease"
@@ -224,13 +298,13 @@ const boardStyles = {
 
         position: "absolute",
 
-        top: "4px",
+        top: "5px",
 
-        left: "4px",
+        left: "5px",
 
-        width: "24px",
+        width: "25px",
 
-        height: "24px",
+        height: "25px",
 
         borderRadius: "50%",
 
@@ -253,11 +327,9 @@ const boardStyles = {
 
     name: {
 
-        height: "20px",
+        height: "22px",
 
-        minHeight: "20px",
-
-        lineHeight: "20px",
+        lineHeight: "22px",
 
         textAlign: "center",
 
@@ -278,21 +350,18 @@ const boardStyles = {
 
         width: "100%",
 
-        height: "85px",
+        height: "105px",
 
-        minHeight: "85px",
-
-        maxHeight: "85px",
+        minHeight: "105px",
 
         background: "#111",
 
-        border: "1px solid #555",
+        border:
+            "1px solid #555",
 
         borderRadius: "6px",
 
-        overflow: "hidden",
-
-        flexShrink: 0
+        overflow: "hidden"
 
     },
 
@@ -322,9 +391,7 @@ const boardStyles = {
 
         justifyContent: "center",
 
-        color: "#555",
-
-        fontSize: "10px"
+        color: "#555"
 
     },
 
@@ -337,7 +404,7 @@ const boardStyles = {
 
         color: "#aaa",
 
-        paddingTop: "3px"
+        paddingTop: "4px"
 
     },
 
@@ -346,9 +413,11 @@ const boardStyles = {
 
         display: "flex",
 
-        justifyContent: "space-between",
+        justifyContent:
+            "space-between",
 
-        padding: "3px 4px",
+        padding:
+            "4px",
 
         fontSize: "12px",
 
