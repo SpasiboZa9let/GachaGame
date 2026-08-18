@@ -1,44 +1,36 @@
 function createInitialGameState() {
 
     const playerHero =
-        window.HEROES.find(
-            hero =>
-                hero.id ===
-                "ilya_muromets"
+        HEROES.find(
+            hero => hero.id === "ilya_muromets"
         );
-
 
     const opponentHero =
-        window.HEROES.find(
-            hero =>
-                hero.id ===
-                "vasilisa_premudraya"
+        HEROES.find(
+            hero => hero.id === "vasilisa_premudraya"
         );
-
 
     return {
 
         turn: 1,
 
-        activePlayer:
-            "player",
+        activePlayer: "player",
+
+        gameOver: false,
+
+        winner: null,
 
         combatLog: [
-
             "Бой начинается."
-
         ],
-
 
         player: {
 
-            hero:
-                playerHero,
+            hero: playerHero,
 
-            hp:
-                playerHero
-                    ? playerHero.maxHealth
-                    : 10000,
+            hp: playerHero
+                ? playerHero.maxHealth
+                : 10000,
 
             mana: 1,
 
@@ -47,27 +39,21 @@ function createInitialGameState() {
             deck: [],
 
             hand: [
-
                 "baba_yaga",
-
                 "shaman"
-
             ],
 
             board: []
 
         },
 
-
         opponent: {
 
-            hero:
-                opponentHero,
+            hero: opponentHero,
 
-            hp:
-                opponentHero
-                    ? opponentHero.maxHealth
-                    : 9000,
+            hp: opponentHero
+                ? opponentHero.maxHealth
+                : 9000,
 
             mana: 1,
 
@@ -75,17 +61,7 @@ function createInitialGameState() {
 
             deck: [],
 
-            hand: [
-
-                "svetogor",
-
-                "viy",
-
-                "volk",
-
-                "zmey_gorynych"
-
-            ],
+            hand: [],
 
             board: []
 
@@ -96,37 +72,138 @@ function createInitialGameState() {
 }
 
 
+/*
+    Добавляет сообщение в журнал боя.
+*/
+
+function addCombatLog(state, message) {
+
+    return {
+
+        ...state,
+
+        combatLog: [
+            ...(state.combatLog || []),
+            message
+        ]
+
+    };
+
+}
+
+
+/*
+    Проверка окончания игры.
+*/
+
+function checkGameOver(state) {
+
+    if (!state) {
+        return state;
+    }
+
+    if (state.gameOver) {
+        return state;
+    }
+
+
+    if (state.player.hp <= 0) {
+
+        return {
+
+            ...state,
+
+            gameOver: true,
+
+            winner: "opponent",
+
+            player: {
+
+                ...state.player,
+
+                hp: 0
+
+            },
+
+            combatLog: [
+                ...(state.combatLog || []),
+                "Герой игрока повержен.",
+                "ПОРАЖЕНИЕ."
+            ]
+
+        };
+
+    }
+
+
+    if (state.opponent.hp <= 0) {
+
+        return {
+
+            ...state,
+
+            gameOver: true,
+
+            winner: "player",
+
+            opponent: {
+
+                ...state.opponent,
+
+                hp: 0
+
+            },
+
+            combatLog: [
+                ...(state.combatLog || []),
+                "Герой противника повержен.",
+                "ПОБЕДА."
+            ]
+
+        };
+
+    }
+
+
+    return state;
+
+}
+
+
+/*
+    Получение карты по ID.
+*/
+
 function getCardById(cardId) {
 
-    if (
-        !Array.isArray(
-            window.CARDS
-        )
-    ) {
+    if (!Array.isArray(CARDS)) {
 
         console.error(
-            "CARDS не является массивом"
+            "CARDS не является массивом."
         );
 
         return null;
 
     }
 
-
-    return window.CARDS.find(
-        card =>
-            card.id === cardId
-    ) || null;
+    return (
+        CARDS.find(
+            card => card.id === cardId
+        ) || null
+    );
 
 }
 
 
+/*
+    Создание экземпляра карты
+    для размещения на поле.
+*/
+
 function createCardInstance(cardId) {
 
     const card =
-        getCardById(
-            cardId
-        );
+        getCardById(cardId);
 
 
     if (!card) {
@@ -144,7 +221,6 @@ function createCardInstance(cardId) {
     return {
 
         instanceId:
-
             cardId +
             "_" +
             Date.now() +
@@ -153,34 +229,19 @@ function createCardInstance(cardId) {
                 .toString(36)
                 .substring(2, 8),
 
+        cardId: cardId,
 
-        cardId:
-            cardId,
+        attack: card.attack,
 
+        health: card.health,
 
-        attack:
-            card.attack,
+        maxHealth: card.health,
 
+        defense: card.defense,
 
-        health:
-            card.health,
+        strength: card.strength,
 
-
-        maxHealth:
-            card.health,
-
-
-        defense:
-            card.defense,
-
-
-        strength:
-            card.strength,
-
-
-        canAttack:
-            false,
-
+        canAttack: false,
 
         status: []
 
@@ -189,36 +250,44 @@ function createCardInstance(cardId) {
 }
 
 
-function getCardFromHand(
-    player,
-    cardId
-) {
+/*
+    Поиск карты в руке.
+*/
+
+function getCardFromHand(player, cardId) {
 
     if (
         !player ||
-        !Array.isArray(
-            player.hand
-        )
+        !Array.isArray(player.hand)
     ) {
 
         return null;
 
     }
 
-
-    return player.hand.find(
-        id =>
-            id === cardId
-    ) || null;
+    return (
+        player.hand.find(
+            id => id === cardId
+        ) || null
+    );
 
 }
 
+
+/*
+    Розыгрыш карты.
+*/
 
 function playCard(
     state,
     playerId,
     cardId
 ) {
+
+    if (!state || state.gameOver) {
+        return state;
+    }
+
 
     const player =
         state[playerId];
@@ -259,9 +328,7 @@ function playCard(
 
 
     const card =
-        getCardById(
-            cardId
-        );
+        getCardById(cardId);
 
 
     if (!card) {
@@ -309,66 +376,30 @@ function playCard(
 
     const newHand =
         player.hand.filter(
-            id =>
-                id !== cardId
+            id => id !== cardId
         );
 
 
-    const newBoard =
-        [
-            ...player.board,
-            instance
-        ];
+    const newBoard = [
+        ...player.board,
+        instance
+    ];
 
 
-    let newCombatLog =
-        [
-            ...(state.combatLog || [])
-        ];
-
-
-    newCombatLog.push(
-
-        (
-            playerId ===
-            "player"
-
-                ? "Игрок"
-                : "Противник"
-
-        ) +
-
-        " разыгрывает " +
-
-        card.name +
-
-        "."
-
-    );
-
-
-    return {
+    let newState = {
 
         ...state,
-
-
-        combatLog:
-            newCombatLog,
-
 
         [playerId]: {
 
             ...player,
 
-
             mana:
                 player.mana -
                 card.cost,
 
-
             hand:
                 newHand,
-
 
             board:
                 newBoard
@@ -377,81 +408,61 @@ function playCard(
 
     };
 
+
+    newState =
+        addCombatLog(
+            newState,
+            (
+                playerId === "player"
+                    ? "Вы"
+                    : "Противник"
+            ) +
+            " разыграли карту «" +
+            card.name +
+            "»."
+        );
+
+
+    return newState;
+
+}
+
+
+/*
+    Начать новый бой.
+*/
+
+function restartGame() {
+
+    return createInitialGameState();
+
 }
 
 
-function checkGameOver(state) {
-
-    if (state.gameOver) {
-        return state;
-    }
-
-
-    if (state.player.hp <= 0) {
-
-        return {
-
-            ...state,
-
-            gameOver: true,
-
-            winner: "opponent",
-
-            combatLog: [
-                ...(state.combatLog || []),
-                "Герой игрока повержен.",
-                "Противник побеждает!"
-            ]
-
-        };
-
-    }
-
-
-    if (state.opponent.hp <= 0) {
-
-        return {
-
-            ...state,
-
-            gameOver: true,
-
-            winner: "player",
-
-            combatLog: [
-                ...(state.combatLog || []),
-                "Герой противника повержен.",
-                "Игрок побеждает!"
-            ]
-
-        };
-
-    }
-
-
-    return state;
-
-}
+/*
+    Глобальные функции.
+*/
 
 window.createInitialGameState =
     createInitialGameState;
 
+window.addCombatLog =
+    addCombatLog;
+
+window.checkGameOver =
+    checkGameOver;
 
 window.getCardById =
     getCardById;
 
-
 window.createCardInstance =
     createCardInstance;
-
 
 window.getCardFromHand =
     getCardFromHand;
 
-
 window.playCard =
     playCard;
 
-
-window.checkGameOver =
-    checkGameOver;
+window.restartGame =
+    restartGame;
