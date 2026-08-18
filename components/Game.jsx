@@ -5,16 +5,9 @@ function Game() {
             createInitialGameState()
         );
 
-
     const [selectedAttacker, setSelectedAttacker] =
         React.useState(null);
 
-
-    /*
-        =========================
-        РАЗЫГРЫВАНИЕ КАРТЫ
-        =========================
-    */
 
     function handleCardClick(card) {
 
@@ -26,7 +19,6 @@ function Game() {
             return;
         }
 
-
         const newState =
             playCard(
                 gameState,
@@ -34,24 +26,16 @@ function Game() {
                 card.id
             );
 
-
         setGameState(newState);
 
     }
 
-
-    /*
-        =========================
-        СВОЁ СУЩЕСТВО
-        =========================
-    */
 
     function handlePlayerUnitClick(unit) {
 
         if (!unit) {
             return;
         }
-
 
         if (
             selectedAttacker ===
@@ -61,9 +45,7 @@ function Game() {
             setSelectedAttacker(null);
 
             return;
-
         }
-
 
         if (!unit.canAttack) {
 
@@ -72,9 +54,7 @@ function Game() {
             );
 
             return;
-
         }
-
 
         setSelectedAttacker(
             unit.instanceId
@@ -83,23 +63,15 @@ function Game() {
     }
 
 
-    /*
-        =========================
-        СУЩЕСТВО ПРОТИВНИКА
-        =========================
-    */
-
     function handleOpponentUnitClick(unit) {
 
         if (!unit) {
             return;
         }
 
-
         if (!selectedAttacker) {
             return;
         }
-
 
         const newState =
             attackUnit(
@@ -109,7 +81,6 @@ function Game() {
                 unit.instanceId
             );
 
-
         setGameState(newState);
 
         setSelectedAttacker(null);
@@ -117,25 +88,12 @@ function Game() {
     }
 
 
-    /*
-        =========================
-        ЗАВЕРШЕНИЕ ХОДА
-        =========================
-    */
-
     function handleEndTurn() {
-
-        console.log(
-            "🔥 КНОПКА ЗАВЕРШИТЬ ХОД"
-        );
-
 
         setSelectedAttacker(null);
 
-
         const newState =
             endTurn(gameState);
-
 
         setGameState(newState);
 
@@ -145,16 +103,9 @@ function Game() {
     const player =
         gameState.player;
 
-
     const opponent =
         gameState.opponent;
 
-
-    /*
-        =========================
-        КАРТЫ В РУКЕ
-        =========================
-    */
 
     const handCards =
         (player.hand || [])
@@ -164,11 +115,8 @@ function Game() {
                     card &&
                     typeof card === "object"
                 ) {
-
                     return card;
-
                 }
-
 
                 if (
                     typeof card === "string" ||
@@ -182,7 +130,6 @@ function Game() {
 
                 }
 
-
                 return null;
 
             })
@@ -194,16 +141,13 @@ function Game() {
         <div style={gameStyles.game}>
 
 
-            {/* =========================
-                HEADER
-            ========================== */}
+            {/* HEADER */}
 
             <header style={gameStyles.header}>
 
                 <h1>
                     Тридевятое царство
                 </h1>
-
 
                 <div>
                     Ход: {gameState.turn}
@@ -213,162 +157,120 @@ function Game() {
 
 
 
-            {/* =========================
-                ИГРОВАЯ АРЕНА
-            ========================== */}
+            {/* ПРОТИВНИК */}
 
-            <div style={gameStyles.arena}>
+            <section style={gameStyles.playerSection}>
 
+                <div style={gameStyles.hero}>
 
-                {/* =====================
-                    ПРОТИВНИК
-                ====================== */}
+                    <strong>
+                        Противник
+                    </strong>
 
-                <div style={gameStyles.playerPanel}>
-
-
-                    <div style={gameStyles.hero}>
-
-                        <strong>
-                            Противник
-                        </strong>
-
-
-                        <span>
-                            ❤️ {opponent.hp}
-                        </span>
-
-                    </div>
-
-
-                    <div style={gameStyles.boardArea}>
-
-                        <Board
-                            units={
-                                opponent.board || []
-                            }
-
-                            onUnitClick={
-                                handleOpponentUnitClick
-                            }
-
-                            selectedUnitId={null}
-                        />
-
-                    </div>
+                    <span>
+                        ❤️ {opponent.hp}
+                    </span>
 
                 </div>
 
 
+                <Board
+                    units={
+                        opponent.board || []
+                    }
 
-                {/* =====================
-                    ЦЕНТР
-                ====================== */}
+                    onUnitClick={
+                        handleOpponentUnitClick
+                    }
 
-                <div style={gameStyles.center}>
+                    selectedUnitId={null}
+                />
 
-                    <div style={gameStyles.divider} />
-
-
-                    {selectedAttacker ? (
-
-                        <span
-                            style={
-                                gameStyles.attackMode
-                            }
-                        >
-
-                            ⚔️ Выберите цель
-
-                        </span>
-
-                    ) : (
-
-                        <span>
-
-                            {
-                                gameState.activePlayer ===
-                                "player"
-
-                                    ? "Ваш ход"
-
-                                    : "Ход противника"
-                            }
-
-                        </span>
-
-                    )}
-
-
-                    <div style={gameStyles.divider} />
-
-                </div>
+            </section>
 
 
 
-                {/* =====================
-                    ИГРОК
-                ====================== */}
+            {/* ЦЕНТР */}
 
-                <div style={gameStyles.playerPanel}>
+            <div style={gameStyles.center}>
 
+                {selectedAttacker ? (
 
-                    <div style={gameStyles.boardArea}>
+                    <span
+                        style={
+                            gameStyles.attackMode
+                        }
+                    >
+                        ⚔️ Выберите цель
+                    </span>
 
-                        <Board
-                            units={
-                                player.board || []
-                            }
+                ) : (
 
-                            onUnitClick={
-                                handlePlayerUnitClick
-                            }
+                    <span>
 
-                            selectedUnitId={
-                                selectedAttacker
-                            }
-                        />
+                        {
+                            gameState.activePlayer ===
+                            "player"
 
-                    </div>
+                                ? "Ваш ход"
 
+                                : "Ход противника"
+                        }
 
-                    <div style={gameStyles.hero}>
+                    </span>
 
-                        <strong>
-                            Игрок
-                        </strong>
-
-
-                        <span>
-                            ❤️ {player.hp}
-                        </span>
-
-
-                        <span
-                            style={
-                                gameStyles.mana
-                            }
-                        >
-
-                            🔵 {player.mana}
-                            {" / "}
-                            {player.maxMana}
-
-                        </span>
-
-                    </div>
-
-                </div>
+                )}
 
             </div>
 
 
 
-            {/* =========================
-                РУКА
-            ========================== */}
+            {/* ИГРОК */}
 
-            <div style={gameStyles.handArea}>
+            <section style={gameStyles.playerSection}>
+
+                <Board
+                    units={
+                        player.board || []
+                    }
+
+                    onUnitClick={
+                        handlePlayerUnitClick
+                    }
+
+                    selectedUnitId={
+                        selectedAttacker
+                    }
+                />
+
+
+                <div style={gameStyles.hero}>
+
+                    <strong>
+                        Игрок
+                    </strong>
+
+                    <span>
+                        ❤️ {player.hp}
+                    </span>
+
+                    <span
+                        style={
+                            gameStyles.mana
+                        }
+                    >
+                        🔵 {player.mana} / {player.maxMana}
+                    </span>
+
+                </div>
+
+            </section>
+
+
+
+            {/* РУКА */}
+
+            <div style={gameStyles.handWrapper}>
 
                 <Hand
                     cards={handCards}
@@ -379,19 +281,14 @@ function Game() {
 
 
 
-            {/* =========================
-                КНОПКА
-            ========================== */}
+            {/* КНОПКА */}
 
             <button
                 onClick={handleEndTurn}
                 style={gameStyles.endTurn}
             >
-
                 Завершить ход
-
             </button>
-
 
         </div>
 
@@ -400,14 +297,7 @@ function Game() {
 }
 
 
-
 const gameStyles = {
-
-    /*
-        =========================
-        ОСНОВНАЯ СТРАНИЦА
-        =========================
-    */
 
     game: {
 
@@ -423,20 +313,12 @@ const gameStyles = {
 
         flexDirection: "column",
 
-        gap: "12px"
+        gap: "10px"
 
     },
 
 
-    /*
-        =========================
-        HEADER
-        =========================
-    */
-
     header: {
-
-        width: "100%",
 
         height: "55px",
 
@@ -455,154 +337,45 @@ const gameStyles = {
     },
 
 
-    /*
-        =========================
-        ГЛАВНАЯ АРЕНА
-        =========================
-
-        ФИКСИРОВАННЫЙ РАЗМЕР.
-
-        Именно это нам сейчас нужно.
-    */
-
-    arena: {
+    playerSection: {
 
         width: "100%",
-
-        height: "570px",
-
-        minHeight: "570px",
-
-        maxHeight: "570px",
-
-        background: "#111",
-
-        border: "1px solid #444",
-
-        borderRadius: "14px",
-
-        padding: "10px",
-
-        boxSizing: "border-box",
 
         display: "flex",
 
         flexDirection: "column",
 
-        overflow: "hidden"
+        gap: "5px"
 
     },
 
-
-    /*
-        =========================
-        ПАНЕЛЬ ИГРОКА
-        =========================
-    */
-
-    playerPanel: {
-
-        width: "100%",
-
-        height: "210px",
-
-        minHeight: "210px",
-
-        display: "flex",
-
-        flexDirection: "column",
-
-        justifyContent: "space-between",
-
-        boxSizing: "border-box"
-
-    },
-
-
-    /*
-        =========================
-        HERO
-        =========================
-    */
 
     hero: {
 
-        width: "100%",
-
         height: "35px",
 
-        minHeight: "35px",
-
         display: "flex",
-
-        alignItems: "center",
 
         gap: "20px",
 
-        padding: "0 10px",
+        alignItems: "center",
 
-        boxSizing: "border-box"
-
-    },
-
-
-    /*
-        =========================
-        ОБЛАСТЬ ПОЛЯ
-        =========================
-    */
-
-    boardArea: {
-
-        width: "100%",
-
-        height: "165px",
-
-        minHeight: "165px",
-
-        overflow: "hidden",
-
-        boxSizing: "border-box"
+        padding: "0 10px"
 
     },
 
-
-    /*
-        =========================
-        ЦЕНТР
-        =========================
-    */
 
     center: {
 
-        width: "100%",
-
-        height: "130px",
-
-        minHeight: "130px",
+        height: "30px",
 
         display: "flex",
 
-        flexDirection: "column",
+        alignItems: "center",
 
         justifyContent: "center",
 
-        alignItems: "center",
-
-        gap: "15px",
-
         color: "#777"
-
-    },
-
-
-    divider: {
-
-        width: "80%",
-
-        height: "1px",
-
-        background: "#333"
 
     },
 
@@ -611,9 +384,7 @@ const gameStyles = {
 
         color: "#ffd700",
 
-        fontWeight: "bold",
-
-        fontSize: "16px"
+        fontWeight: "bold"
 
     },
 
@@ -628,35 +399,33 @@ const gameStyles = {
 
 
     /*
-        =========================
-        РУКА
-        =========================
+        Рука теперь получает
+        отдельную область.
+
+        Она находится ниже поля
+        и не залезает на него.
     */
 
-    handArea: {
+    handWrapper: {
 
         width: "100%",
 
-        height: "270px",
-
-        minHeight: "270px",
-
-        overflow: "hidden",
+        minHeight: "230px",
 
         display: "flex",
 
+        alignItems: "flex-end",
+
         justifyContent: "center",
 
-        boxSizing: "border-box"
+        paddingTop: "10px",
+
+        boxSizing: "border-box",
+
+        overflow: "hidden"
 
     },
 
-
-    /*
-        =========================
-        КНОПКА
-        =========================
-    */
 
     endTurn: {
 
