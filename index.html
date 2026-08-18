@@ -5,7 +5,7 @@
 
 <meta charset="UTF-8">
 
-<meta
+<meta 
     name="viewport"
     content="width=device-width, initial-scale=1.0"
 >
@@ -30,19 +30,19 @@
 html,
 body {
 
-    margin: 0;
-    padding: 0;
+    margin:0;
+    padding:0;
 
-    min-height: 100%;
+    min-height:100%;
 
 }
 
 
 body {
 
-    background: #171717;
+    background:#171717;
 
-    color: #eee;
+    color:#eee;
 
     font-family:
         Arial,
@@ -52,147 +52,152 @@ body {
 }
 
 
-button,
-input {
+button {
 
-    font-family: inherit;
+    font-family:inherit;
 
 }
 
 
 #root {
 
-    min-height: 100vh;
+    min-height:100vh;
 
 }
 
 </style>
 
+
 </head>
+
 
 
 <body>
 
+
 <div id="root"></div>
 
 
-<!-- =========================
-     DATA
-========================== -->
+
+<!-- =====================
+DATA
+===================== -->
 
 
-<script
-    type="text/babel"
-    src="./data/cards.js">
+<script 
+type="text/babel"
+src="./data/cards.js">
 </script>
 
 
 <script
-    type="text/babel"
-    src="./data/heroes.js">
+type="text/babel"
+src="./data/heroes.js">
 </script>
 
 
 <script
-    type="text/babel"
-    src="./data/factions.js">
+type="text/babel"
+src="./data/factions.js">
 </script>
 
 
 <script
-    type="text/babel"
-    src="./data/effects.js">
+type="text/babel"
+src="./data/effects.js">
 </script>
 
 
-<!-- =========================
-     GAME LOGIC
-========================== -->
 
 
-<!-- Бой -->
-
-<script
-    type="text/babel"
-    src="./game/combat.js">
-</script>
-
-
-<!-- Колода -->
-
-<script
-    type="text/babel"
-    src="./game/deck.js">
-</script>
-
-
-<!-- Выполнение эффектов -->
-
-<script
-    type="text/babel"
-    src="./game/effects.js">
-</script>
-
-
-<!-- Основное состояние игры -->
-
-<script
-    type="text/babel"
-    src="./game/engine.js">
-</script>
-
-
-<!-- Ходы и AI -->
-
-<script
-    type="text/babel"
-    src="./game/turns.js">
-</script>
-
-
-<!-- =========================
-     COMPONENTS
-========================== -->
+<!-- =====================
+GAME
+===================== -->
 
 
 <script
-    type="text/babel"
-    src="./components/Card.jsx">
+type="text/babel"
+src="./game/combat.js">
 </script>
 
 
 <script
-    type="text/babel"
-    src="./components/Board.jsx">
+type="text/babel"
+src="./game/deck.js">
 </script>
 
 
 <script
-    type="text/babel"
-    src="./components/Hand.jsx">
+type="text/babel"
+src="./game/effects.js">
 </script>
 
 
 <script
-    type="text/babel"
-    src="./components/Hero.jsx">
+type="text/babel"
+src="./game/engine.js">
 </script>
 
 
 <script
-    type="text/babel"
-    src="./components/Game.jsx">
+type="text/babel"
+src="./game/turns.js">
 </script>
 
 
-<!-- =========================
-     APPLICATION
-========================== -->
+
+
+<!-- =====================
+COMPONENTS
+===================== -->
 
 
 <script
-    type="text/babel"
-    src="./app.js">
+type="text/babel"
+src="./components/Card.jsx">
+</script>
+
+
+<script
+type="text/babel"
+src="./components/Board.jsx">
+</script>
+
+
+<script
+type="text/babel"
+src="./components/Hand.jsx">
+</script>
+
+
+<script
+type="text/babel"
+src="./components/Hero.jsx">
+</script>
+
+
+<script
+type="text/babel"
+src="./components/Mana.jsx">
+</script>
+
+
+<script
+type="text/babel"
+src="./components/Game.jsx">
+</script>
+
+
+
+
+<!-- =====================
+APP
+===================== -->
+
+
+<script
+type="text/babel"
+src="./app.js">
 </script>
 
 
