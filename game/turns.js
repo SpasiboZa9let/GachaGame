@@ -1,79 +1,61 @@
 function endTurn(state) {
 
-    console.log(
-        "🔥 END TURN FROM turns.js",
-        "turn:",
-        state.turn,
-        "mana:",
-        state.player.mana,
-        "maxMana:",
-        state.player.maxMana
-    );
-
-
-    /*
-        Сейчас ход всегда принадлежит игроку.
-
-        Позже здесь сделаем:
-        игрок → противник → игрок.
-    */
-
-    if (state.activePlayer !== "player") {
-
-        console.log(
-            "Ход сейчас не игрока."
-        );
+    if (
+        state.activePlayer !==
+        "player"
+    ) {
 
         return state;
 
     }
 
 
-    /*
-        Увеличиваем номер хода.
-    */
-
-    const newTurn =
-        state.turn + 1;
+    let newMaxMana =
+        state.player.maxMana;
 
 
     /*
-        Увеличиваем максимальную ману.
+        Каждый новый ход
+        +1 максимальная мана.
 
         Максимум — 10.
     */
 
-    const newMaxMana =
-        Math.min(
-            state.player.maxMana + 1,
-            10
-        );
+    if (
+        newMaxMana < 10
+    ) {
+
+        newMaxMana += 1;
+
+    }
 
 
     /*
-        Разрешаем существам атаковать
-        в начале нового хода.
+        Все существа игрока
+        снова получают возможность атаковать.
     */
 
-    const newBoard =
-        (state.player.board || [])
-            .map(unit => ({
+    const refreshedBoard =
+        state.player.board.map(
+            unit => ({
 
                 ...unit,
 
                 canAttack: true
 
-            }));
+            })
+        );
 
 
-    const newState = {
+    return {
 
         ...state,
 
-        turn: newTurn,
+        turn:
+            state.turn + 1,
 
-        activePlayer: "player",
-
+        activePlayer:
+            "player",
 
         player: {
 
@@ -86,24 +68,10 @@ function endTurn(state) {
                 newMaxMana,
 
             board:
-                newBoard
+                refreshedBoard
 
         }
 
     };
-
-
-    console.log(
-        "🔥 НОВОЕ СОСТОЯНИЕ:",
-        "turn:",
-        newState.turn,
-        "mana:",
-        newState.player.mana,
-        "maxMana:",
-        newState.player.maxMana
-    );
-
-
-    return newState;
 
 }
