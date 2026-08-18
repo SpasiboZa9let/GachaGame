@@ -3,13 +3,9 @@ function Hand({ cards, onCardClick }) {
     if (!cards || cards.length === 0) {
 
         return (
-
             <div style={styles.emptyHand}>
-
                 Рука пуста
-
             </div>
-
         );
 
     }
@@ -28,18 +24,17 @@ function Hand({ cards, onCardClick }) {
 
                 return (
 
-                    <Card
-                        key={
-                            card.id ||
-                            index
-                        }
+                    <div
+                        key={card.id || index}
+                        style={styles.cardWrapper}
+                    >
 
-                        card={card}
+                        <Card
+                            card={card}
+                            onClick={onCardClick}
+                        />
 
-                        onClick={
-                            onCardClick
-                        }
-                    />
+                    </div>
 
                 );
 
@@ -55,6 +50,11 @@ function Hand({ cards, onCardClick }) {
 
 const styles = {
 
+    /*
+        Вся рука располагается
+        строго в одну горизонтальную линию.
+    */
+
     hand: {
 
         display: "flex",
@@ -67,17 +67,46 @@ const styles = {
 
         alignItems: "flex-end",
 
-        gap: "12px",
+        gap: "14px",
 
         width: "100%",
 
-        minHeight: "230px",
+        minHeight: "250px",
 
-        padding: "15px 10px",
+        padding: "20px",
 
         boxSizing: "border-box",
 
-        overflowX: "auto"
+        overflowX: "auto",
+
+        overflowY: "hidden"
+
+    },
+
+
+    /*
+        Каждая карта является отдельным
+        горизонтальным элементом руки.
+
+        flexShrink: 0 не позволяет браузеру
+        сжимать карты.
+    */
+
+    cardWrapper: {
+
+        flex: "0 0 auto",
+
+        flexShrink: 0,
+
+        width: "180px",
+
+        height: "250px",
+
+        display: "flex",
+
+        justifyContent: "center",
+
+        alignItems: "flex-end"
 
     },
 
