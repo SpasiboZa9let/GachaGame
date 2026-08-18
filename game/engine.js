@@ -382,38 +382,47 @@ function playCard(
 
 function checkGameOver(state) {
 
-    if (
-        state.player.hp <= 0
-    ) {
+    if (state.gameOver) {
+        return state;
+    }
+
+
+    if (state.player.hp <= 0) {
 
         return {
 
             ...state,
 
-            gameOver:
-                true,
+            gameOver: true,
 
-            winner:
-                "opponent"
+            winner: "opponent",
+
+            combatLog: [
+                ...(state.combatLog || []),
+                "Герой игрока повержен.",
+                "Противник побеждает!"
+            ]
 
         };
 
     }
 
 
-    if (
-        state.opponent.hp <= 0
-    ) {
+    if (state.opponent.hp <= 0) {
 
         return {
 
             ...state,
 
-            gameOver:
-                true,
+            gameOver: true,
 
-            winner:
-                "player"
+            winner: "player",
+
+            combatLog: [
+                ...(state.combatLog || []),
+                "Герой противника повержен.",
+                "Игрок побеждает!"
+            ]
 
         };
 
@@ -423,7 +432,6 @@ function checkGameOver(state) {
     return state;
 
 }
-
 
 window.createInitialGameState =
     createInitialGameState;
