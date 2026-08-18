@@ -1,33 +1,55 @@
 function endTurn(state) {
 
+    /*
+        Если сейчас не ход игрока —
+        ничего не делаем.
+    */
+
     if (state.activePlayer !== "player") {
-
         return state;
-
     }
 
+
+    /*
+        Следующий ход.
+    */
 
     const newTurn =
         state.turn + 1;
 
 
-    let newMaxMana =
-        state.player.maxMana;
+    /*
+        Увеличиваем максимальную ману
+        максимум до 10.
+    */
+
+    const newMaxMana =
+        Math.min(
+            state.player.maxMana + 1,
+            10
+        );
 
 
     /*
-        Максимальная мана увеличивается
-        каждый новый ход.
+        Подготавливаем существ игрока.
 
-        Пока ограничиваем её десятью.
+        После начала нового хода
+        они снова могут атаковать.
     */
 
-    if (newMaxMana < 10) {
+    const newPlayerBoard =
+        state.player.board.map(unit => ({
 
-        newMaxMana += 1;
+            ...unit,
 
-    }
+            canAttack: true
 
+        }));
+
+
+    /*
+        Возвращаем новое состояние.
+    */
 
     return {
 
@@ -37,24 +59,19 @@ function endTurn(state) {
 
         activePlayer: "player",
 
+
         player: {
 
             ...state.player,
 
-            maxMana: newMaxMana,
+            maxMana:
+                newMaxMana,
 
-            mana: newMaxMana,
+            mana:
+                newMaxMana,
 
             board:
-                state.player.board.map(
-                    unit => ({
-
-                        ...unit,
-
-                        canAttack: true
-
-                    })
-                )
+                newPlayerBoard
 
         }
 
