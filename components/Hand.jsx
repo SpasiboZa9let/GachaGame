@@ -4,49 +4,65 @@ function Hand({ cards, onCardClick }) {
         return null;
     }
 
+
     return (
-        <div
-            style={{
-                width: "100%",
-                overflowX: "auto",
-                overflowY: "hidden",
-                boxSizing: "border-box",
-                padding: "20px 10px"
-            }}
-        >
 
-            <div
-                style={{
-                    display: "flex",
-                    flexDirection: "row",
-                    flexWrap: "nowrap",
-                    justifyContent: "center",
-                    alignItems: "flex-start",
-                    gap: "15px",
-                    width: "max-content",
-                    minWidth: "100%",
-                    boxSizing: "border-box"
-                }}
-            >
+        <div style={handStyles.hand}>
 
-                {cards.map((card, index) => {
+            {cards.map((card, index) => {
 
-                    if (!card) {
-                        return null;
-                    }
+                if (!card) {
+                    return null;
+                }
 
-                    return (
-                        <Card
-                            key={card.id || index}
-                            card={card}
-                            onClick={onCardClick}
-                        />
-                    );
 
-                })}
+                return (
 
-            </div>
+                    <Card
+                        key={card.id || index}
+                        card={card}
+                        onClick={onCardClick}
+                    />
+
+                );
+
+            })}
 
         </div>
+
     );
+
 }
+
+
+const handStyles = {
+
+    hand: {
+
+        display: "flex",
+
+        flexDirection: "row",
+
+        flexWrap: "nowrap",
+
+        justifyContent: "center",
+
+        alignItems: "flex-end",
+
+        gap: "12px",
+
+        width: "100%",
+
+        minHeight: "230px",
+
+        padding: "15px 10px",
+
+        boxSizing: "border-box",
+
+        overflowX: "auto",
+
+        overflowY: "hidden"
+
+    }
+
+};
