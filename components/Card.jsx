@@ -7,10 +7,17 @@ function Card({ card, onClick }) {
     return (
         <div
             onClick={() => onClick && onClick(card)}
+
             style={{
                 width: "180px",
-                height: "260px",
                 minWidth: "180px",
+                maxWidth: "180px",
+
+                height: "260px",
+                minHeight: "260px",
+                maxHeight: "260px",
+
+                flex: "0 0 180px",
 
                 background: "#292929",
 
@@ -18,16 +25,15 @@ function Card({ card, onClick }) {
                 borderRadius: "12px",
 
                 padding: "8px",
+
                 boxSizing: "border-box",
 
                 display: "flex",
                 flexDirection: "column",
 
-                cursor: "pointer",
-
-                flexShrink: 0,
-
                 position: "relative",
+
+                cursor: "pointer",
 
                 transition:
                     "transform 0.15s ease, box-shadow 0.15s ease",
@@ -35,6 +41,7 @@ function Card({ card, onClick }) {
                 boxShadow:
                     "0 5px 15px rgba(0,0,0,0.5)"
             }}
+
             onMouseEnter={(e) => {
 
                 e.currentTarget.style.transform =
@@ -44,6 +51,7 @@ function Card({ card, onClick }) {
                     "0 12px 25px rgba(0,0,0,0.7)";
 
             }}
+
             onMouseLeave={(e) => {
 
                 e.currentTarget.style.transform =
@@ -95,6 +103,7 @@ function Card({ card, onClick }) {
                     fontSize: "14px",
 
                     height: "25px",
+                    minHeight: "25px",
 
                     lineHeight: "25px",
 
@@ -114,9 +123,7 @@ function Card({ card, onClick }) {
             <div
                 style={{
                     width: "100%",
-
                     height: "150px",
-
                     minHeight: "150px",
 
                     background: "#111",
@@ -125,7 +132,9 @@ function Card({ card, onClick }) {
 
                     borderRadius: "7px",
 
-                    border: "1px solid #555"
+                    border: "1px solid #555",
+
+                    boxSizing: "border-box"
                 }}
             >
 
@@ -134,6 +143,7 @@ function Card({ card, onClick }) {
                     <img
                         src={card.image}
                         alt={card.name}
+
                         style={{
                             width: "100%",
                             height: "100%",
@@ -152,6 +162,7 @@ function Card({ card, onClick }) {
                             height: "100%",
 
                             display: "flex",
+
                             alignItems: "center",
                             justifyContent: "center",
 
@@ -170,7 +181,7 @@ function Card({ card, onClick }) {
 
             <div
                 style={{
-                    flex: 1,
+                    flex: "1 1 auto",
 
                     fontSize: "11px",
 
@@ -195,13 +206,19 @@ function Card({ card, onClick }) {
                 style={{
                     display: "flex",
 
+                    flexDirection: "row",
+
                     justifyContent: "space-between",
+
+                    alignItems: "center",
 
                     fontWeight: "bold",
 
                     fontSize: "14px",
 
-                    padding: "3px 5px"
+                    padding: "3px 5px",
+
+                    flexShrink: 0
                 }}
             >
 
