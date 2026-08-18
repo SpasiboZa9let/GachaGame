@@ -4,7 +4,9 @@ function preparePlayerTurn(state) {
         state.player.maxMana;
 
 
-    if (newMaxMana < 10) {
+    if (
+        newMaxMana < 10
+    ) {
 
         newMaxMana += 1;
 
@@ -50,7 +52,7 @@ function preparePlayerTurn(state) {
 
 
     /*
-        Добор карты в начале хода.
+        Добор карты.
     */
 
     if (
@@ -77,7 +79,9 @@ function prepareOpponentTurn(state) {
         state.opponent.maxMana;
 
 
-    if (newMaxMana < 10) {
+    if (
+        newMaxMana < 10
+    ) {
 
         newMaxMana += 1;
 
@@ -124,6 +128,11 @@ function prepareOpponentTurn(state) {
 }
 
 
+/*
+    Получаем случайную
+    доступную карту AI.
+*/
+
 function getRandomPlayableCard(state) {
 
     const opponent =
@@ -135,6 +144,15 @@ function getRandomPlayableCard(state) {
         !Array.isArray(
             opponent.hand
         )
+    ) {
+
+        return null;
+
+    }
+
+
+    if (
+        opponent.board.length >= 5
     ) {
 
         return null;
@@ -160,26 +178,10 @@ function getRandomPlayableCard(state) {
                     }
 
 
-                    if (
-                        opponent.mana <
+                    return (
+                        opponent.mana >=
                         card.cost
-                    ) {
-
-                        return false;
-
-                    }
-
-
-                    if (
-                        opponent.board.length >= 5
-                    ) {
-
-                        return false;
-
-                    }
-
-
-                    return true;
+                    );
 
                 }
             );
@@ -208,13 +210,19 @@ function getRandomPlayableCard(state) {
 }
 
 
+/*
+    AI разыгрывает карты.
+*/
+
 function opponentPlayCards(state) {
 
     let newState =
         state;
 
 
-    while (true) {
+    while (
+        !newState.gameOver
+    ) {
 
         const card =
             getRandomPlayableCard(
@@ -256,13 +264,30 @@ function opponentPlayCards(state) {
 }
 
 
+/*
+    AI атакует.
+
+    Приоритет:
+
+    1. Если у игрока есть существа —
+       атакуем случайное существо.
+
+    2. Если существ нет —
+       атакуем героя.
+
+    AI продолжает атаковать
+    всеми доступными существами.
+*/
+
 function opponentAttack(state) {
 
     let newState =
         state;
 
 
-    while (true) {
+    while (
+        !newState.gameOver
+    ) {
 
         const attackers =
             newState.opponent.board
@@ -291,8 +316,8 @@ function opponentAttack(state) {
 
 
         /*
-            Если у игрока есть существа —
-            атакуем случайное существо.
+            Если есть существа игрока —
+            атакуем их.
         */
 
         if (
@@ -334,14 +359,35 @@ function opponentAttack(state) {
 
             }
 
-        } else {
+        }
 
-            /*
-                Пока герой напрямую
-                не атакуется.
-            */
+        /*
+            Если существ игрока нет —
+            атакуем героя.
+        */
 
-            break;
+        else {
+
+            const previousState =
+                newState;
+
+
+            newState =
+                window.attackHero(
+                    newState,
+                    "opponent",
+                    attacker.instanceId
+                );
+
+
+            if (
+                newState ===
+                previousState
+            ) {
+
+                break;
+
+            }
 
         }
 
@@ -353,10 +399,23 @@ function opponentAttack(state) {
 }
 
 
+/*
+    Полный ход противника.
+*/
+
 function opponentTurn(state) {
 
     let newState =
         state;
+
+
+    if (
+        newState.gameOver
+    ) {
+
+        return newState;
+
+    }
 
 
     newState =
@@ -365,29 +424,23 @@ function opponentTurn(state) {
         );
 
 
-    let log =
-        [
-            ...(newState.combatLog || [])
-        ];
-
-
-    log.push(
-        "Ход противника."
-    );
-
-
     newState = {
 
         ...newState,
 
-        combatLog:
-            log
+        combatLog: [
+
+            ...(newState.combatLog || []),
+
+            "Ход Василисы."
+
+        ]
 
     };
 
 
     /*
-        AI разыгрывает карты.
+        Сначала играем карты.
     */
 
     newState =
@@ -397,7 +450,7 @@ function opponentTurn(state) {
 
 
     /*
-        AI атакует.
+        Затем атакуем.
     */
 
     newState =
@@ -411,7 +464,21 @@ function opponentTurn(state) {
 }
 
 
+/*
+    Завершение хода игрока.
+*/
+
 function endTurn(state) {
+
+    if (
+        !state ||
+        state.gameOver
+    ) {
+
+        return state;
+
+    }
+
 
     if (
         state.activePlayer !==
@@ -423,39 +490,43 @@ function endTurn(state) {
     }
 
 
-    let newState =
-        state;
+    let newState = {
 
+        ...state,
 
-    let log =
-        [
-            ...(newState.combatLog || [])
-        ];
+        combatLog: [
 
+            ...(state.combatLog || []),
 
-    log.push(
-        "Игрок завершает ход."
-    );
+            "Игрок завершает ход."
 
-
-    newState = {
-
-        ...newState,
-
-        combatLog:
-            log
+        ]
 
     };
 
 
     /*
-        Передаём управление AI.
+        Ход AI.
     */
 
     newState =
         opponentTurn(
             newState
         );
+
+
+    /*
+        Если AI убил игрока —
+        дальше ход не передаём.
+    */
+
+    if (
+        newState.gameOver
+    ) {
+
+        return newState;
+
+    }
 
 
     /*
