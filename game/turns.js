@@ -1,17 +1,36 @@
 function endTurn(state) {
 
+    console.log(
+        "🔥 END TURN FROM turns.js",
+        "turn:",
+        state.turn,
+        "mana:",
+        state.player.mana,
+        "maxMana:",
+        state.player.maxMana
+    );
+
+
     /*
-        Если сейчас не ход игрока —
-        ничего не делаем.
+        Сейчас ход всегда принадлежит игроку.
+
+        Позже здесь сделаем:
+        игрок → противник → игрок.
     */
 
     if (state.activePlayer !== "player") {
+
+        console.log(
+            "Ход сейчас не игрока."
+        );
+
         return state;
+
     }
 
 
     /*
-        Следующий ход.
+        Увеличиваем номер хода.
     */
 
     const newTurn =
@@ -19,8 +38,9 @@ function endTurn(state) {
 
 
     /*
-        Увеличиваем максимальную ману
-        максимум до 10.
+        Увеличиваем максимальную ману.
+
+        Максимум — 10.
     */
 
     const newMaxMana =
@@ -31,27 +51,22 @@ function endTurn(state) {
 
 
     /*
-        Подготавливаем существ игрока.
-
-        После начала нового хода
-        они снова могут атаковать.
+        Разрешаем существам атаковать
+        в начале нового хода.
     */
 
-    const newPlayerBoard =
-        state.player.board.map(unit => ({
+    const newBoard =
+        (state.player.board || [])
+            .map(unit => ({
 
-            ...unit,
+                ...unit,
 
-            canAttack: true
+                canAttack: true
 
-        }));
+            }));
 
 
-    /*
-        Возвращаем новое состояние.
-    */
-
-    return {
+    const newState = {
 
         ...state,
 
@@ -71,10 +86,24 @@ function endTurn(state) {
                 newMaxMana,
 
             board:
-                newPlayerBoard
+                newBoard
 
         }
 
     };
+
+
+    console.log(
+        "🔥 НОВОЕ СОСТОЯНИЕ:",
+        "turn:",
+        newState.turn,
+        "mana:",
+        newState.player.mana,
+        "maxMana:",
+        newState.player.maxMana
+    );
+
+
+    return newState;
 
 }
