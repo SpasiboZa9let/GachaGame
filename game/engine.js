@@ -1,324 +1,277 @@
 function createInitialGameState() {
 
-const playerHero =
-    HEROES.find(
-        hero => hero.id === "ilya_muromets"
-    );
+    const playerHero =
+        HEROES.find(
+            hero => hero.id === "ilya_muromets"
+        );
 
+    const opponentHero =
+        HEROES.find(
+            hero => hero.id === "vasilisa_premudraya"
+        );
 
-const opponentHero =
-    HEROES.find(
-        hero => hero.id === "vasilisa_premudraya"
-    );
+    return {
 
+        turn: 1,
 
-return {
+        activePlayer: "player",
 
+        player: {
 
-    turn: 1,
+            hero: playerHero,
 
+            hp: playerHero
+                ? playerHero.maxHealth
+                : 10000,
 
-    activePlayer: "player",
+            mana: 1,
+            maxMana: 1,
 
+            deck: [],
 
-    player: {
+            hand: [
+                "baba_yaga",
+                "voin_pikhotinets"
+            ],
 
+            board: []
 
-        hero: playerHero,
+        },
 
+        opponent: {
 
-        hp: playerHero
-            ? playerHero.maxHealth
-            : 10000,
+            hero: opponentHero,
 
+            hp: opponentHero
+                ? opponentHero.maxHealth
+                : 9000,
 
-        mana: 1,
-        maxMana: 1,
+            mana: 1,
+            maxMana: 1,
 
+            deck: [],
 
-        deck: [],
+            hand: [],
 
+            board: []
 
-        hand: [
-            "baba_yaga",
-            "shaman"
-        ],
+        }
 
-
-        board: []
-
-
-    },
-
-
-    opponent: {
-
-
-        hero: opponentHero,
-
-
-        hp: opponentHero
-            ? opponentHero.maxHealth
-            : 9000,
-
-
-        mana: 1,
-        maxMana: 1,
-
-
-        deck: [],
-
-
-        hand: [],
-
-
-        board: []
-
-
-    }
-
-
-};
+    };
 
 }
 
 function getCardById(cardId) {
 
-if (!Array.isArray(CARDS)) {
+    if (!Array.isArray(CARDS)) {
 
+        console.error(
+            "CARDS не является массивом"
+        );
 
-    console.error(
-        "CARDS не является массивом"
-    );
+        return null;
 
+    }
 
-    return null;
-
-
-}
-
-
-return CARDS.find(
-    card => card.id === cardId
-) || null;
+    return CARDS.find(
+        card => card.id === cardId
+    ) || null;
 
 }
 
 function createCardInstance(cardId) {
 
-const card =
-    getCardById(cardId);
+    const card =
+        getCardById(cardId);
 
+    if (!card) {
 
-if (!card) {
+        console.error(
+            "Карта не найдена:",
+            cardId
+        );
 
+        return null;
 
-    console.error(
-        "Карта не найдена:",
-        cardId
-    );
+    }
 
+    return {
 
-    return null;
+        instanceId:
+            cardId +
+            "_" +
+            Date.now() +
+            "_" +
+            Math.random()
+                .toString(36)
+                .substring(2, 8),
 
+        cardId: cardId,
 
-}
+        attack: card.attack,
 
+        health: card.health,
 
+        maxHealth: card.health,
 
+        defense: card.defense,
 
-return {
+        strength: card.strength,
 
+        canAttack: false,
 
-    instanceId:
-        cardId +
-        "_" +
-        Date.now() +
-        "_" +
-        Math.random()
-            .toString(36)
-            .substring(2, 8),
+        status: []
 
-
-    cardId: cardId,
-
-
-    attack: card.attack,
-
-
-    health: card.health,
-
-
-    maxHealth: card.health,
-
-
-    defense: card.defense,
-
-
-    strength: card.strength,
-
-
-    canAttack: false,
-
-
-    status: []
-
-
-};
+    };
 
 }
 
 function getCardFromHand(player, cardId) {
 
-if (
-    !player ||
-    !Array.isArray(player.hand)
-) {
+    if (
+        !player ||
+        !Array.isArray(player.hand)
+    ) {
 
+        return null;
 
-    return null;
+    }
 
-
-}
-
-
-return player.hand.find(
-    id => id === cardId
-) || null;
+    return player.hand.find(
+        id => id === cardId
+    ) || null;
 
 }
 
 function playCard(
-state,
-playerId,
-cardId
+    state,
+    playerId,
+    cardId
 ) {
 
-const player =
-    state[playerId];
+    const player =
+        state[playerId];
 
+    if (!player) {
+        return state;
+    }
 
-if (!player) {
-    return state;
-}
+    if (
+        state.activePlayer !==
+        playerId
+    ) {
 
+        return state;
 
+    }
 
+    const cardInHand =
+        getCardFromHand(
+            player,
+            cardId
+        );
 
-if (
-    state.activePlayer !==
-    playerId
-) {
+    if (!cardInHand) {
 
+        console.log(
+            "Карты нет в руке:",
+            cardId
+        );
 
-    return state;
+        return state;
 
+    }
 
-}
+    const card =
+        getCardById(cardId);
 
+    if (!card) {
+        return state;
+    }
 
+    if (
+        player.mana <
+        card.cost
+    ) {
 
+        console.log(
+            "Недостаточно маны."
+        );
 
-const cardInHand =
-    getCardFromHand(
-        player,
-        cardId
-    );
+        return state;
 
+    }
 
-if (!cardInHand) {
+    if (
+        player.board.length >= 5
+    ) {
 
+        console.log(
+            "На поле нет свободного места."
+        );
 
-    console.log(
-        "Карты нет в руке:",
-        cardId
-    );
+        return state;
 
+    }
 
-    return state;
+    const instance =
+        createCardInstance(
+            cardId
+        );
 
+    if (!instance) {
+        return state;
+    }
 
-}
+    const newHand =
+        player.hand.filter(
+            id => id !== cardId
+        );
 
+    const newBoard =
+        [
+            ...player.board,
+            instance
+        ];
 
+    const newPlayer = {
 
+        ...player,
 
-const card =
-    getCardById(cardId);
+        mana:
+            player.mana -
+            card.cost,
 
+        hand:
+            newHand,
 
-if (!card) {
-    return state;
-}
+        board:
+            newBoard
 
+    };
 
+    return {
 
+        ...state,
 
-if (
-    player.mana <
-    card.cost
-) {
+        [playerId]:
+            newPlayer
 
-
-    console.log(
-        "Недостаточно маны."
-    );
-
-
-    return state;
-
-
-}
-
-
-
-
-if (
-    player.board.length >= 5
-) {
-
-
-    console.log(
-        "На поле нет свободного места."
-    );
-
-
-    return state;
-
-
-}
-
-
-
-
-const instance =
-    createCardInstance(
-        cardId
-    );
-
-
-if (!instance) {
-    return state;
-}
-
-
-
-
-return {
+    };
 
 }
 
 window.createInitialGameState =
-createInitialGameState;
+    createInitialGameState;
 
 window.getCardById =
-getCardById;
+    getCardById;
 
 window.createCardInstance =
-createCardInstance;
+    createCardInstance;
 
 window.getCardFromHand =
-getCardFromHand;
+    getCardFromHand;
 
 window.playCard =
-playCard;
+    playCard;
