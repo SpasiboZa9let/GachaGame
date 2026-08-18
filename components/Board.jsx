@@ -22,32 +22,23 @@ function Board({
                         return null;
                     }
 
-
                     const card =
                         CARDS.find(
                             item =>
-                                item.id ===
-                                unit.cardId
+                                item.id === unit.cardId
                         );
-
 
                     if (!card) {
                         return null;
                     }
 
-
                     const selected =
-                        unit.instanceId ===
-                        selectedUnitId;
-
+                        unit.instanceId === selectedUnitId;
 
                     return (
 
                         <div
-
-                            key={
-                                unit.instanceId
-                            }
+                            key={unit.instanceId}
 
                             onClick={() =>
                                 onUnitClick &&
@@ -55,14 +46,11 @@ function Board({
                             }
 
                             style={{
-
                                 ...styles.unit,
 
                                 border:
                                     selected
-
-                                        ? "3px solid #ffd700"
-
+                                        ? "4px solid #ffd700"
                                         : "2px solid #777",
 
                                 opacity:
@@ -72,73 +60,41 @@ function Board({
 
                                 boxShadow:
                                     selected
-
-                                        ? "0 0 20px rgba(255,215,0,0.7)"
-
-                                        : "0 5px 12px rgba(0,0,0,0.5)"
-
+                                        ? "0 0 25px rgba(255,215,0,0.8)"
+                                        : "0 5px 15px rgba(0,0,0,0.6)"
                             }}
-
                         >
 
                             {/* COST */}
 
-                            <div
-                                style={styles.cost}
-                            >
-
+                            <div style={styles.cost}>
                                 {card.cost}
-
                             </div>
 
 
                             {/* NAME */}
 
-                            <div
-                                style={styles.name}
-                            >
-
+                            <div style={styles.name}>
                                 {card.name}
-
                             </div>
 
 
                             {/* IMAGE */}
 
-                            <div
-                                style={
-                                    styles.imageBox
-                                }
-                            >
+                            <div style={styles.imageBox}>
 
                                 {card.image ? (
 
                                     <img
-
-                                        src={
-                                            card.image
-                                        }
-
-                                        alt={
-                                            card.name
-                                        }
-
-                                        style={
-                                            styles.image
-                                        }
-
+                                        src={card.image}
+                                        alt={card.name}
+                                        style={styles.image}
                                     />
 
                                 ) : (
 
-                                    <div
-                                        style={
-                                            styles.noImage
-                                        }
-                                    >
-
+                                    <div style={styles.noImage}>
                                         АРТ
-
                                     </div>
 
                                 )}
@@ -148,41 +104,25 @@ function Board({
 
                             {/* STATUS */}
 
-                            <div
-                                style={
-                                    styles.status
-                                }
-                            >
+                            <div style={styles.status}>
 
-                                {
-                                    unit.canAttack
-
-                                        ? "⚔️ Готов"
-
-                                        : "💤 Ожидание"
-                                }
+                                {unit.canAttack
+                                    ? "⚔️ Готов"
+                                    : "💤 Ожидание"}
 
                             </div>
 
 
                             {/* STATS */}
 
-                            <div
-                                style={
-                                    styles.stats
-                                }
-                            >
+                            <div style={styles.stats}>
 
                                 <span>
-                                    ⚔️ {
-                                        unit.attack
-                                    }
+                                    ⚔️ {unit.attack}
                                 </span>
 
                                 <span>
-                                    ❤️ {
-                                        unit.health
-                                    }
+                                    ❤️ {unit.health}
                                 </span>
 
                             </div>
@@ -205,17 +145,16 @@ function Board({
 const styles = {
 
     /*
-        ПОЛЕ
+        САМО ПОЛЕ
 
-        Жёстко задаём горизонтальное
-        направление.
+        Только горизонтальный ряд.
     */
 
     board: {
 
         width: "100%",
 
-        minHeight: "230px",
+        minHeight: "300px",
 
         display: "flex",
 
@@ -231,11 +170,11 @@ const styles = {
 
         padding: "20px",
 
+        boxSizing: "border-box",
+
         overflowX: "auto",
 
-        overflowY: "hidden",
-
-        boxSizing: "border-box"
+        overflowY: "hidden"
 
     },
 
@@ -246,7 +185,9 @@ const styles = {
 
         textAlign: "center",
 
-        color: "#555"
+        color: "#555",
+
+        fontSize: "16px"
 
     },
 
@@ -254,31 +195,39 @@ const styles = {
     /*
         КАРТА НА ПОЛЕ
 
-        180 × 260 — карта в руке.
+        Теперь она РОВНО такого же
+        физического размера, как карта
+        в руке.
 
-        Здесь примерно в 1.5 раза
-        меньше, чтобы поле не раздувалось.
+        Никаких 120x165.
+        Никаких ограничений родителя.
     */
 
     unit: {
 
-        position: "relative",
+        width: "180px",
 
-        width: "135px",
+        minWidth: "180px",
 
-        minWidth: "135px",
+        maxWidth: "180px",
 
-        height: "195px",
+        height: "260px",
 
-        minHeight: "195px",
+        minHeight: "260px",
+
+        maxHeight: "260px",
+
+        flex: "0 0 180px",
 
         flexShrink: 0,
 
+        position: "relative",
+
         background: "#292929",
 
-        borderRadius: "10px",
+        borderRadius: "12px",
 
-        padding: "7px",
+        padding: "8px",
 
         boxSizing: "border-box",
 
@@ -287,6 +236,8 @@ const styles = {
         flexDirection: "column",
 
         cursor: "pointer",
+
+        overflow: "hidden",
 
         transition:
             "transform 0.15s ease, box-shadow 0.15s ease"
@@ -298,13 +249,13 @@ const styles = {
 
         position: "absolute",
 
-        top: "5px",
+        top: "6px",
 
-        left: "5px",
+        left: "6px",
 
-        width: "25px",
+        width: "30px",
 
-        height: "25px",
+        height: "30px",
 
         borderRadius: "50%",
 
@@ -316,7 +267,7 @@ const styles = {
 
         justifyContent: "center",
 
-        fontSize: "12px",
+        fontSize: "14px",
 
         fontWeight: "bold",
 
@@ -327,15 +278,17 @@ const styles = {
 
     name: {
 
-        height: "22px",
+        height: "25px",
 
-        lineHeight: "22px",
+        minHeight: "25px",
+
+        lineHeight: "25px",
 
         textAlign: "center",
 
         fontWeight: "bold",
 
-        fontSize: "12px",
+        fontSize: "14px",
 
         whiteSpace: "nowrap",
 
@@ -350,16 +303,15 @@ const styles = {
 
         width: "100%",
 
-        height: "105px",
+        height: "150px",
 
-        minHeight: "105px",
+        minHeight: "150px",
 
         background: "#111",
 
-        border:
-            "1px solid #555",
+        border: "1px solid #555",
 
-        borderRadius: "6px",
+        borderRadius: "7px",
 
         overflow: "hidden"
 
@@ -400,11 +352,11 @@ const styles = {
 
         textAlign: "center",
 
-        fontSize: "9px",
+        fontSize: "11px",
 
         color: "#aaa",
 
-        paddingTop: "4px"
+        paddingTop: "6px"
 
     },
 
@@ -413,13 +365,11 @@ const styles = {
 
         display: "flex",
 
-        justifyContent:
-            "space-between",
+        justifyContent: "space-between",
 
-        padding:
-            "4px",
+        padding: "6px 5px",
 
-        fontSize: "12px",
+        fontSize: "14px",
 
         fontWeight: "bold"
 
