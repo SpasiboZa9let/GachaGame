@@ -31,6 +31,10 @@ function Game() {
             .filter(card => card);
 
 
+    const combatLog =
+        gameState.combatLog || [];
+
+
     function handleCardClick(card) {
 
         if (!card) {
@@ -54,9 +58,15 @@ function Game() {
             );
 
 
-        setGameState(
-            newState
-        );
+        if (
+            newState !== gameState
+        ) {
+
+            setGameState(
+                newState
+            );
+
+        }
 
     }
 
@@ -129,7 +139,9 @@ function Game() {
         }
 
 
-        if (!selectedAttacker) {
+        if (
+            !selectedAttacker
+        ) {
             return;
         }
 
@@ -188,11 +200,13 @@ function Game() {
         <div style={gameStyles.game}>
 
 
-            <section style={gameStyles.opponentSection}>
-
+            <section
+                style={
+                    gameStyles.opponentSection
+                }
+            >
 
                 <div style={gameStyles.hero}>
-
 
                     <strong>
 
@@ -204,27 +218,21 @@ function Game() {
 
 
                     <span>
-
                         ❤️ {opponent.hp}
-
                     </span>
 
 
                     <span>
-
                         🛡️ {opponentHero
                             ? opponentHero.defense
                             : 0}
-
                     </span>
 
 
                     <span>
-
                         ⚔️ Сила {opponentHero
                             ? opponentHero.strength
                             : 0}
-
                     </span>
 
 
@@ -233,11 +241,8 @@ function Game() {
                             gameStyles.mana
                         }
                     >
-
                         🔵 {opponent.mana} / {opponent.maxMana}
-
                     </span>
-
 
                 </div>
 
@@ -256,12 +261,10 @@ function Game() {
                     }
                 />
 
-
             </section>
 
 
             <div style={gameStyles.center}>
-
 
                 {selectedAttacker ? (
 
@@ -281,12 +284,75 @@ function Game() {
 
                 )}
 
+            </div>
+
+
+            <div
+                style={
+                    gameStyles.combatLog
+                }
+            >
+
+                <div
+                    style={
+                        gameStyles.combatLogTitle
+                    }
+                >
+                    Журнал боя
+                </div>
+
+
+                <div
+                    style={
+                        gameStyles.combatLogMessages
+                    }
+                >
+
+                    {combatLog.length === 0 ? (
+
+                        <div
+                            style={
+                                gameStyles.emptyLog
+                            }
+                        >
+                            Здесь будут отображаться события боя
+                        </div>
+
+                    ) : (
+
+                        combatLog
+                            .slice()
+                            .reverse()
+                            .map(
+                                (message, index) => (
+
+                                    <div
+                                        key={
+                                            index
+                                        }
+
+                                        style={
+                                            gameStyles.logMessage
+                                        }
+                                    >
+                                        {message}
+                                    </div>
+
+                                )
+                            )
+
+                    )}
+
+                </div>
 
             </div>
 
 
-            <section style={gameStyles.playerSection}>
-
+            <section
+                style={
+                    gameStyles.playerSection
+                }
+            >
 
                 <Board
                     units={
@@ -305,7 +371,6 @@ function Game() {
 
                 <div style={gameStyles.hero}>
 
-
                     <strong>
 
                         {playerHero
@@ -316,27 +381,21 @@ function Game() {
 
 
                     <span>
-
                         ❤️ {player.hp}
-
                     </span>
 
 
                     <span>
-
                         🛡️ {playerHero
                             ? playerHero.defense
                             : 0}
-
                     </span>
 
 
                     <span>
-
                         ⚔️ Сила {playerHero
                             ? playerHero.strength
                             : 0}
-
                     </span>
 
 
@@ -345,33 +404,41 @@ function Game() {
                             gameStyles.mana
                         }
                     >
-
                         🔵 {player.mana} / {player.maxMana}
-
                     </span>
 
-
                 </div>
-
 
             </section>
 
 
-            <div style={gameStyles.handWrapper}>
-
+            <div
+                style={
+                    gameStyles.handWrapper
+                }
+            >
 
                 <Hand
-                    cards={handCards}
-                    onCardClick={handleCardClick}
-                />
+                    cards={
+                        handCards
+                    }
 
+                    onCardClick={
+                        handleCardClick
+                    }
+                />
 
             </div>
 
 
             <button
-                onClick={handleEndTurn}
-                style={gameStyles.endTurn}
+                onClick={
+                    handleEndTurn
+                }
+
+                style={
+                    gameStyles.endTurn
+                }
             >
                 Завершить ход
             </button>
@@ -481,6 +548,99 @@ const gameStyles = {
         color: "#55aaff",
 
         fontWeight: "bold"
+
+    },
+
+
+    combatLog: {
+
+        width: "90%",
+
+        maxWidth: "700px",
+
+        height: "95px",
+
+        margin: "5px auto 10px auto",
+
+        background: "#151515",
+
+        border: "1px solid #444",
+
+        borderRadius: "8px",
+
+        boxSizing: "border-box",
+
+        overflow: "hidden",
+
+        display: "flex",
+
+        flexDirection: "column"
+
+    },
+
+
+    combatLogTitle: {
+
+        height: "24px",
+
+        minHeight: "24px",
+
+        display: "flex",
+
+        alignItems: "center",
+
+        padding: "0 10px",
+
+        boxSizing: "border-box",
+
+        background: "#222",
+
+        borderBottom: "1px solid #333",
+
+        color: "#aaa",
+
+        fontSize: "11px",
+
+        fontWeight: "bold",
+
+        textTransform: "uppercase"
+
+    },
+
+
+    combatLogMessages: {
+
+        flex: 1,
+
+        overflowY: "auto",
+
+        padding: "5px 10px",
+
+        boxSizing: "border-box"
+
+    },
+
+
+    logMessage: {
+
+        fontSize: "12px",
+
+        lineHeight: "18px",
+
+        color: "#ccc"
+
+    },
+
+
+    emptyLog: {
+
+        fontSize: "11px",
+
+        color: "#555",
+
+        textAlign: "center",
+
+        paddingTop: "15px"
 
     },
 
