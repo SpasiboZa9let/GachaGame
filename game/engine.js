@@ -11,6 +11,7 @@ function createInitialGameState() {
             hp: 30,
 
             mana: 1,
+
             maxMana: 1,
 
             deck: [],
@@ -29,11 +30,15 @@ function createInitialGameState() {
             hp: 30,
 
             mana: 1,
+
             maxMana: 1,
 
             deck: [],
 
-            hand: [],
+            hand: [
+                "shaman",
+                "baba_yaga"
+            ],
 
             board: []
 
@@ -44,27 +49,25 @@ function createInitialGameState() {
 }
 
 
-/*
-    Получить карту по ID
-*/
-
 function getCardById(cardId) {
 
     if (!Array.isArray(CARDS)) {
-        console.error("CARDS не является массивом");
+
+        console.error(
+            "CARDS не является массивом"
+        );
+
         return null;
+
     }
 
     return CARDS.find(
-        card => card.id === cardId
+        card =>
+            card.id === cardId
     ) || null;
 
 }
 
-
-/*
-    Создание экземпляра существа
-*/
 
 function createCardInstance(cardId) {
 
@@ -79,8 +82,8 @@ function createCardInstance(cardId) {
         );
 
         return null;
-    }
 
+    }
 
     return {
 
@@ -93,15 +96,20 @@ function createCardInstance(cardId) {
                 .toString(36)
                 .substring(2, 8),
 
-        cardId: cardId,
+        cardId:
+            cardId,
 
-        attack: card.attack,
+        attack:
+            card.attack,
 
-        health: card.health,
+        health:
+            card.health,
 
-        maxHealth: card.health,
+        maxHealth:
+            card.health,
 
-        canAttack: false,
+        canAttack:
+            false,
 
         status: []
 
@@ -110,28 +118,31 @@ function createCardInstance(cardId) {
 }
 
 
-/*
-    Проверяем наличие карты в руке
-*/
+function getCardFromHand(
+    player,
+    cardId
+) {
 
-function getCardFromHand(player, cardId) {
-
-    if (!player || !Array.isArray(player.hand)) {
+    if (
+        !player ||
+        !Array.isArray(player.hand)
+    ) {
         return null;
     }
 
     return player.hand.find(
-        id => id === cardId
+        id =>
+            id === cardId
     ) || null;
 
 }
 
 
-/*
-    Разыгрывание карты
-*/
-
-function playCard(state, playerId, cardId) {
+function playCard(
+    state,
+    playerId,
+    cardId
+) {
 
     const player =
         state[playerId];
@@ -140,24 +151,12 @@ function playCard(state, playerId, cardId) {
         return state;
     }
 
-
-    /*
-        Проверяем ход
-    */
-
     if (
         state.activePlayer !==
         playerId
     ) {
-
         return state;
-
     }
-
-
-    /*
-        Карта должна быть в руке
-    */
 
     const cardInHand =
         getCardFromHand(
@@ -176,22 +175,12 @@ function playCard(state, playerId, cardId) {
 
     }
 
-
-    /*
-        Получаем карту
-    */
-
     const card =
         getCardById(cardId);
 
     if (!card) {
         return state;
     }
-
-
-    /*
-        Проверяем ману
-    */
 
     if (
         player.mana <
@@ -206,11 +195,6 @@ function playCard(state, playerId, cardId) {
 
     }
 
-
-    /*
-        Максимум 5 существ
-    */
-
     if (
         player.board.length >= 5
     ) {
@@ -223,11 +207,6 @@ function playCard(state, playerId, cardId) {
 
     }
 
-
-    /*
-        Создаём экземпляр
-    */
-
     const instance =
         createCardInstance(
             cardId
@@ -236,11 +215,6 @@ function playCard(state, playerId, cardId) {
     if (!instance) {
         return state;
     }
-
-
-    /*
-        Новое состояние
-    */
 
     return {
 
