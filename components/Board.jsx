@@ -6,11 +6,11 @@ function Board({
 
     return (
 
-        <div style={styles.board}>
+        <div style={boardStyles.board}>
 
             {(!units || units.length === 0) ? (
 
-                <div style={styles.empty}>
+                <div style={boardStyles.empty}>
                     Поле пусто
                 </div>
 
@@ -50,7 +50,7 @@ function Board({
                             }
 
                             style={{
-                                ...styles.unit,
+                                ...boardStyles.unit,
 
                                 border:
                                     selected
@@ -69,35 +69,29 @@ function Board({
                             }}
                         >
 
-                            {/* COST */}
-
-                            <div style={styles.cost}>
+                            <div style={boardStyles.cost}>
                                 {card.cost}
                             </div>
 
 
-                            {/* NAME */}
-
-                            <div style={styles.name}>
+                            <div style={boardStyles.name}>
                                 {card.name}
                             </div>
 
 
-                            {/* IMAGE */}
-
-                            <div style={styles.imageBox}>
+                            <div style={boardStyles.imageBox}>
 
                                 {card.image ? (
 
                                     <img
                                         src={card.image}
                                         alt={card.name}
-                                        style={styles.image}
+                                        style={boardStyles.image}
                                     />
 
                                 ) : (
 
-                                    <div style={styles.noImage}>
+                                    <div style={boardStyles.noImage}>
                                         АРТ
                                     </div>
 
@@ -106,9 +100,7 @@ function Board({
                             </div>
 
 
-                            {/* STATUS */}
-
-                            <div style={styles.status}>
+                            <div style={boardStyles.status}>
 
                                 {unit.canAttack
                                     ? "⚔️ Готов"
@@ -117,9 +109,7 @@ function Board({
                             </div>
 
 
-                            {/* STATS */}
-
-                            <div style={styles.stats}>
+                            <div style={boardStyles.stats}>
 
                                 <span>
                                     ⚔️ {unit.attack}
@@ -146,15 +136,9 @@ function Board({
 }
 
 
-const styles = {
+const boardStyles = {
 
     board: {
-
-        /*
-            ГЛАВНОЕ:
-
-            Всегда горизонтальный ряд.
-        */
 
         display: "flex",
 
@@ -178,13 +162,7 @@ const styles = {
 
         overflowX: "auto",
 
-        overflowY: "hidden",
-
-        /*
-            Запрещаем сжатие элементов.
-        */
-
-        flexShrink: 0
+        overflowY: "hidden"
 
     },
 
@@ -199,13 +177,6 @@ const styles = {
 
     },
 
-
-    /*
-        КАРТА НА ПОЛЕ
-
-        Размер примерно в 2 раза
-        меньше большой карты в руке.
-    */
 
     unit: {
 
