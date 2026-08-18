@@ -1,23 +1,8 @@
 const CARDS = [
-{
-id: "baba_yaga",
-name: "Баба-Яга",
-rarity: "epic",
-faction: "Навь",
-cost: 6,
-health: 3500,
-attack: 1400,
-defense: 1050,
-strength: 12,
-image: "./assets/cards/epic/baba_yaga.png",
-abilities: [
-"Глаз ворона",
-"Контроль предков"
-],
-description: "Хозяйка избушки на курьих ножках."
-},
 
 {
+
+
 {
     id: "svetogor",
     name: "Светогор",
