@@ -1,14 +1,10 @@
 function Hand({ cards, onCardClick }) {
 
     if (!cards || cards.length === 0) {
-
         return null;
-
     }
 
-
     return (
-
         <div style={styles.hand}>
 
             {cards.map((card, index) => {
@@ -17,64 +13,52 @@ function Hand({ cards, onCardClick }) {
                     return null;
                 }
 
-
                 return (
-
                     <div
                         key={card.id || index}
-                        style={styles.cardWrapper}
+                        style={styles.cardSlot}
                     >
-
                         <Card
                             card={card}
                             onClick={onCardClick}
                         />
-
                     </div>
-
                 );
 
             })}
 
         </div>
-
     );
-
 }
-
 
 
 const styles = {
 
-    /*
-        Рука.
-
-        Карты идут:
-        слева → направо.
-
-        Никаких переносов
-        на новую строку.
-    */
-
     hand: {
 
-        display: "flex",
+        display: "grid",
 
-        flexDirection: "row",
+        /*
+         * ВСЕ карты находятся
+         * в одной горизонтальной строке.
+         */
+        gridAutoFlow: "column",
 
-        flexWrap: "nowrap",
+        gridAutoColumns: "140px",
+
+        gridTemplateRows: "200px",
 
         justifyContent: "center",
 
-        alignItems: "flex-end",
+        alignItems: "start",
 
-        gap: "12px",
+        columnGap: "12px",
 
         width: "100%",
 
-        minHeight: "230px",
+        minHeight: "220px",
 
-        padding: "15px 10px",
+        padding: "10px",
 
         boxSizing: "border-box",
 
@@ -85,21 +69,13 @@ const styles = {
     },
 
 
-    /*
-        Контейнер карты.
+    cardSlot: {
 
-        flexShrink: 0 очень важен:
-        браузер не будет пытаться
-        переносить или сжимать карты.
-    */
+        width: "140px",
 
-    cardWrapper: {
+        height: "200px",
 
-        flex: "0 0 auto",
-
-        flexShrink: 0,
-
-        display: "block"
+        flexShrink: 0
 
     }
 
