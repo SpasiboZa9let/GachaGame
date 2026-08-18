@@ -33,9 +33,7 @@ function createInitialGameState() {
             maxMana: 1,
 
             deck: [],
-
             hand: [],
-
             board: []
 
         }
@@ -46,35 +44,75 @@ function createInitialGameState() {
 
 
 /*
-    Создание экземпляра существа.
+    =========================
+    ПОИСК КАРТЫ
+    =========================
 
-    cardId — ссылка на шаблон карты.
+    CARDS — массив объектов.
+
+    Поэтому ищем карту по её id.
+*/
+
+function getCardById(cardId) {
+
+    return CARDS.find(
+        card => card.id === cardId
+    );
+
+}
+
+
+/*
+    =========================
+    СОЗДАНИЕ ЭКЗЕМПЛЯРА
+    =========================
 */
 
 function createCardInstance(cardId) {
 
-    const card = CARDS[cardId];
+    const card =
+        getCardById(cardId);
+
 
     if (!card) {
-        console.error("Карта не найдена:", cardId);
+
+        console.error(
+            "Карта не найдена:",
+            cardId
+        );
+
         return null;
+
     }
 
 
     return {
 
         instanceId:
-            cardId + "_" + Date.now() + "_" + Math.random(),
+            cardId +
+            "_" +
+            Date.now() +
+            "_" +
+            Math.random(),
+
 
         cardId: cardId,
 
-        attack: card.attack,
 
-        health: card.health,
+        attack:
+            card.attack,
 
-        maxHealth: card.health,
+
+        health:
+            card.health,
+
+
+        maxHealth:
+            card.health,
+
 
         canAttack: false,
+
 
         status: []
 
@@ -84,40 +122,68 @@ function createCardInstance(cardId) {
 
 
 /*
-    Получаем карту игрока
-    из его руки.
+    =========================
+    ПОЛУЧЕНИЕ КАРТЫ ИЗ РУКИ
+    =========================
 */
 
 function getCardFromHand(player, cardId) {
 
     return player.hand.find(
-        id => id === cardId
+        id => {
+
+            if (
+                typeof id === "object"
+            ) {
+
+                return id.id === cardId;
+
+            }
+
+            return id === cardId;
+
+        }
     );
 
 }
 
 
 /*
-    Разыгрывание карты.
-
-    Пока поддерживаем только существ.
+    =========================
+    РАЗЫГРЫВАНИЕ КАРТЫ
+    =========================
 */
 
-function playCard(state, playerId, cardId) {
+function playCard(
+    state,
+    playerId,
+    cardId
+) {
 
-    const player = state[playerId];
+    const player =
+        state[playerId];
+
 
     if (!player) {
+
         return state;
+
     }
 
 
-    // Проверяем, есть ли карта в руке
+    /*
+        Проверяем наличие карты
+        в руке.
+    */
 
-    const cardIdInHand =
-        getCardFromHand(player, cardId);
+    const cardInHand =
+        getCardFromHand(
+            player,
+            cardId
+        );
 
-    if (!cardIdInHand) {
+
+    if (!cardInHand) {
 
         console.log(
             "Карты нет в руке:",
@@ -125,76 +191,132 @@ function playCard(state, playerId, cardId) {
         );
 
         return state;
+
     }
 
 
-    // Получаем шаблон карты
+    /*
+        Получаем шаблон карты.
+    */
 
-    const card = CARDS[cardId];
+    const card =
+        getCardById(cardId);
+
 
     if (!card) {
+
+        console.error(
+            "Шаблон карты не найден:",
+            cardId
+        );
+
         return state;
+
     }
 
 
-    // Проверяем ману
+    /*
+        Проверяем ману.
+    */
 
-    if (player.mana < card.cost) {
+    if (
+        player.mana <
+        card.cost
+    ) {
 
         console.log(
             "Недостаточно маны."
         );
 
         return state;
+
     }
 
 
-    // Проверяем поле
+    /*
+        Проверяем лимит существ
+        на поле.
+    */
 
-    if (player.board.length >= 5) {
+    if (
+        player.board.length >= 5
+    ) {
 
         console.log(
             "На поле нет свободного места."
         );
 
         return state;
-    }
 
-
-    // Создаём экземпляр
-
-    const instance =
-        createCardInstance(cardId);
-
-    if (!instance) {
-        return state;
     }
 
 
     /*
-        Создаём новое состояние,
-        не изменяя старое напрямую.
+        Создаём экземпляр карты.
+    */
+
+    const instance =
+        createCardInstance(cardId);
+
+
+    if (!instance) {
+
+        return state;
+
+    }
+
+
+    /*
+        Удаляем карту из руки.
+    */
+
+    const newHand =
+        player.hand.filter(
+            id => {
+
+                if (
+                    typeof id === "object"
+                ) {
+
+                    return id.id !== cardId;
+
+                }
+
+                return id !== cardId;
+
+            }
+        );
+
+
+    /*
+        Создаём новое состояние.
     */
 
     const newState = {
 
         ...state,
 
+
         [playerId]: {
 
             ...player,
 
+
             mana:
-                player.mana - card.cost,
+                player.mana -
+                card.cost,
+
 
             hand:
-                player.hand.filter(
-                    id => id !== cardId
-                ),
+                newHand,
+
 
             board: [
+
                 ...player.board,
+
                 instance
+
             ]
 
         }
