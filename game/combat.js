@@ -9,31 +9,64 @@ function canUnitAttack(unit) {
 }
 
 
-function calculateDamage(attack, defense) {
+/*
+    Расчёт обычного физического урона.
 
-    attack =
-        Number(attack) || 0;
+    Attack атакующего уменьшается
+    защитой цели.
 
-    defense =
-        Number(defense) || 0;
+    Формула:
 
+    Damage =
+    Attack × 100 /
+    (100 + Defense / 10)
 
-    const damage =
-        attack *
-        100 /
-        (
-            100 +
-            defense / 10
+    Минимальный урон:
+    1% от Attack.
+*/
+
+function calculateDamage(
+    attack,
+    defense
+) {
+
+    const safeAttack =
+        Math.max(
+            0,
+            Number(attack) || 0
+        );
+
+    const safeDefense =
+        Math.max(
+            0,
+            Number(defense) || 0
         );
 
 
+    const damage =
+        safeAttack *
+        100 /
+        (
+            100 +
+            safeDefense / 10
+        );
+
+
+    const minimumDamage =
+        safeAttack * 0.01;
+
+
     return Math.max(
-        1,
+        minimumDamage,
         Math.floor(damage)
     );
 
 }
 
+
+/*
+    Атака существа по существу.
+*/
 
 function attackUnit(
     state,
@@ -41,6 +74,11 @@ function attackUnit(
     attackerId,
     targetId
 ) {
+
+    if (!state || state.gameOver) {
+        return state;
+    }
+
 
     const player =
         state[playerId];
@@ -98,7 +136,8 @@ function attackUnit(
 
 
     /*
-        Урон атакующего по цели.
+        Рассчитываем урон
+        с учётом защиты.
     */
 
     const damageToTarget =
@@ -107,10 +146,6 @@ function attackUnit(
             target.defense
         );
 
-
-    /*
-        Ответный урон.
-    */
 
     const damageToAttacker =
         calculateDamage(
@@ -136,7 +171,7 @@ function attackUnit(
 
 
     /*
-        Обновляем атакующего.
+        Обновляем поле атакующего.
     */
 
     const newPlayerBoard =
@@ -163,7 +198,6 @@ function attackUnit(
 
                 }
 
-
                 return unit;
 
             })
@@ -175,7 +209,7 @@ function attackUnit(
 
 
     /*
-        Обновляем цель.
+        Обновляем поле цели.
     */
 
     const newOpponentBoard =
@@ -199,7 +233,6 @@ function attackUnit(
 
                 }
 
-
                 return unit;
 
             })
@@ -210,30 +243,41 @@ function attackUnit(
             );
 
 
-    /*
-        Журнал боя.
-    */
+    let newState = {
 
-    let newCombatLog =
-        [
-            ...(state.combatLog || [])
-        ];
+        ...state,
+
+        [playerId]: {
+
+            ...player,
+
+            board:
+                newPlayerBoard
+
+        },
+
+        [opponentId]: {
+
+            ...opponent,
+
+            board:
+                newOpponentBoard
+
+        }
+
+    };
 
 
     const attackerCard =
-        window.getCardById
-            ? window.getCardById(
-                attacker.cardId
-            )
-            : null;
+        getCardById(
+            attacker.cardId
+        );
 
 
     const targetCard =
-        window.getCardById
-            ? window.getCardById(
-                target.cardId
-            )
-            : null;
+        getCardById(
+            target.cardId
+        );
 
 
     const attackerName =
@@ -248,52 +292,186 @@ function attackUnit(
             : "Существо";
 
 
-    newCombatLog.push(
-        attackerName +
-        " атакует " +
-        targetName +
-        " и наносит " +
-        damageToTarget +
-        " урона."
-    );
+    newState =
+        addCombatLog(
+            newState,
+
+            attackerName +
+            " атакует " +
+            targetName +
+            " и наносит " +
+            damageToTarget +
+            " урона."
+        );
 
 
-    newCombatLog.push(
-        targetName +
-        " отвечает и наносит " +
-        damageToAttacker +
-        " урона."
-    );
+
+    /*
+        Ответный удар.
+    */
+
+    newState =
+        addCombatLog(
+            newState,
+
+            targetName +
+            " отвечает и наносит " +
+            damageToAttacker +
+            " урона."
+        );
+
+
+    /*
+        Проверяем смерть существ.
+    */
+
+    if (attackerHealth <= 0) {
+
+        newState =
+            addCombatLog(
+                newState,
+
+                attackerName +
+                " погиб."
+            );
+
+    }
 
 
     if (targetHealth <= 0) {
 
-        newCombatLog.push(
-            targetName +
-            " погибает."
-        );
+        newState =
+            addCombatLog(
+                newState,
+
+                targetName +
+                " погиб."
+            );
 
     }
 
 
-    if (attackerHealth <= 0) {
+    return checkGameOver(
+        newState
+    );
 
-        newCombatLog.push(
-            attackerName +
-            " погибает."
+}
+
+
+/*
+    Атака героя существом.
+
+    Пока герой не является
+    отдельным существом на поле.
+
+    Поэтому существо может
+    атаковать непосредственно героя.
+*/
+
+function attackHero(
+    state,
+    playerId,
+    attackerId
+) {
+
+    if (!state || state.gameOver) {
+        return state;
+    }
+
+
+    const player =
+        state[playerId];
+
+
+    const opponentId =
+        playerId === "player"
+            ? "opponent"
+            : "player";
+
+
+    const opponent =
+        state[opponentId];
+
+
+    if (!player || !opponent) {
+        return state;
+    }
+
+
+    const attacker =
+        player.board.find(
+            unit =>
+                unit.instanceId ===
+                attackerId
         );
+
+
+    if (!attacker) {
+        return state;
+    }
+
+
+    if (!canUnitAttack(attacker)) {
+
+        return state;
 
     }
 
 
-    return {
+    const opponentHero =
+        opponent.hero;
+
+
+    const heroDefense =
+        opponentHero
+            ? opponentHero.defense
+            : 0;
+
+
+    const damage =
+        calculateDamage(
+            attacker.attack,
+            heroDefense
+        );
+
+
+    const newOpponentHp =
+        Math.max(
+            0,
+            opponent.hp -
+            damage
+        );
+
+
+    const newPlayerBoard =
+        player.board
+
+            .map(unit => {
+
+                if (
+                    unit.instanceId ===
+                    attackerId
+                ) {
+
+                    return {
+
+                        ...unit,
+
+                        canAttack:
+                            false
+
+                    };
+
+                }
+
+                return unit;
+
+            });
+
+
+    let newState = {
 
         ...state,
-
-
-        combatLog:
-            newCombatLog,
-
 
         [playerId]: {
 
@@ -304,28 +482,64 @@ function attackUnit(
 
         },
 
-
         [opponentId]: {
 
             ...opponent,
 
-            board:
-                newOpponentBoard
+            hp:
+                newOpponentHp
 
         }
 
     };
 
+
+    const attackerCard =
+        getCardById(
+            attacker.cardId
+        );
+
+
+    const attackerName =
+        attackerCard
+            ? attackerCard.name
+            : "Существо";
+
+
+    const heroName =
+        opponentHero
+            ? opponentHero.name
+            : "Герой";
+
+
+    newState =
+        addCombatLog(
+            newState,
+
+            attackerName +
+            " атакует героя " +
+            heroName +
+            " и наносит " +
+            damage +
+            " урона."
+        );
+
+
+    return checkGameOver(
+        newState
+    );
+
 }
 
 
 window.canUnitAttack =
-    canUnitAttack;
-
+canUnitAttack;
 
 window.calculateDamage =
-    calculateDamage;
-
+calculateDamage;
 
 window.attackUnit =
-    attackUnit;
+attackUnit;
+
+window.attackHero =
+attackHero;
