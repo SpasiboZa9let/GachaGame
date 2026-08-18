@@ -5,78 +5,48 @@ function Hand({ cards, onCardClick }) {
     }
 
     return (
-        <div style={styles.hand}>
+        <div
+            style={{
+                width: "100%",
+                overflowX: "auto",
+                overflowY: "hidden",
+                boxSizing: "border-box",
+                padding: "20px 10px"
+            }}
+        >
 
-            {cards.map((card, index) => {
+            <div
+                style={{
+                    display: "flex",
+                    flexDirection: "row",
+                    flexWrap: "nowrap",
+                    justifyContent: "center",
+                    alignItems: "flex-start",
+                    gap: "15px",
+                    width: "max-content",
+                    minWidth: "100%",
+                    boxSizing: "border-box"
+                }}
+            >
 
-                if (!card) {
-                    return null;
-                }
+                {cards.map((card, index) => {
 
-                return (
-                    <div
-                        key={card.id || index}
-                        style={styles.cardSlot}
-                    >
+                    if (!card) {
+                        return null;
+                    }
+
+                    return (
                         <Card
+                            key={card.id || index}
                             card={card}
                             onClick={onCardClick}
                         />
-                    </div>
-                );
+                    );
 
-            })}
+                })}
+
+            </div>
 
         </div>
     );
 }
-
-
-const styles = {
-
-    hand: {
-
-        display: "grid",
-
-        /*
-         * ВСЕ карты находятся
-         * в одной горизонтальной строке.
-         */
-        gridAutoFlow: "column",
-
-        gridAutoColumns: "140px",
-
-        gridTemplateRows: "200px",
-
-        justifyContent: "center",
-
-        alignItems: "start",
-
-        columnGap: "12px",
-
-        width: "100%",
-
-        minHeight: "220px",
-
-        padding: "10px",
-
-        boxSizing: "border-box",
-
-        overflowX: "auto",
-
-        overflowY: "hidden"
-
-    },
-
-
-    cardSlot: {
-
-        width: "140px",
-
-        height: "200px",
-
-        flexShrink: 0
-
-    }
-
-};
