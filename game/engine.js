@@ -40,23 +40,25 @@ function createInitialGameState() {
 
         opponent: {
 
-            hero: opponentHero,
+    hero: opponentHero,
 
-            hp: opponentHero
-                ? opponentHero.maxHealth
-                : 9000,
+    hp: opponentHero
+        ? opponentHero.maxHealth
+        : 9000,
 
-            mana: 1,
-            maxMana: 1,
+    mana: 1,
+    maxMana: 1,
 
-            deck: [],
+    deck: [],
 
-            hand: [],
+    hand: [
+        "volk",
+        "frog"
+    ],
 
-            board: []
+    board: []
 
-        }
-
+}
     };
 
 }
