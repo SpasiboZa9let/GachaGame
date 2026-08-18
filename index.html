@@ -1,103 +1,79 @@
-<!DOCTYPE html> <html lang="ru"> <head>
-<meta charset="UTF-8">
+<!DOCTYPE html>
+<html lang="ru">
 
+<head>
+
+<meta charset="UTF-8">
 
 <meta
     name="viewport"
     content="width=device-width, initial-scale=1.0"
 >
 
-
 <title>Тридевятое царство</title>
-
-
 
 
 <script src="https://unpkg.com/react@18/umd/react.development.js"></script>
 
-
 <script src="https://unpkg.com/react-dom@18/umd/react-dom.development.js"></script>
-
 
 <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
 
 
-
-
 <style>
 
-
-    * {
-        box-sizing: border-box;
-    }
-
+* {
+    box-sizing: border-box;
+}
 
 
+html,
+body {
 
-    html,
-    body {
+    margin: 0;
+    padding: 0;
 
+    min-height: 100%;
 
-        margin: 0;
-        padding: 0;
-
-
-        min-height: 100%;
-
-
-    }
+}
 
 
+body {
+
+    background: #171717;
+
+    color: #eee;
+
+    font-family:
+        Arial,
+        Helvetica,
+        sans-serif;
+
+}
 
 
-    body {
+button,
+input {
+
+    font-family: inherit;
+
+}
 
 
-        background: #171717;
+#root {
 
+    min-height: 100vh;
 
-        color: #eee;
-
-
-        font-family:
-            Arial,
-            Helvetica,
-            sans-serif;
-
-
-    }
-
-
-
-
-    button,
-    input {
-
-
-        font-family: inherit;
-
-
-    }
-
-
-
-
-    #root {
-
-
-        min-height: 100vh;
-
-
-    }
-
+}
 
 </style>
-</head> <body>
+
+</head>
+
+
+<body>
+
 <div id="root"></div>
-
-
-
-
 
 
 <!-- =========================
@@ -117,8 +93,16 @@
 </script>
 
 
+<script
+    type="text/babel"
+    src="./data/factions.js">
+</script>
 
 
+<script
+    type="text/babel"
+    src="./data/effects.js">
+</script>
 
 
 <!-- =========================
@@ -126,17 +110,7 @@
 ========================== -->
 
 
-<script
-    type="text/babel"
-    src="./game/engine.js">
-</script>
-
-
-<script
-    type="text/babel"
-    src="./game/turns.js">
-</script>
-
+<!-- Бой -->
 
 <script
     type="text/babel"
@@ -144,8 +118,36 @@
 </script>
 
 
+<!-- Колода -->
+
+<script
+    type="text/babel"
+    src="./game/deck.js">
+</script>
 
 
+<!-- Выполнение эффектов -->
+
+<script
+    type="text/babel"
+    src="./game/effects.js">
+</script>
+
+
+<!-- Основное состояние игры -->
+
+<script
+    type="text/babel"
+    src="./game/engine.js">
+</script>
+
+
+<!-- Ходы и AI -->
+
+<script
+    type="text/babel"
+    src="./game/turns.js">
+</script>
 
 
 <!-- =========================
@@ -173,12 +175,32 @@
 
 <script
     type="text/babel"
-    src="./components/Game.jsx">
+    src="./components/Deck.jsx">
 </script>
 
 
+<script
+    type="text/babel"
+    src="./components/Hero.jsx">
+</script>
 
 
+<script
+    type="text/babel"
+    src="./components/Mana.jsx">
+</script>
+
+
+<script
+    type="text/babel"
+    src="./components/Modal.jsx">
+</script>
+
+
+<script
+    type="text/babel"
+    src="./components/Game.jsx">
+</script>
 
 
 <!-- =========================
@@ -190,4 +212,8 @@
     type="text/babel"
     src="./app.js">
 </script>
-</body> </html>
+
+
+</body>
+
+</html>
