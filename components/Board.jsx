@@ -4,11 +4,21 @@ function Board({
     selectedUnitId
 }) {
 
+    /*
+        Защита от undefined.
+    */
+
+    const safeUnits =
+        Array.isArray(units)
+            ? units
+            : [];
+
+
     return (
 
         <div style={styles.board}>
 
-            {units.length === 0 ? (
+            {safeUnits.length === 0 ? (
 
                 <div style={styles.empty}>
                     Поле пусто
@@ -16,11 +26,38 @@ function Board({
 
             ) : (
 
-                units.map(unit => {
+                safeUnits.map(unit => {
+
+                    /*
+                        Получаем исходную карту
+                        по её ID.
+                    */
 
                     const card =
                         CARDS[unit.cardId];
 
+
+                    /*
+                        Если карта не найдена,
+                        не ломаем весь Board.
+                    */
+
+                    if (!card) {
+
+                        console.warn(
+                            "Карта не найдена:",
+                            unit.cardId
+                        );
+
+                        return null;
+
+                    }
+
+
+                    /*
+                        Проверяем,
+                        выбрано ли это существо.
+                    */
 
                     const selected =
                         unit.instanceId ===
@@ -32,10 +69,13 @@ function Board({
                         <div
                             key={unit.instanceId}
 
-                            onClick={() =>
-                                onUnitClick &&
-                                onUnitClick(unit)
-                            }
+                            onClick={() => {
+
+                                if (onUnitClick) {
+                                    onUnitClick(unit);
+                                }
+
+                            }}
 
                             style={{
                                 ...styles.unit,
@@ -48,14 +88,23 @@ function Board({
                                 opacity:
                                     unit.canAttack
                                         ? 1
-                                        : 0.65
+                                        : 0.65,
+
+                                transform:
+                                    selected
+                                        ? "translateY(-5px)"
+                                        : "translateY(0)"
                             }}
                         >
+
+                            {/* НАЗВАНИЕ */}
 
                             <div style={styles.name}>
                                 {card.name}
                             </div>
 
+
+                            {/* СТАТУС */}
 
                             <div style={styles.status}>
 
@@ -66,13 +115,18 @@ function Board({
                             </div>
 
 
-                            <div>
-                                ⚔️ {unit.attack}
-                            </div>
+                            {/* ХАРАКТЕРИСТИКИ */}
 
+                            <div style={styles.stats}>
 
-                            <div>
-                                ❤️ {unit.health}
+                                <span>
+                                    ⚔️ {unit.attack}
+                                </span>
+
+                                <span>
+                                    ❤️ {unit.health}
+                                </span>
+
                             </div>
 
                         </div>
@@ -86,17 +140,31 @@ function Board({
         </div>
 
     );
-
 }
 
 
 const styles = {
 
+    /*
+        Главное поле.
+
+        Именно здесь задаётся
+        горизонтальное расположение.
+    */
+
     board: {
 
-        minHeight: "150px",
+        width: "100%",
+
+        minHeight: "170px",
+
+        boxSizing: "border-box",
 
         display: "flex",
+
+        flexDirection: "row",
+
+        flexWrap: "nowrap",
 
         alignItems: "center",
 
@@ -104,29 +172,51 @@ const styles = {
 
         gap: "15px",
 
-        padding: "15px"
+        padding: "20px",
+
+        overflowX: "auto",
+
+        overflowY: "hidden"
 
     },
 
 
     empty: {
 
-        color: "#555"
+        color: "#555",
+
+        fontSize: "14px"
 
     },
 
+
+    /*
+        Отдельное существо.
+    */
 
     unit: {
 
         width: "120px",
 
+        minWidth: "120px",
+
+        maxWidth: "120px",
+
         height: "130px",
+
+        minHeight: "130px",
+
+        maxHeight: "130px",
+
+        flex: "0 0 120px",
 
         background: "#292929",
 
         borderRadius: "10px",
 
         padding: "10px",
+
+        boxSizing: "border-box",
 
         display: "flex",
 
@@ -136,7 +226,10 @@ const styles = {
 
         cursor: "pointer",
 
-        transition: "0.15s"
+        transition:
+            "transform 0.15s ease, border 0.15s ease",
+
+        userSelect: "none"
 
     },
 
@@ -145,7 +238,13 @@ const styles = {
 
         fontWeight: "bold",
 
-        textAlign: "center"
+        textAlign: "center",
+
+        whiteSpace: "nowrap",
+
+        overflow: "hidden",
+
+        textOverflow: "ellipsis"
 
     },
 
@@ -157,6 +256,19 @@ const styles = {
         textAlign: "center",
 
         color: "#aaa"
+
+    },
+
+
+    stats: {
+
+        display: "flex",
+
+        justifyContent: "space-between",
+
+        fontWeight: "bold",
+
+        fontSize: "13px"
 
     }
 
