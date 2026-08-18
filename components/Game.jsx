@@ -380,64 +380,12 @@ function Game() {
                     }
                 >
 
-                    <div
-                        style={
-                            gameStyles.hero
-                        }
-
-                        onClick={
-                            handleOpponentHeroClick
-                        }
-                    >
-
-                        <strong>
-
-                            {opponentHero
-                                ? opponentHero.name
-                                : "Противник"}
-
-                        </strong>
-
-
-                        <span>
-
-                            ❤️ {opponent.hp}
-
-                        </span>
-
-
-                        <span>
-
-                            🛡️ {opponentHero
-                                ? opponentHero.defense
-                                : 0}
-
-                        </span>
-
-
-                        <span>
-
-                            ⚔️ Сила {opponentHero
-                                ? opponentHero.strength
-                                : 0}
-
-                        </span>
-
-
-                        <span
-                            style={
-                                gameStyles.mana
-                            }
-                        >
-
-                            🔵 {opponent.mana} / {opponent.maxMana}
-
-                        </span>
-
-                    </div>
-
-                </div>
-
+                   <Hero
+    hero={playerHero}
+    hp={player.hp}
+    mana={player.mana}
+    maxMana={player.maxMana}
+/>
 
                 <Board
                     units={
@@ -568,58 +516,12 @@ function Game() {
                 />
 
 
-                <div
-                    style={
-                        gameStyles.hero
-                    }
-                >
-
-                    <strong>
-
-                        {playerHero
-                            ? playerHero.name
-                            : "Игрок"}
-
-                    </strong>
-
-
-                    <span>
-
-                        ❤️ {player.hp}
-
-                    </span>
-
-
-                    <span>
-
-                        🛡️ {playerHero
-                            ? playerHero.defense
-                            : 0}
-
-                    </span>
-
-
-                    <span>
-
-                        ⚔️ Сила {playerHero
-                            ? playerHero.strength
-                            : 0}
-
-                    </span>
-
-
-                    <span
-                        style={
-                            gameStyles.mana
-                        }
-                    >
-
-                        🔵 {player.mana} / {player.maxMana}
-
-                    </span>
-
-                </div>
-
+                <Hero
+    hero={playerHero}
+    hp={player.hp}
+    mana={player.mana}
+    maxMana={player.maxMana}
+/>
 
             </section>
 
