@@ -23,10 +23,6 @@ function Board({
                     }
 
 
-                    /*
-                        Ищем карту по cardId.
-                    */
-
                     const card =
                         CARDS.find(
                             item =>
@@ -34,19 +30,13 @@ function Board({
                         );
 
 
-                    /*
-                        Если карта не найдена —
-                        не ломаем всё поле.
-                    */
-
                     if (!card) {
                         return null;
                     }
 
 
                     const selected =
-                        unit.instanceId ===
-                        selectedUnitId;
+                        unit.instanceId === selectedUnitId;
 
 
                     return (
@@ -79,31 +69,21 @@ function Board({
                             }}
                         >
 
-                            {/* =====================
-                                СТОИМОСТЬ
-                            ====================== */}
+                            {/* COST */}
 
                             <div style={styles.cost}>
-
                                 {card.cost}
-
                             </div>
 
 
-                            {/* =====================
-                                НАЗВАНИЕ
-                            ====================== */}
+                            {/* NAME */}
 
                             <div style={styles.name}>
-
                                 {card.name}
-
                             </div>
 
 
-                            {/* =====================
-                                ИЗОБРАЖЕНИЕ
-                            ====================== */}
+                            {/* IMAGE */}
 
                             <div style={styles.imageBox}>
 
@@ -126,9 +106,7 @@ function Board({
                             </div>
 
 
-                            {/* =====================
-                                СТАТУС
-                            ====================== */}
+                            {/* STATUS */}
 
                             <div style={styles.status}>
 
@@ -139,9 +117,7 @@ function Board({
                             </div>
 
 
-                            {/* =====================
-                                ХАРАКТЕРИСТИКИ
-                            ====================== */}
+                            {/* STATS */}
 
                             <div style={styles.stats}>
 
@@ -172,20 +148,13 @@ function Board({
 
 const styles = {
 
-    /*
-        Само поле.
-
-        ВАЖНО:
-        flex-direction: row
-
-        Поэтому существа идут:
-        [карта] [карта] [карта] [карта]
-        слева направо.
-    */
-
     board: {
 
-        minHeight: "190px",
+        /*
+            ГЛАВНОЕ:
+
+            Всегда горизонтальный ряд.
+        */
 
         display: "flex",
 
@@ -197,13 +166,25 @@ const styles = {
 
         justifyContent: "flex-start",
 
-        gap: "15px",
+        gap: "12px",
+
+        width: "100%",
+
+        minHeight: "200px",
 
         padding: "15px",
 
+        boxSizing: "border-box",
+
         overflowX: "auto",
 
-        boxSizing: "border-box"
+        overflowY: "hidden",
+
+        /*
+            Запрещаем сжатие элементов.
+        */
+
+        flexShrink: 0
 
     },
 
@@ -220,20 +201,29 @@ const styles = {
 
 
     /*
-        Карта существа на поле.
+        КАРТА НА ПОЛЕ
 
-        Она меньше карты в руке.
+        Размер примерно в 2 раза
+        меньше большой карты в руке.
     */
 
     unit: {
 
         position: "relative",
 
+        flex: "0 0 120px",
+
         width: "120px",
 
         minWidth: "120px",
 
+        maxWidth: "120px",
+
         height: "165px",
+
+        minHeight: "165px",
+
+        maxHeight: "165px",
 
         background: "#292929",
 
@@ -250,6 +240,8 @@ const styles = {
         flexShrink: 0,
 
         cursor: "pointer",
+
+        overflow: "hidden",
 
         transition:
             "transform 0.15s ease, box-shadow 0.15s ease"
@@ -292,6 +284,8 @@ const styles = {
 
         height: "20px",
 
+        minHeight: "20px",
+
         lineHeight: "20px",
 
         textAlign: "center",
@@ -317,13 +311,17 @@ const styles = {
 
         minHeight: "85px",
 
+        maxHeight: "85px",
+
         background: "#111",
 
         border: "1px solid #555",
 
         borderRadius: "6px",
 
-        overflow: "hidden"
+        overflow: "hidden",
+
+        flexShrink: 0
 
     },
 
