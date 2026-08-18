@@ -1,257 +1,536 @@
 function Game() {
 
-const [gameState, setGameState] =
+    const [gameState, setGameState] =
+        React.useState(
+            () => createInitialGameState()
+        );
+
+    const [selectedAttacker, setSelectedAttacker] =
+        React.useState(null);
 
 
+    const player =
+        gameState.player;
+
+    const opponent =
+        gameState.opponent;
+
+
+    const playerHero =
+        player.hero;
+
+    const opponentHero =
+        opponent.hero;
+
+
+    const handCards =
+        (player.hand || [])
+            .map(cardId =>
+                getCardById(cardId)
+            )
+            .filter(card => card);
+
+
+    function handleCardClick(card) {
+
+        if (!card) {
+            return;
+        }
+
+
+        if (
+            gameState.activePlayer !==
+            "player"
+        ) {
+            return;
+        }
+
+
+        const newState =
+            playCard(
+                gameState,
+                "player",
+                card.id
+            );
+
+
+        setGameState(
+            newState
+        );
+
+    }
+
+
+    function handlePlayerUnitClick(unit) {
+
+        if (!unit) {
+            return;
+        }
+
+
+        if (
+            gameState.activePlayer !==
+            "player"
+        ) {
+            return;
+        }
+
+
+        if (
+            selectedAttacker
+        ) {
+
+            if (
+                selectedAttacker ===
+                unit.instanceId
+            ) {
+
+                setSelectedAttacker(
+                    null
+                );
+
+                return;
+
+            }
+
+            return;
+
+        }
+
+
+        if (
+            !canUnitAttack(unit)
+        ) {
+
+            return;
+
+        }
+
+
+        setSelectedAttacker(
+            unit.instanceId
+        );
+
+    }
+
+
+    function handleOpponentUnitClick(unit) {
+
+        if (!unit) {
+            return;
+        }
+
+
+        if (
+            gameState.activePlayer !==
+            "player"
+        ) {
+            return;
+        }
+
+
+        if (!selectedAttacker) {
+            return;
+        }
+
+
+        const newState =
+            attackUnit(
+                gameState,
+                "player",
+                selectedAttacker,
+                unit.instanceId
+            );
+
+
+        setGameState(
+            newState
+        );
+
+
+        setSelectedAttacker(
+            null
+        );
+
+    }
+
+
+    function handleEndTurn() {
+
+        if (
+            gameState.activePlayer !==
+            "player"
+        ) {
+            return;
+        }
+
+
+        setSelectedAttacker(
+            null
+        );
+
+
+        const newState =
+            endTurn(
+                gameState
+            );
+
+
+        setGameState(
+            newState
+        );
+
+    }
+
+
+    return (
+
+        <div style={gameStyles.game}>
+
+
+            <section style={gameStyles.opponentSection}>
+
+
+                <div style={gameStyles.hero}>
+
+
+                    <strong>
+
+                        {opponentHero
+                            ? opponentHero.name
+                            : "Противник"}
+
+                    </strong>
+
+
+                    <span>
+
+                        ❤️ {opponent.hp}
+
+                    </span>
+
+
+                    <span>
+
+                        🛡️ {opponentHero
+                            ? opponentHero.defense
+                            : 0}
+
+                    </span>
+
+
+                    <span>
+
+                        ⚔️ Сила {opponentHero
+                            ? opponentHero.strength
+                            : 0}
+
+                    </span>
+
+
+                    <span
+                        style={
+                            gameStyles.mana
+                        }
+                    >
+
+                        🔵 {opponent.mana} / {opponent.maxMana}
+
+                    </span>
+
+
+                </div>
+
+
+                <Board
+                    units={
+                        opponent.board || []
                     }
 
-
-                </span>
-
-
-            )}
-
-
-        </div>
-
-
-
-
-
-
-        <section style={gameStyles.playerSection}>
-
-
-            <Board
-                units={
-                    player.board || []
-                }
-
-
-                onUnitClick={
-                    handlePlayerUnitClick
-                }
-
-
-                selectedUnitId={
-                    selectedAttacker
-                }
-            />
-
-
-
-
-            <div style={gameStyles.hero}>
-
-
-                <strong>
-
-
-                    {playerHero
-                        ? playerHero.name
-                        : "Игрок"}
-
-
-                </strong>
-
-
-                <span>
-                    ❤️ {player.hp}
-                </span>
-
-
-                <span>
-                    🛡️ {playerHero
-                        ? playerHero.defense
-                        : 0}
-                </span>
-
-
-                <span>
-                    ⚔️ Сила {playerHero
-                        ? playerHero.strength
-                        : 0}
-                </span>
-
-
-                <span
-                    style={
-                        gameStyles.mana
+                    onUnitClick={
+                        handleOpponentUnitClick
                     }
-                >
-                    🔵 {player.mana} / {player.maxMana}
-                </span>
+
+                    selectedUnitId={
+                        null
+                    }
+                />
+
+
+            </section>
+
+
+            <div style={gameStyles.center}>
+
+
+                {selectedAttacker ? (
+
+                    <span
+                        style={
+                            gameStyles.attackMode
+                        }
+                    >
+                        Выберите цель для атаки
+                    </span>
+
+                ) : (
+
+                    <span>
+                        Ход: {gameState.turn}
+                    </span>
+
+                )}
 
 
             </div>
 
 
-        </section>
+            <section style={gameStyles.playerSection}>
 
 
+                <Board
+                    units={
+                        player.board || []
+                    }
+
+                    onUnitClick={
+                        handlePlayerUnitClick
+                    }
+
+                    selectedUnitId={
+                        selectedAttacker
+                    }
+                />
 
 
+                <div style={gameStyles.hero}>
 
 
-        <div style={gameStyles.handWrapper}>
+                    <strong>
+
+                        {playerHero
+                            ? playerHero.name
+                            : "Игрок"}
+
+                    </strong>
 
 
-            <Hand
-                cards={handCards}
-                onCardClick={handleCardClick}
-            />
+                    <span>
+
+                        ❤️ {player.hp}
+
+                    </span>
+
+
+                    <span>
+
+                        🛡️ {playerHero
+                            ? playerHero.defense
+                            : 0}
+
+                    </span>
+
+
+                    <span>
+
+                        ⚔️ Сила {playerHero
+                            ? playerHero.strength
+                            : 0}
+
+                    </span>
+
+
+                    <span
+                        style={
+                            gameStyles.mana
+                        }
+                    >
+
+                        🔵 {player.mana} / {player.maxMana}
+
+                    </span>
+
+
+                </div>
+
+
+            </section>
+
+
+            <div style={gameStyles.handWrapper}>
+
+
+                <Hand
+                    cards={handCards}
+                    onCardClick={handleCardClick}
+                />
+
+
+            </div>
+
+
+            <button
+                onClick={handleEndTurn}
+                style={gameStyles.endTurn}
+            >
+                Завершить ход
+            </button>
 
 
         </div>
 
-
-
-
-
-
-        <button
-            onClick={handleEndTurn}
-            style={gameStyles.endTurn}
-        >
-            Завершить ход
-        </button>
-
-
-    </div>
-
-
-);
+    );
 
 }
+
 
 const gameStyles = {
 
-game: {
+    game: {
 
+        width: "100%",
 
-    alignItems: "center",
+        display: "flex",
 
+        flexDirection: "column",
 
-    padding: "0 10px"
+        alignItems: "center",
 
+        padding: "0 10px",
 
-},
+        boxSizing: "border-box"
 
+    },
 
 
+    opponentSection: {
 
-center: {
+        width: "100%",
 
+        display: "flex",
 
-    height: "30px",
+        flexDirection: "column",
 
+        alignItems: "center"
 
-    display: "flex",
+    },
 
 
-    alignItems: "center",
+    playerSection: {
 
+        width: "100%",
 
-    justifyContent: "center",
+        display: "flex",
 
+        flexDirection: "column",
 
-    color: "#777"
+        alignItems: "center"
 
+    },
 
-},
 
+    hero: {
 
+        display: "flex",
 
+        alignItems: "center",
 
-attackMode: {
+        justifyContent: "center",
 
+        gap: "18px",
 
-    color: "#ffd700",
+        minHeight: "45px",
 
+        padding: "8px 12px",
 
-    fontWeight: "bold"
+        boxSizing: "border-box",
 
+        color: "#ddd"
 
-},
+    },
 
 
+    center: {
 
+        height: "30px",
 
-mana: {
+        minHeight: "30px",
 
+        display: "flex",
 
-    color: "#55aaff",
+        alignItems: "center",
 
+        justifyContent: "center",
 
-    fontWeight: "bold"
+        color: "#777"
 
+    },
 
-},
 
+    attackMode: {
 
+        color: "#ffd700",
 
+        fontWeight: "bold"
 
-handWrapper: {
+    },
 
 
-    width: "100%",
+    mana: {
 
+        color: "#55aaff",
 
-    minHeight: "230px",
+        fontWeight: "bold"
 
+    },
 
-    display: "flex",
 
+    handWrapper: {
 
-    alignItems: "flex-end",
+        width: "100%",
 
+        minHeight: "230px",
 
-    justifyContent: "center",
+        display: "flex",
 
+        alignItems: "flex-end",
 
-    paddingTop: "10px",
+        justifyContent: "center",
 
+        paddingTop: "10px",
 
-    boxSizing: "border-box",
+        boxSizing: "border-box",
 
+        overflow: "hidden"
 
-    overflow: "hidden"
+    },
 
 
-},
+    endTurn: {
 
+        alignSelf: "center",
 
+        padding: "12px 30px",
 
+        marginTop: "5px",
 
-endTurn: {
+        marginBottom: "15px",
 
+        border: "none",
 
-    alignSelf: "center",
+        borderRadius: "8px",
 
+        background: "#444",
 
-    padding: "12px 30px",
+        color: "#fff",
 
+        cursor: "pointer",
 
-    border: "none",
+        fontSize: "16px"
 
-
-    borderRadius: "8px",
-
-
-    background: "#444",
-
-
-    color: "#fff",
-
-
-    cursor: "pointer",
-
-
-    fontSize: "16px"
-
-
-}
+    }
 
 };
+
 
 window.Game = Game;
