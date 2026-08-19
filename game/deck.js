@@ -1,26 +1,20 @@
 /*
-    Работа с колодой
+    Система колоды
 */
 
 
 function createDeck() {
 
+
     if (!Array.isArray(CARDS)) {
 
         console.error(
-            "CARDS не найден"
+            "Карты не найдены"
         );
 
         return [];
 
     }
-
-
-    /*
-        Создаем колоду.
-        Пока тест:
-        каждая карта встречается 1 раз.
-    */
 
 
     return CARDS.map(
@@ -31,22 +25,20 @@ function createDeck() {
 
 
 
-/*
-    Перемешивание колоды
-*/
 
 function shuffleDeck(deck) {
 
 
-    const newDeck =
+    const result =
         [...deck];
 
 
     for (
-        let i = newDeck.length - 1;
+        let i = result.length - 1;
         i > 0;
         i--
     ) {
+
 
         const j =
             Math.floor(
@@ -57,34 +49,41 @@ function shuffleDeck(deck) {
 
 
         [
-            newDeck[i],
-            newDeck[j]
+            result[i],
+            result[j]
 
         ] =
         [
-            newDeck[j],
-            newDeck[i]
+            result[j],
+            result[i]
         ];
+
 
     }
 
 
-    return newDeck;
+    return result;
 
 }
 
 
 
+
 /*
-    Стартовая рука
+    Получаем стартовую руку
 */
 
-function drawStartingHand(deck, count = 5) {
+function drawStartingHand(
+    deck,
+    count = 5
+) {
 
 
     return {
 
+
         hand:
+
             deck.slice(
                 0,
                 count
@@ -97,6 +96,7 @@ function drawStartingHand(deck, count = 5) {
                 count
             )
 
+
     };
 
 }
@@ -105,15 +105,13 @@ function drawStartingHand(deck, count = 5) {
 
 
 /*
-    Будущий добор карт.
-    Сейчас отключен.
+    Сейчас добор выключен.
 */
 
 function drawCard(
     state,
     playerId
 ) {
-
 
     return state;
 
