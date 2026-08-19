@@ -23,7 +23,7 @@
 <style>
 
 * {
-    box-sizing: border-box;
+    box-sizing:border-box;
 }
 
 
@@ -80,14 +80,49 @@ button {
 
 
 <!-- =====================
-DATA
+     DATA
 ===================== -->
 
 
-<script 
+<!-- Карты по редкости -->
+
+<script
+type="text/babel"
+src="./data/cards/common.js">
+</script>
+
+
+<script
+type="text/babel"
+src="./data/cards/uncommon.js">
+</script>
+
+
+<script
+type="text/babel"
+src="./data/cards/rare.js">
+</script>
+
+
+<script
+type="text/babel"
+src="./data/cards/epic.js">
+</script>
+
+
+<script
+type="text/babel"
+src="./data/cards/legendary.js">
+</script>
+
+
+<!-- Сборщик карт -->
+
+<script
 type="text/babel"
 src="./data/cards.js">
 </script>
+
 
 
 <script
@@ -110,8 +145,9 @@ src="./data/effects.js">
 
 
 
+
 <!-- =====================
-GAME
+     GAME ENGINE
 ===================== -->
 
 
@@ -147,8 +183,9 @@ src="./game/turns.js">
 
 
 
+
 <!-- =====================
-COMPONENTS
+     COMPONENTS
 ===================== -->
 
 
@@ -184,14 +221,22 @@ src="./components/Mana.jsx">
 
 <script
 type="text/babel"
+src="./components/Modal.jsx">
+</script>
+
+
+<script
+type="text/babel"
 src="./components/Game.jsx">
 </script>
 
 
 
 
+
+
 <!-- =====================
-APP
+     APP
 ===================== -->
 
 
@@ -199,6 +244,7 @@ APP
 type="text/babel"
 src="./app.js">
 </script>
+
 
 
 </body>
