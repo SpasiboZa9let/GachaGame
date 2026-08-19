@@ -1,15 +1,16 @@
 const COMMON_CARDS = [
 
 {
-    id:"medved",
+    id: "medved",
 
-    name:"Медведь",
+    name: "Медведь",
 
-    rarity:"common",
+    rarity: "common",
 
-    type:"creature",
+    type: "creature",
 
-    cost:5,
+    cost: 5,
+
 
     health:1600,
 
@@ -19,40 +20,47 @@ const COMMON_CARDS = [
 
     strength:7,
 
+
     faction:"forest",
+
+
+    image:
+        "./assets/cards/common/medved.png",
+
+
 
     effects:[
 
         {
             trigger:"afterAttack",
 
-            type:"buffAttack",
+            type:"rage",
 
-            value:50
+            value:5
         }
 
     ],
 
-    image:
-        "./assets/cards/common/medved.png",
+
 
     abilities:[
 
         {
+
             id:"den_of_rage",
 
             name:"Ярость берлоги",
 
-            type:"buff",
+            type:"passive",
 
             description:
-            "Получает +5 урона за каждые потерянные 20% здоровья."
+            "Получает +5 атаки за каждые потерянные 20% здоровья."
+
         }
 
     ]
 
 },
-
 
 
 
