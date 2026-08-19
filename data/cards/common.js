@@ -21,6 +21,13 @@ const COMMON_CARDS = [
         strength: 7,
 
         faction: "forest",
+        effects:[
+    {
+        trigger:"afterAttack",
+        type:"buffAttack",
+        value:50
+    }
+]
 
         image:
             "./assets/cards/common/medved.png",
