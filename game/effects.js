@@ -2,7 +2,7 @@
     ============================
     GAME EFFECTS
 
-    Базовая система эффектов
+    Система эффектов
 
     Поддерживает:
 
@@ -14,12 +14,14 @@
     stun
     fear
 
-    Будет использоваться:
-    - картами
-    - способностями
-    - амуницией
+
+    Работает через:
+
+    modifiers.js
+
     ============================
 */
+
 
 
 
@@ -34,11 +36,15 @@ function applyEffect(
 
 
 
-    if(!effect || !target){
+    if(
+        !target ||
+        !effect
+    ){
 
         return target;
 
     }
+
 
 
 
@@ -50,25 +56,22 @@ function applyEffect(
         ...target,
 
 
-        stats:{
-
-
-            ...(target.stats || {})
-
-
-        },
-
-
         status:[
 
             ...(target.status || [])
+
+        ],
+
+
+        modifiers:[
+
+            ...(target.modifiers || [])
 
         ]
 
 
 
     };
-
 
 
 
@@ -84,16 +87,31 @@ function applyEffect(
             Прямой урон
         */
 
+
         case "damage":
 
 
-            unit.stats.health -=
 
-                effect.value;
+            unit.stats = {
+
+
+                ...(unit.stats || {}),
+
+
+                health:
+
+                    unit.stats.health -
+
+                    effect.value
+
+
+
+            };
 
 
 
             break;
+
 
 
 
@@ -106,19 +124,38 @@ function applyEffect(
             Лечение
         */
 
+
         case "heal":
 
 
-            unit.stats.health =
 
-                Math.min(
+            unit.stats = {
 
-                    unit.stats.maxHealth,
 
-                    unit.stats.health +
-                    effect.value
+                ...(unit.stats || {}),
 
-                );
+
+
+                health:
+
+
+                    Math.min(
+
+
+                        unit.baseStats.maxHealth,
+
+
+                        unit.stats.health +
+
+                        effect.value
+
+
+                    )
+
+
+
+            };
+
 
 
             break;
@@ -132,16 +169,54 @@ function applyEffect(
 
 
         /*
-            Усиление атаки
+            Бафф атаки
+
+            Теперь НЕ меняем attack напрямую
+
         */
+
 
         case "buffAttack":
 
 
 
-            unit.stats.attack +=
+            if(
+                typeof addModifier === "function"
+            ){
 
-                effect.value;
+
+
+                unit =
+
+                    addModifier(
+
+                        unit,
+
+
+                        createAttackBuff(
+
+                            effect.value,
+
+
+                            effect.source ||
+
+                            "Эффект"
+
+                        )
+
+
+                    );
+
+
+
+
+                unit =
+
+                    refreshUnitStats(unit);
+
+
+
+            }
 
 
 
@@ -156,22 +231,52 @@ function applyEffect(
 
 
         /*
-            Усиление здоровья
+            Бафф здоровья
         */
+
 
         case "buffHealth":
 
 
 
-            unit.stats.health +=
+            if(
+                typeof addModifier === "function"
+            ){
 
-                effect.value;
+
+
+                unit =
+
+
+                    addModifier(
+
+                        unit,
+
+
+                        createHealthBuff(
+
+                            effect.value,
+
+
+                            effect.source ||
+
+                            "Эффект"
+
+                        )
+
+
+                    );
 
 
 
-            unit.stats.maxHealth +=
 
-                effect.value;
+                unit =
+
+                    refreshUnitStats(unit);
+
+
+
+            }
 
 
 
@@ -188,11 +293,8 @@ function applyEffect(
         /*
             Щит
 
-            Пока просто статус
-
-            Позже:
-            поглощение урона
         */
+
 
         case "shield":
 
@@ -206,6 +308,7 @@ function applyEffect(
 
                 value:
                     effect.value
+
 
 
             });
@@ -225,8 +328,8 @@ function applyEffect(
         /*
             Оглушение
 
-            Нельзя атаковать
         */
+
 
         case "stun":
 
@@ -239,7 +342,9 @@ function applyEffect(
 
 
                 turns:
+
                     effect.value || 1
+
 
 
             });
@@ -263,8 +368,8 @@ function applyEffect(
         /*
             Страх
 
-            Существо не атакует
         */
+
 
         case "fear":
 
@@ -277,7 +382,9 @@ function applyEffect(
 
 
                 turns:
+
                     effect.value || 1
+
 
 
             });
@@ -297,18 +404,22 @@ function applyEffect(
 
 
 
+
         default:
+
 
 
             console.log(
 
                 "Неизвестный эффект:",
+
                 effect
 
             );
 
 
     }
+
 
 
 
@@ -327,15 +438,15 @@ function applyEffect(
 
 
 
-/*
-    Проверка наличия эффекта
-*/
+
+
 
 
 function hasStatus(
     unit,
     type
 ){
+
 
 
     if(
@@ -346,6 +457,7 @@ function hasStatus(
         return false;
 
     }
+
 
 
 
@@ -369,9 +481,8 @@ function hasStatus(
 
 
 
-/*
-    Удаление статуса
-*/
+
+
 
 
 function removeStatus(
@@ -387,6 +498,7 @@ function removeStatus(
 
 
         status:
+
 
             (unit.status || [])
 
@@ -406,11 +518,36 @@ function removeStatus(
 
 
 
+
+
+
+
+
+
+
+
+
+
+/*
+    Запуск эффектов карты
+
+    Например:
+
+    afterAttack
+
+    onSummon
+
+    onDeath
+
+*/
+
+
 function triggerEffects(
     state,
     unit,
     trigger
 ){
+
 
 
     if(
@@ -424,14 +561,22 @@ function triggerEffects(
 
 
 
+
+
     let result =
+
         unit;
+
+
+
+
 
 
 
     unit.effects.forEach(
 
         effect => {
+
 
 
             if(
@@ -444,17 +589,28 @@ function triggerEffects(
 
 
 
+
+
             result =
+
                 applyEffect(
+
                     state,
+
                     result,
+
                     effect
+
                 );
+
 
 
         }
 
+
     );
+
+
 
 
 
@@ -467,16 +623,27 @@ function triggerEffects(
 
 
 
+
+
+
+
+
+
+
 window.applyEffect =
 applyEffect;
+
 
 
 window.hasStatus =
 hasStatus;
 
 
+
 window.removeStatus =
 removeStatus;
+
+
 
 window.triggerEffects =
 triggerEffects;
