@@ -505,6 +505,76 @@ overflow:auto;
 
 }
 
+    /* =====================
+   РУКА ИГРОКА
+===================== */
+
+
+.player-hand {
+
+
+    width:100%;
+
+
+    height:100%;
+
+
+    display:flex;
+
+
+    justify-content:center;
+
+
+    align-items:flex-end;
+
+
+    gap:12px;
+
+
+    overflow-x:auto;
+
+
+    overflow-y:hidden;
+
+
+    padding:10px;
+
+
+
+}
+
+
+
+
+.player-hand .card {
+
+
+    transition:
+
+        transform .2s ease;
+
+
+}
+
+
+
+
+
+.player-hand .card:hover {
+
+
+    transform:
+
+        translateY(-20px)
+
+        scale(1.05);
+
+
+    z-index:10;
+
+
+}
+
 
 
 }
