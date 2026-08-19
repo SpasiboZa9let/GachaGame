@@ -6,12 +6,14 @@ GameActions.js
 
 Отвечает за:
 - розыгрыш карт
+- выбор атакующего существа
 - атаки
 - завершение хода
 - рестарт
 - тестовое поле
 
 React state остаётся в Game.jsx
+
 ============================
 */
 
@@ -32,6 +34,12 @@ function createGameActions({
 
 
 
+
+
+
+    /*
+        Разыграть карту
+    */
 
 
     function playCard(card){
@@ -74,7 +82,6 @@ function createGameActions({
 
 
 
-
         setGameState(newState);
 
 
@@ -86,6 +93,86 @@ function createGameActions({
 
 
 
+
+
+    /*
+        Выбор своего существа
+    */
+
+
+    function selectAttacker(unit){
+
+
+        if(!unit){
+
+            return;
+
+        }
+
+
+
+
+
+        if(gameState.activePlayer !== "player"){
+
+            return;
+
+        }
+
+
+
+
+
+
+        if(!window.Combat.canUnitAttack(unit)){
+
+            return;
+
+        }
+
+
+
+
+
+
+
+        if(selectedAttacker === unit.instanceId){
+
+
+            setSelectedAttacker(null);
+
+
+            return;
+
+
+        }
+
+
+
+
+
+
+
+        setSelectedAttacker(
+
+            unit.instanceId
+
+        );
+
+
+    }
+
+
+
+
+
+
+
+
+
+    /*
+        Атака существа
+    */
 
 
     function attackUnit(unitId){
@@ -121,6 +208,7 @@ function createGameActions({
 
 
 
+
         setGameState(newState);
 
 
@@ -135,6 +223,11 @@ function createGameActions({
 
 
 
+
+
+    /*
+        Атака героя
+    */
 
 
     function attackHero(){
@@ -170,6 +263,7 @@ function createGameActions({
 
 
 
+
         setGameState(newState);
 
 
@@ -186,6 +280,11 @@ function createGameActions({
 
 
 
+    /*
+        Завершение хода
+    */
+
+
     function endTurn(){
 
 
@@ -194,6 +293,7 @@ function createGameActions({
             return;
 
         }
+
 
 
 
@@ -213,6 +313,7 @@ function createGameActions({
 
 
 
+
         setGameState(newState);
 
 
@@ -227,6 +328,11 @@ function createGameActions({
 
 
 
+
+
+    /*
+        Перезапуск
+    */
 
 
     function restart(){
@@ -256,6 +362,11 @@ function createGameActions({
 
 
 
+    /*
+        Тестовое поле
+    */
+
+
     function testBoard(){
 
 
@@ -264,6 +375,7 @@ function createGameActions({
             typeof window.createTestBoard !== "function"
 
         ){
+
 
             console.warn(
 
@@ -274,7 +386,9 @@ function createGameActions({
 
             return;
 
+
         }
+
 
 
 
@@ -307,6 +421,8 @@ function createGameActions({
 
         playCard,
 
+        selectAttacker,
+
         attackUnit,
 
         attackHero,
@@ -322,6 +438,8 @@ function createGameActions({
 
 
 }
+
+
 
 
 
