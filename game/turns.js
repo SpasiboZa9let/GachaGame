@@ -10,12 +10,28 @@
 
 
 
-function preparePlayerTurn(state) {
+
+
+function preparePlayerTurn(state){
+
+
+
+    if(!state || !state.player){
+
+        return state;
+
+    }
+
+
+
+
 
 
     let maxMana =
 
-        state.player.maxMana;
+        state.player.maxMana || 0;
+
+
 
 
 
@@ -28,13 +44,20 @@ function preparePlayerTurn(state) {
 
 
 
+
+
+
     return {
 
 
         ...state,
 
 
+
         activePlayer:"player",
+
+
+
 
 
 
@@ -44,7 +67,9 @@ function preparePlayerTurn(state) {
             ...state.player,
 
 
+
             maxMana:maxMana,
+
 
 
             mana:maxMana,
@@ -53,20 +78,28 @@ function preparePlayerTurn(state) {
 
             board:
 
+
                 state.player.board.map(
 
                     unit => ({
 
+
                         ...unit,
+
 
                         canAttack:true
 
+
+
                     })
+
 
                 )
 
 
+
         }
+
 
 
     };
@@ -80,12 +113,28 @@ function preparePlayerTurn(state) {
 
 
 
-function prepareOpponentTurn(state) {
+
+
+function prepareOpponentTurn(state){
+
+
+
+    if(!state || !state.opponent){
+
+        return state;
+
+    }
+
+
+
+
 
 
     let maxMana =
 
-        state.opponent.maxMana;
+        state.opponent.maxMana || 0;
+
+
 
 
 
@@ -99,13 +148,19 @@ function prepareOpponentTurn(state) {
 
 
 
+
+
     return {
 
 
         ...state,
 
 
+
         activePlayer:"opponent",
+
+
+
 
 
 
@@ -115,7 +170,9 @@ function prepareOpponentTurn(state) {
             ...state.opponent,
 
 
+
             maxMana:maxMana,
+
 
 
             mana:maxMana,
@@ -124,20 +181,28 @@ function prepareOpponentTurn(state) {
 
             board:
 
+
                 state.opponent.board.map(
 
                     unit => ({
 
+
                         ...unit,
+
 
                         canAttack:true
 
+
+
                     })
+
 
                 )
 
 
+
         }
+
 
 
     };
@@ -156,15 +221,21 @@ function prepareOpponentTurn(state) {
 function getRandomPlayableCard(state){
 
 
+
     const opponent =
 
-        state.opponent;
+        state?.opponent;
+
+
 
 
 
     if(
+
         !opponent ||
+
         !Array.isArray(opponent.hand)
+
     ){
 
         return null;
@@ -176,7 +247,9 @@ function getRandomPlayableCard(state){
 
 
 
+
     const getCard =
+
 
         window.Cards?.getCardById
 
@@ -197,9 +270,7 @@ function getRandomPlayableCard(state){
 
         .map(
 
-            id =>
-
-            getCard(id)
+            id => getCard(id)
 
         )
 
@@ -207,13 +278,17 @@ function getRandomPlayableCard(state){
 
             card =>
 
+
                 card &&
 
                 card.cost <= opponent.mana &&
 
                 opponent.board.length < 5
 
+
+
         );
+
 
 
 
@@ -225,6 +300,7 @@ function getRandomPlayableCard(state){
         return null;
 
     }
+
 
 
 
@@ -257,20 +333,28 @@ function getRandomPlayableCard(state){
 function opponentPlayCards(state){
 
 
+
     let newState = state;
+
+
+
 
 
 
     while(true){
 
 
+
         const card =
+
 
             getRandomPlayableCard(
 
                 newState
 
             );
+
+
 
 
 
@@ -283,13 +367,22 @@ function opponentPlayCards(state){
 
 
 
+
+
+
         const before =
 
             newState;
 
 
 
+
+
+
+
+
         newState =
+
 
             window.playCard(
 
@@ -305,6 +398,8 @@ function opponentPlayCards(state){
 
 
 
+
+
         if(before === newState){
 
             break;
@@ -312,7 +407,11 @@ function opponentPlayCards(state){
         }
 
 
+
     }
+
+
+
 
 
 
@@ -332,7 +431,11 @@ function opponentPlayCards(state){
 function opponentAttack(state){
 
 
+
     let newState = state;
+
+
+
 
 
 
@@ -358,6 +461,8 @@ function opponentAttack(state){
 
 
 
+
+
         if(
             attackers.length === 0
         ){
@@ -371,6 +476,7 @@ function opponentAttack(state){
 
 
 
+
         const attacker =
 
 
@@ -378,13 +484,17 @@ function opponentAttack(state){
 
                 Math.floor(
 
-                    Math.random() *
+                    Math.random()
+
+                    *
 
                     attackers.length
 
                 )
 
             ];
+
+
 
 
 
@@ -405,7 +515,9 @@ function opponentAttack(state){
 
                     Math.floor(
 
-                        Math.random() *
+                        Math.random()
+
+                        *
 
                         newState.player.board.length
 
@@ -416,7 +528,10 @@ function opponentAttack(state){
 
 
 
+
+
             newState =
+
 
                 window.Combat.attackUnit(
 
@@ -447,11 +562,10 @@ function opponentAttack(state){
             const damage =
 
 
-                attacker.stats?.attack
+                attacker.stats?.attack || 0;
 
-                ||
 
-                0;
+
 
 
 
@@ -469,7 +583,9 @@ function opponentAttack(state){
                     ...newState.player,
 
 
+
                     hp:
+
 
                         Math.max(
 
@@ -480,7 +596,11 @@ function opponentAttack(state){
                         )
 
 
+
                 },
+
+
+
 
 
 
@@ -489,6 +609,7 @@ function opponentAttack(state){
 
 
                     ...(newState.combatLog || []),
+
 
 
                     attacker.name +
@@ -500,11 +621,13 @@ function opponentAttack(state){
                     " урона."
 
 
+
                 ]
 
 
 
             };
+
 
 
         }
@@ -516,7 +639,10 @@ function opponentAttack(state){
 
 
 
-        newState = {
+        newState =
+
+
+        {
 
 
             ...newState,
@@ -527,6 +653,7 @@ function opponentAttack(state){
 
 
                 ...newState.opponent,
+
 
 
                 board:
@@ -554,10 +681,13 @@ function opponentAttack(state){
                         unit
 
 
+
                     )
 
 
+
             }
+
 
 
         };
@@ -568,8 +698,8 @@ function opponentAttack(state){
 
 
 
-
         newState =
+
 
             window.Victory?.checkGameOver
 
@@ -587,6 +717,7 @@ function opponentAttack(state){
 
 
 
+
         if(newState.gameOver){
 
             break;
@@ -594,7 +725,11 @@ function opponentAttack(state){
         }
 
 
+
     }
+
+
+
 
 
 
@@ -615,12 +750,17 @@ function opponentAttack(state){
 function opponentTurn(state){
 
 
+
     let newState = state;
 
 
 
 
+
+
+
     newState =
+
 
         prepareOpponentTurn(
 
@@ -632,10 +772,14 @@ function opponentTurn(state){
 
 
 
+
+
+
     newState = {
 
 
         ...newState,
+
 
 
         combatLog:[
@@ -644,7 +788,9 @@ function opponentTurn(state){
             ...(newState.combatLog || []),
 
 
+
             "Ход Василисы."
+
 
 
         ]
@@ -652,6 +798,7 @@ function opponentTurn(state){
 
 
     };
+
 
 
 
@@ -671,6 +818,7 @@ function opponentTurn(state){
 
 
 
+
     newState =
 
         opponentAttack(
@@ -678,6 +826,7 @@ function opponentTurn(state){
             newState
 
         );
+
 
 
 
@@ -702,12 +851,16 @@ function endTurn(state){
 
 
     if(
+        !state ||
+
         state.activePlayer !== "player"
+
     ){
 
         return state;
 
     }
+
 
 
 
@@ -720,16 +873,20 @@ function endTurn(state){
         ...state,
 
 
+
         combatLog:[
 
 
             ...(state.combatLog || []),
 
 
+
             "Игрок завершает ход."
 
 
+
         ]
+
 
 
     };
@@ -739,13 +896,18 @@ function endTurn(state){
 
 
 
+
+
     newState =
+
 
         opponentTurn(
 
             newState
 
         );
+
+
 
 
 
@@ -763,7 +925,9 @@ function endTurn(state){
 
 
 
+
     newState =
+
 
         preparePlayerTurn(
 
@@ -776,10 +940,13 @@ function endTurn(state){
 
 
 
+
+
     return {
 
 
         ...newState,
+
 
 
         turn:
@@ -787,7 +954,9 @@ function endTurn(state){
             newState.turn + 1,
 
 
+
         activePlayer:"player"
+
 
 
     };
@@ -806,6 +975,7 @@ function endTurn(state){
 window.Turns =
 
 window.Turns || {};
+
 
 
 
@@ -834,4 +1004,16 @@ opponentTurn;
 
 
 window.Turns.endTurn =
+endTurn;
+
+
+
+
+
+/*
+    Совместимость
+*/
+
+
+window.endTurn =
 endTurn;
