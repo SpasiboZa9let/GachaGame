@@ -19,6 +19,8 @@
 
 
 
+
+
 function canUnitAttack(unit){
 
 
@@ -31,7 +33,10 @@ function canUnitAttack(unit){
 
     return unit.canAttack === true;
 
+
 }
+
+
 
 
 
@@ -42,20 +47,34 @@ function canUnitAttack(unit){
 function getUnitAttack(unit){
 
 
-    if(
+    return (
+
         unit &&
+
         unit.stats &&
+
         typeof unit.stats.attack === "number"
-    ){
 
-        return unit.stats.attack;
+    )
 
-    }
+    ?
 
+    Math.max(
 
-    return 0;
+        0,
+
+        unit.stats.attack
+
+    )
+
+    :
+
+    0;
+
 
 }
+
+
 
 
 
@@ -66,20 +85,28 @@ function getUnitAttack(unit){
 function getUnitHealth(unit){
 
 
-    if(
+    return (
+
         unit &&
+
         unit.stats &&
+
         typeof unit.stats.health === "number"
-    ){
 
-        return unit.stats.health;
+    )
 
-    }
+    ?
 
+    unit.stats.health
 
-    return 0;
+    :
+
+    0;
+
 
 }
+
+
 
 
 
@@ -105,12 +132,18 @@ function setUnitHealth(
             ...(unit.stats || {}),
 
 
+
             health:
 
+
                 Math.max(
+
                     0,
+
                     value
+
                 )
+
 
 
         }
@@ -128,17 +161,21 @@ function setUnitHealth(
 
 
 
+
 function getUnitById(
     board,
     id
 ){
 
 
-    if(!board){
+    if(
+        !Array.isArray(board)
+    ){
 
         return null;
 
     }
+
 
 
     return board.find(
@@ -167,8 +204,19 @@ function triggerUnitEffect(
 ){
 
 
+    const triggerFunction =
+
+
+        window.Effects?.triggerEffects
+
+        ||
+
+        window.triggerEffects;
+
+
+
     if(
-        typeof triggerEffects !== "function"
+        typeof triggerFunction !== "function"
     ){
 
         return unit;
@@ -177,7 +225,8 @@ function triggerUnitEffect(
 
 
 
-    return triggerEffects(
+
+    return triggerFunction(
 
         state,
 
@@ -198,7 +247,6 @@ function triggerUnitEffect(
 
 
 
-
 function applyDamage(
     unit,
     damage
@@ -209,7 +257,13 @@ function applyDamage(
 
         unit,
 
-        getUnitHealth(unit) - damage
+        getUnitHealth(unit)
+
+        -
+
+        (
+            Number(damage) || 0
+        )
 
     );
 
@@ -239,7 +293,19 @@ function attackUnit(
 
 
 
+    if(!player){
+
+        return state;
+
+    }
+
+
+
+
+
+
     const enemyId =
+
 
         playerId === "player"
 
@@ -253,6 +319,8 @@ function attackUnit(
 
 
 
+
+
     const enemy =
 
         state[enemyId];
@@ -262,8 +330,20 @@ function attackUnit(
 
 
 
+    if(!enemy){
+
+        return state;
+
+    }
+
+
+
+
+
+
 
     let attacker =
+
 
         getUnitById(
 
@@ -277,23 +357,20 @@ function attackUnit(
 
 
 
-    if(!attacker){
+
+
+    if(
+        !attacker ||
+
+        !canUnitAttack(attacker)
+
+    ){
 
         return state;
 
     }
 
 
-
-
-
-
-
-    if(!canUnitAttack(attacker)){
-
-        return state;
-
-    }
 
 
 
@@ -337,10 +414,12 @@ function attackUnit(
     ){
 
 
+
         let newState = {
 
 
             ...state,
+
 
 
             [enemyId]:{
@@ -350,6 +429,7 @@ function attackUnit(
 
 
                 hp:
+
 
                     Math.max(
 
@@ -370,6 +450,7 @@ function attackUnit(
                 ...(state.combatLog || []),
 
 
+
                 attacker.name +
 
                 " наносит герою " +
@@ -382,6 +463,7 @@ function attackUnit(
             ]
 
 
+
         };
 
 
@@ -389,7 +471,9 @@ function attackUnit(
 
 
 
-        let updatedAttacker =
+
+        const updatedAttacker =
+
 
             triggerUnitEffect(
 
@@ -411,6 +495,7 @@ function attackUnit(
 
 
             ...newState[playerId],
+
 
 
             board:
@@ -447,9 +532,18 @@ function attackUnit(
 
 
 
-        return checkGameOver(
 
-            newState
+        return (
+
+            window.Victory?.checkGameOver
+
+            ?
+
+            window.Victory.checkGameOver(newState)
+
+            :
+
+            window.checkGameOver(newState)
 
         );
 
@@ -492,47 +586,34 @@ function attackUnit(
 
 
 
-    const attackerDamage =
-
-        getUnitAttack(attacker);
-
-
-
-
-    const targetDamage =
-
-        getUnitAttack(target);
-
-
-
-
-
-
 
     let newAttacker =
+
 
         applyDamage(
 
             attacker,
 
-            targetDamage
+            getUnitAttack(target)
 
         );
+
+
+
 
 
 
 
     let newTarget =
 
+
         applyDamage(
 
             target,
 
-            attackerDamage
+            damage
 
         );
-
-
 
 
 
@@ -555,6 +636,8 @@ function attackUnit(
 
 
 
+
+
     newTarget =
 
         triggerUnitEffect(
@@ -566,8 +649,6 @@ function attackUnit(
             "onDamage"
 
         );
-
-
 
 
 
@@ -592,12 +673,9 @@ function attackUnit(
 
 
 
-
-
     if(
         getUnitHealth(newAttacker)<=0
     ){
-
 
         newAttacker =
 
@@ -611,7 +689,6 @@ function attackUnit(
 
             );
 
-
     }
 
 
@@ -622,7 +699,6 @@ function attackUnit(
     if(
         getUnitHealth(newTarget)<=0
     ){
-
 
         newTarget =
 
@@ -636,7 +712,6 @@ function attackUnit(
 
             );
 
-
     }
 
 
@@ -647,7 +722,7 @@ function attackUnit(
 
 
 
-    let newState={
+    const newState = {
 
 
         ...state,
@@ -699,8 +774,8 @@ function attackUnit(
                 )
 
 
-        },
 
+        },
 
 
 
@@ -747,8 +822,8 @@ function attackUnit(
                 )
 
 
-        },
 
+        },
 
 
 
@@ -760,6 +835,7 @@ function attackUnit(
 
 
             ...(state.combatLog || []),
+
 
 
             attacker.name +
@@ -781,14 +857,24 @@ function attackUnit(
 
 
 
-    return checkGameOver(
 
-        newState
+    return (
+
+        window.Victory?.checkGameOver
+
+        ?
+
+        window.Victory.checkGameOver(newState)
+
+        :
+
+        window.checkGameOver(newState)
 
     );
 
 
 }
+
 
 
 
@@ -802,6 +888,7 @@ window.Combat || {};
 
 
 
+
 window.Combat.canUnitAttack =
 
 canUnitAttack;
@@ -811,3 +898,21 @@ canUnitAttack;
 window.Combat.attackUnit =
 
 attackUnit;
+
+
+
+window.Combat.getUnitAttack =
+
+getUnitAttack;
+
+
+
+window.Combat.getUnitHealth =
+
+getUnitHealth;
+
+
+
+window.Combat.getUnitById =
+
+getUnitById;
