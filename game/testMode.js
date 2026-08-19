@@ -2,75 +2,20 @@
     ============================
     TEST MODE
 
-    Тестовые колоды
+    Отключен.
+
+    Будущий режим разработки:
+    - тестовые колоды
+    - тестовые карты
+    - отладка
+
     ============================
 */
 
 
-const TEST_MODE = true;
+window.TestMode =
+window.TestMode || {};
 
 
 
-function getTestHand(){
-
-
-    if(!TEST_MODE){
-
-        return null;
-
-    }
-
-
-    return [
-
-        "medved",
-
-        "razboynik",
-
-        "kort_aika",
-
-        "voin_pikhotinets",
-
-        "lyagushka"
-
-    ];
-
-}
-
-
-
-
-function getTestOpponentHand(){
-
-
-    if(!TEST_MODE){
-
-        return null;
-
-    }
-
-
-    return [
-
-        "volk",
-
-        "voin_s_kopem",
-
-        "medved"
-
-    ];
-
-}
-
-
-
-window.TEST_MODE =
-TEST_MODE;
-
-
-window.getTestHand =
-getTestHand;
-
-
-window.getTestOpponentHand =
-getTestOpponentHand;
+window.TestMode.enabled = false;
