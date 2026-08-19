@@ -64,6 +64,7 @@ function applyEffect(
             strength:0,
 
 
+
             ...(target.stats || {})
 
 
@@ -87,6 +88,18 @@ function applyEffect(
 
 
 
+
+    const value =
+
+        Number(effect.value) || 0;
+
+
+
+
+
+
+
+
     switch(effect.type){
 
 
@@ -101,15 +114,14 @@ function applyEffect(
 
                     0,
 
-                    unit.stats.health -
-
-                    (Number(effect.value) || 0)
+                    unit.stats.health - value
 
                 );
 
 
 
             break;
+
 
 
 
@@ -128,9 +140,7 @@ function applyEffect(
 
                     unit.stats.maxHealth,
 
-                    unit.stats.health +
-
-                    (Number(effect.value) || 0)
+                    unit.stats.health + value
 
                 );
 
@@ -145,13 +155,12 @@ function applyEffect(
 
 
 
+
         case "buffAttack":
 
 
 
-            unit.stats.attack +=
-
-                Number(effect.value) || 0;
+            unit.stats.attack += value;
 
 
 
@@ -164,19 +173,16 @@ function applyEffect(
 
 
 
+
         case "buffHealth":
 
 
 
-            unit.stats.maxHealth +=
-
-                Number(effect.value) || 0;
+            unit.stats.maxHealth += value;
 
 
 
-            unit.stats.health +=
-
-                Number(effect.value) || 0;
+            unit.stats.health += value;
 
 
 
@@ -194,7 +200,7 @@ function applyEffect(
 
 
 
-            const lostHealth =
+            const lost =
 
                 unit.stats.maxHealth -
 
@@ -203,14 +209,16 @@ function applyEffect(
 
 
 
-            const lostPercent =
+
+            const percent =
+
 
                 unit.stats.maxHealth > 0
 
                 ?
 
                 (
-                    lostHealth /
+                    lost /
 
                     unit.stats.maxHealth
 
@@ -224,23 +232,27 @@ function applyEffect(
 
 
 
-            const bonus =
+
+
+            const rageBonus =
+
 
                 Math.floor(
 
-                    lostPercent / 20
+                    percent / 20
 
                 )
 
                 *
 
-                (Number(effect.value) || 0);
+                value;
 
 
 
 
 
-            unit.stats.attack += bonus;
+
+            unit.stats.attack += rageBonus;
 
 
 
@@ -264,9 +276,7 @@ function applyEffect(
                 type:"shield",
 
 
-                value:
-
-                    Number(effect.value) || 0
+                value:value
 
 
             });
@@ -295,14 +305,14 @@ function applyEffect(
 
                 turns:
 
-                    effect.value || 1
+                    value || 1
 
 
             });
 
 
 
-            unit.canAttack=false;
+            unit.canAttack = false;
 
 
 
@@ -328,14 +338,14 @@ function applyEffect(
 
                 turns:
 
-                    effect.value || 1
+                    value || 1
 
 
             });
 
 
 
-            unit.canAttack=false;
+            unit.canAttack = false;
 
 
 
@@ -369,6 +379,8 @@ function applyEffect(
 
 
 
+
+
     return unit;
 
 
@@ -390,7 +402,7 @@ function hasStatus(
 
     if(
         !unit ||
-        !unit.status
+        !Array.isArray(unit.status)
     ){
 
         return false;
@@ -470,12 +482,13 @@ function triggerEffects(
 
     if(
         !unit ||
-        !unit.effects
+        !Array.isArray(unit.effects)
     ){
 
         return unit;
 
     }
+
 
 
 
@@ -497,14 +510,14 @@ function triggerEffects(
 
 
             if(
-
                 effect.trigger !== trigger
-
             ){
 
                 return;
 
             }
+
+
 
 
 
@@ -533,6 +546,8 @@ function triggerEffects(
 
 
 
+
+
     return result;
 
 
@@ -549,6 +564,9 @@ function triggerEffects(
 window.Effects =
 
 window.Effects || {};
+
+
+
 
 
 
@@ -571,5 +589,41 @@ removeStatus;
 
 
 window.Effects.triggerEffects =
+
+triggerEffects;
+
+
+
+
+
+
+
+
+
+/*
+    Совместимость
+*/
+
+
+
+window.applyEffect =
+
+applyEffect;
+
+
+
+window.hasStatus =
+
+hasStatus;
+
+
+
+window.removeStatus =
+
+removeStatus;
+
+
+
+window.triggerEffects =
 
 triggerEffects;
