@@ -69,6 +69,7 @@ function GameBoard({
 
 
 
+
     const opponentHandCards =
 
         (opponent.hand || [])
@@ -88,10 +89,14 @@ function GameBoard({
 
 
 
+
     return (
 
 
         <div style={gameStyles.game}>
+
+
+
 
 
             <GameOver
@@ -101,6 +106,7 @@ function GameBoard({
                 onRestart={onRestart}
 
             />
+
 
 
 
@@ -158,52 +164,15 @@ function GameBoard({
 
 
 
-            <section>
+            <PlayerArea
 
+                player={player}
 
-                <h3>
+                selectedAttacker={selectedAttacker}
 
-                    Игрок
+                onPlayerUnitClick={onPlayerUnitClick}
 
-                </h3>
-
-
-
-
-
-
-                <Board
-
-                    units={player.board || []}
-
-                    onUnitClick={onPlayerUnitClick}
-
-                    selectedUnitId={selectedAttacker}
-
-                />
-
-
-
-
-
-
-
-
-                <Hero
-
-                    hero={player.hero}
-
-                    hp={player.hp}
-
-                    mana={player.mana}
-
-                    maxMana={player.maxMana}
-
-                />
-
-
-
-            </section>
+            />
 
 
 
@@ -244,11 +213,13 @@ function GameBoard({
 
 
 
+
             <GameLog
 
                 log={gameState.combatLog}
 
             />
+
 
 
 
@@ -261,6 +232,7 @@ function GameBoard({
 
 
 }
+
 
 
 
@@ -325,7 +297,9 @@ const gameStyles = {
 
         cursor:"crosshair",
 
-        filter:"drop-shadow(0 0 15px red)"
+        filter:"drop-shadow(" +
+        
+        "0 0 15px red)"
 
 
     },
