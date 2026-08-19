@@ -18,13 +18,32 @@
 
 
 
+
+
 function createCardInstance(id){
+
+
+
+    const getCard =
+
+
+        window.Cards?.getCardById
+
+        ||
+
+        window.getCardById;
+
+
+
+
 
 
 
     const card =
 
-        getCardById(id);
+        getCard(id);
+
+
 
 
 
@@ -35,6 +54,7 @@ function createCardInstance(id){
         return null;
 
     }
+
 
 
 
@@ -85,7 +105,10 @@ function createCardInstance(id){
 
 
 
+
     let unit = {
+
+
 
 
 
@@ -110,7 +133,10 @@ function createCardInstance(id){
 
 
 
+
+
         cardId:id,
+
 
 
 
@@ -124,7 +150,10 @@ function createCardInstance(id){
 
 
 
+
+
         rarity:
+
 
             card.rarity || "common",
 
@@ -132,7 +161,10 @@ function createCardInstance(id){
 
 
 
+
+
         faction:
+
 
             card.faction || null,
 
@@ -140,9 +172,16 @@ function createCardInstance(id){
 
 
 
+
+
         tags:
 
+
             card.tags || [],
+
+
+
+
 
 
 
@@ -153,15 +192,7 @@ function createCardInstance(id){
         baseStats:{
 
 
-            attack:baseStats.attack,
-
-            health:baseStats.health,
-
-            maxHealth:baseStats.maxHealth,
-
-            defense:baseStats.defense,
-
-            strength:baseStats.strength
+            ...baseStats
 
 
         },
@@ -173,18 +204,13 @@ function createCardInstance(id){
 
 
 
+
+
+
         stats:{
 
 
-            attack:baseStats.attack,
-
-            health:baseStats.health,
-
-            maxHealth:baseStats.maxHealth,
-
-            defense:baseStats.defense,
-
-            strength:baseStats.strength
+            ...baseStats
 
 
         },
@@ -203,7 +229,14 @@ function createCardInstance(id){
 
 
 
+
+
+
         equipment:[],
+
+
+
+
 
 
 
@@ -211,7 +244,26 @@ function createCardInstance(id){
 
         effects:
 
+
             card.effects || [],
+
+
+
+
+
+
+
+
+
+
+        abilities:
+
+
+            card.abilities || [],
+
+
+
+
 
 
 
@@ -223,9 +275,14 @@ function createCardInstance(id){
 
 
 
-        abilities:
 
-            card.abilities || [],
+
+
+        currentEffects:[],
+
+
+
+
 
 
 
@@ -245,17 +302,31 @@ function createCardInstance(id){
 
 
 
+    const refresh =
+
+
+        window.Modifiers?.refreshUnitStats
+
+        ||
+
+        window.refreshUnitStats;
+
+
+
+
+
+
+
+
     if(
-
-        typeof refreshUnitStats === "function"
-
+        typeof refresh === "function"
     ){
 
 
 
         unit =
 
-            refreshUnitStats(unit);
+            refresh(unit);
 
 
 
@@ -280,9 +351,11 @@ function createCardInstance(id){
 
 
 
+
 window.Units =
 
 window.Units || {};
+
 
 
 
