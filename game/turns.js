@@ -98,11 +98,6 @@ function preparePlayerTurn(state) {
 
     return newState;
 
-}
-
-
-
-
 
 
 function prepareOpponentTurn(state) {
