@@ -2,17 +2,18 @@
 ============================
 GameBoard.jsx
 
-Отображение игрового экрана
+Главный экран боя
 
-Логика остаётся в Game.jsx
+Отвечает только за сборку:
 
-Этот компонент только рисует:
-- противника
-- игрока
+- противник
+- игрок
 - поле
 - руки
 - кнопки
 - лог
+
+Игровая логика находится в Game.jsx
 ============================
 */
 
@@ -63,12 +64,7 @@ function GameBoard({
             }) => (
 
 
-
                 <div style={window.gameStyles.game}>
-
-
-
-
 
 
 
@@ -79,10 +75,6 @@ function GameBoard({
                         onRestart={onRestart}
 
                     />
-
-
-
-
 
 
 
@@ -106,10 +98,6 @@ function GameBoard({
 
 
 
-
-
-
-
                     <GameTurn
 
                         selectedAttacker={selectedAttacker}
@@ -117,10 +105,6 @@ function GameBoard({
                         turn={gameState.turn}
 
                     />
-
-
-
-
 
 
 
@@ -140,10 +124,6 @@ function GameBoard({
 
 
 
-
-
-
-
                     <PlayerHand
 
                         cards={handCards}
@@ -151,10 +131,6 @@ function GameBoard({
                         onCardClick={onCardClick}
 
                     />
-
-
-
-
 
 
 
@@ -172,10 +148,6 @@ function GameBoard({
 
 
 
-
-
-
-
                     <GameLog
 
                         log={gameState.combatLog}
@@ -183,13 +155,7 @@ function GameBoard({
                     />
 
 
-
-
-
-
-
                 </div>
-
 
 
             )}
