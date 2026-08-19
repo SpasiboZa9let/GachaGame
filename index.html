@@ -10,10 +10,7 @@
     content="width=device-width, initial-scale=1.0"
 >
 
-<title>
-Тридевятое царство: Были и Сказки
-</title>
-
+<title>Тридевятое царство</title>
 
 
 <script src="https://unpkg.com/react@18/umd/react.development.js"></script>
@@ -21,7 +18,6 @@
 <script src="https://unpkg.com/react-dom@18/umd/react-dom.development.js"></script>
 
 <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
-
 
 
 <style>
@@ -36,7 +32,6 @@ body {
 
     margin:0;
     padding:0;
-
     min-height:100%;
 
 }
@@ -56,22 +51,18 @@ body {
 }
 
 
+button {
+
+    font-family:inherit;
+
+}
+
 
 #root {
 
     min-height:100vh;
 
 }
-
-
-button {
-
-    cursor:pointer;
-
-    font-family:inherit;
-
-}
-
 
 </style>
 
@@ -83,13 +74,7 @@ button {
 <body>
 
 
-
-<div id="root">
-
-Загрузка игры...
-
-</div>
-
+<div id="root"></div>
 
 
 
@@ -100,27 +85,63 @@ button {
 ===================== -->
 
 
-<script src="./data/cards/common.js"></script>
-
-<script src="./data/cards/uncommon.js"></script>
-
-<script src="./data/cards/rare.js"></script>
-
-<script src="./data/cards/epic.js"></script>
-
-<script src="./data/cards/legendary.js"></script>
+<script
+type="text/babel"
+src="./data/cards/common.js">
+</script>
 
 
-<script src="./data/cards.js"></script>
+<script
+type="text/babel"
+src="./data/cards/uncommon.js">
+</script>
 
 
-<script src="./data/heroes.js"></script>
+<script
+type="text/babel"
+src="./data/cards/rare.js">
+</script>
 
 
-<script src="./data/factions.js"></script>
+<script
+type="text/babel"
+src="./data/cards/epic.js">
+</script>
 
 
-<script src="./data/effects.js"></script>
+<script
+type="text/babel"
+src="./data/cards/legendary.js">
+</script>
+
+
+
+<script
+type="text/babel"
+src="./data/cards.js">
+</script>
+
+
+
+<script
+type="text/babel"
+src="./data/heroes.js">
+</script>
+
+
+
+<script
+type="text/babel"
+src="./data/factions.js">
+</script>
+
+
+
+<script
+type="text/babel"
+src="./data/effects.js">
+</script>
+
 
 
 
@@ -132,46 +153,118 @@ button {
 ===================== -->
 
 
-<script src="./game/utils.js"></script>
+<!-- utils -->
+
+<script
+type="text/babel"
+src="./game/utils.js">
+</script>
 
 
-<script src="./game/cards.js"></script>
+
+<!-- карты -->
+
+<script
+type="text/babel"
+src="./game/cards.js">
+</script>
 
 
-<script src="./game/deck.js"></script>
+
+<!-- колода -->
+
+<script
+type="text/babel"
+src="./game/deck.js">
+</script>
 
 
-<script src="./game/state.js"></script>
+
+<!-- тестовый режим -->
+
+<script
+type="text/babel"
+src="./game/testMode.js">
+</script>
 
 
-<script src="./game/units.js"></script>
+
+<!-- состояние игры -->
+
+<script
+type="text/babel"
+src="./game/state.js">
+</script>
 
 
-<script src="./game/modifiers.js"></script>
+
+<!-- существа -->
+
+<script
+type="text/babel"
+src="./game/units.js">
+</script>
 
 
-<script src="./game/effects.js"></script>
+
+<!-- модификаторы -->
+
+<script
+type="text/babel"
+src="./game/modifiers.js">
+</script>
 
 
-<script src="./game/cardPlay.js"></script>
+
+<!-- эффекты -->
+
+<script
+type="text/babel"
+src="./game/effects.js">
+</script>
 
 
-<script src="./game/combat.js"></script>
+
+<!-- розыгрыш карт -->
+
+<script
+type="text/babel"
+src="./game/cardPlay.js">
+</script>
 
 
-<script src="./game/turns.js"></script>
+
+<!-- бой -->
+
+<script
+type="text/babel"
+src="./game/combat.js">
+</script>
 
 
-<script src="./game/turnManager.js"></script>
+
+<!-- ходы -->
+
+<script
+type="text/babel"
+src="./game/turns.js">
+</script>
 
 
-<script src="./game/victory.js"></script>
+
+<script
+type="text/babel"
+src="./game/turnManager.js">
+</script>
 
 
-<script src="./game/actions.js"></script>
 
+<!-- победа -->
 
-<script src="./game/engine.js"></script>
+<script
+type="text/babel"
+src="./game/victory.js">
+</script>
 
 
 
@@ -179,14 +272,57 @@ button {
 
 
 <!-- =====================
-        TEST SYSTEM
-        временно
+        COMPONENTS
 ===================== -->
 
 
-<script src="./game/testTools.js"></script>
+<script
+type="text/babel"
+src="./components/Card.jsx">
+</script>
 
-<script src="./game/testMode.js"></script>
+
+
+<script
+type="text/babel"
+src="./components/Board.jsx">
+</script>
+
+
+
+<script
+type="text/babel"
+src="./components/Hand.jsx">
+</script>
+
+
+
+<script
+type="text/babel"
+src="./components/Hero.jsx">
+</script>
+
+
+
+<script
+type="text/babel"
+src="./components/Mana.jsx">
+</script>
+
+
+
+<script
+type="text/babel"
+src="./components/Modal.jsx">
+</script>
+
+
+
+<script
+type="text/babel"
+src="./components/Game.jsx">
+</script>
+
 
 
 
@@ -194,37 +330,14 @@ button {
 
 
 <!-- =====================
-        REACT COMPONENTS
+        APP
 ===================== -->
 
 
-<script type="text/babel" src="./components/Card.jsx"></script>
-
-<script type="text/babel" src="./components/Board.jsx"></script>
-
-<script type="text/babel" src="./components/Hand.jsx"></script>
-
-<script type="text/babel" src="./components/Deck.jsx"></script>
-
-<script type="text/babel" src="./components/Hero.jsx"></script>
-
-<script type="text/babel" src="./components/Mana.jsx"></script>
-
-<script type="text/babel" src="./components/Modal.jsx"></script>
-
-<script type="text/babel" src="./components/Game.jsx"></script>
-
-
-
-
-
-
-<!-- =====================
-        START
-===================== -->
-
-
-<script type="text/babel" src="./app.js"></script>
+<script
+type="text/babel"
+src="./app.js">
+</script>
 
 
 
