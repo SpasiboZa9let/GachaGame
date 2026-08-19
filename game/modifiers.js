@@ -22,21 +22,45 @@ function addModifier(
     modifier
 ){
 
+
+    if(
+        !unit ||
+        !modifier
+    ){
+
+        return unit;
+
+    }
+
+
+
+
+
     return {
+
 
         ...unit,
 
+
+
         modifiers:[
+
 
             ...(unit.modifiers || []),
 
+
             modifier
+
+
 
         ]
 
+
     };
 
+
 }
+
 
 
 
@@ -50,11 +74,27 @@ function removeModifier(
     source
 ){
 
+
+
+    if(!unit){
+
+        return unit;
+
+    }
+
+
+
+
+
     return {
+
 
         ...unit,
 
+
+
         modifiers:
+
 
             (unit.modifiers || [])
 
@@ -66,7 +106,10 @@ function removeModifier(
 
             )
 
+
+
     };
+
 
 }
 
@@ -83,7 +126,21 @@ function calculateStat(
     stat
 ){
 
-    let base =
+
+
+    if(!unit){
+
+        return 0;
+
+    }
+
+
+
+
+
+
+
+    const base =
 
 
         unit.baseStats &&
@@ -106,7 +163,11 @@ function calculateStat(
 
 
 
+
+
     let bonus = 0;
+
+
 
 
 
@@ -119,13 +180,16 @@ function calculateStat(
         mod => {
 
 
+
             if(
                 mod.stat === stat
             ){
 
+
                 bonus +=
 
                     Number(mod.value) || 0;
+
 
             }
 
@@ -138,7 +202,11 @@ function calculateStat(
 
 
 
+
+
+
     return base + bonus;
+
 
 }
 
@@ -153,6 +221,18 @@ function calculateStat(
 function refreshUnitStats(
     unit
 ){
+
+
+
+    if(!unit){
+
+        return unit;
+
+    }
+
+
+
+
 
 
 
@@ -185,16 +265,28 @@ function refreshUnitStats(
 
 
 
+
+
+
     const maxHealth =
 
 
-        calculateStat(
+        Math.max(
 
-            unit,
+            0,
 
-            "health"
+            calculateStat(
+
+                unit,
+
+                "health"
+
+            )
 
         );
+
+
+
 
 
 
@@ -211,20 +303,30 @@ function refreshUnitStats(
         stats:{
 
 
+
             ...(unit.stats || {}),
+
 
 
 
             attack:
 
 
-                calculateStat(
+                Math.max(
 
-                    unit,
+                    0,
 
-                    "attack"
+                    calculateStat(
+
+                        unit,
+
+                        "attack"
+
+                    )
 
                 ),
+
+
 
 
 
@@ -234,7 +336,14 @@ function refreshUnitStats(
 
                 Math.min(
 
-                    oldHealth,
+                    Math.max(
+
+                        0,
+
+                        oldHealth
+
+                    ),
+
 
                     maxHealth
 
@@ -243,7 +352,12 @@ function refreshUnitStats(
 
 
 
+
+
             maxHealth:maxHealth,
+
+
+
 
 
 
@@ -259,6 +373,8 @@ function refreshUnitStats(
                     "defense"
 
                 ),
+
+
 
 
 
@@ -299,6 +415,7 @@ function createAttackBuff(
     source
 ){
 
+
     return {
 
 
@@ -308,7 +425,10 @@ function createAttackBuff(
         stat:"attack",
 
 
-        value:value,
+        value:
+
+            Number(value) || 0,
+
 
 
         source:source
@@ -316,7 +436,9 @@ function createAttackBuff(
 
     };
 
+
 }
+
 
 
 
@@ -330,6 +452,7 @@ function createHealthBuff(
     source
 ){
 
+
     return {
 
 
@@ -339,13 +462,17 @@ function createHealthBuff(
         stat:"health",
 
 
-        value:value,
+        value:
+
+            Number(value) || 0,
+
 
 
         source:source
 
 
     };
+
 
 }
 
@@ -360,6 +487,8 @@ function createHealthBuff(
 window.Modifiers =
 
 window.Modifiers || {};
+
+
 
 
 
@@ -394,5 +523,53 @@ createAttackBuff;
 
 
 window.Modifiers.createHealthBuff =
+
+createHealthBuff;
+
+
+
+
+
+
+
+
+
+/*
+    Совместимость
+*/
+
+
+
+window.addModifier =
+
+addModifier;
+
+
+
+window.removeModifier =
+
+removeModifier;
+
+
+
+window.calculateStat =
+
+calculateStat;
+
+
+
+window.refreshUnitStats =
+
+refreshUnitStats;
+
+
+
+window.createAttackBuff =
+
+createAttackBuff;
+
+
+
+window.createHealthBuff =
 
 createHealthBuff;
