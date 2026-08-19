@@ -21,6 +21,7 @@ function Board({
 
 
 
+
     function getRarityColor(rarity){
 
         switch(rarity){
@@ -52,28 +53,10 @@ function Board({
 
 
 
-    function getStats(unit){
-
-
-        return unit.stats || {
-
-            attack: unit.attack || 0,
-
-            health: unit.health || 0
-
-        };
-
-
-    }
-
-
-
-
 
 
 
     return (
-
 
         <div style={styles.board}>
 
@@ -106,7 +89,7 @@ function Board({
 
                 const card =
 
-                    window.Cards.getCardById
+                    window.Cards?.getCardById
 
                     ?
 
@@ -131,15 +114,11 @@ function Board({
 
 
 
-                const stats = getStats(unit);
-
-
-
-
 
                 const selected =
 
                     unit.instanceId === selectedUnitId;
+
 
 
 
@@ -173,9 +152,6 @@ function Board({
                         style={{
 
 
-                            ...styles.unit,
-
-
                             border:
 
                             selected
@@ -190,72 +166,54 @@ function Board({
 
                             getRarityColor(
                                 card.rarity
-                            )
+                            ),
+
+
+
+                            borderRadius:"12px",
+
+
+
+                            transform:
+
+                            selected
+
+                            ?
+
+                            "translateY(-8px)"
+
+                            :
+
+                            "translateY(0)",
+
+
+
+                            transition:"0.2s",
+
+
+
+                            cursor:"pointer"
+
+
 
                         }}
+
 
 
                     >
 
 
 
-
-                        <div style={styles.name}>
-
-                            {card.name}
-
-                        </div>
+                        <Card
 
 
+                            card={card}
 
 
+                            mode="board"
 
 
-                        <div style={styles.imageBox}>
-
-
-                            {
-
-                            card.image
-
-                            ?
-
-                            <img
-
-                                src={card.image}
-
-                                alt=""
-
-                                style={styles.image}
-
-                            />
-
-                            :
-
-                            null
-
-                            }
-
-
-                        </div>
-
-
-
-
-
-
-                        <div style={styles.stats}>
-
-
-                            ⚔️ {stats.attack}
-
-                            &nbsp;
-
-                            ❤️ {stats.health}
-
-
-                        </div>
-
+                        />
 
 
 
@@ -293,7 +251,6 @@ function Board({
 
 
 const styles = {
-
 
 
 board:{
@@ -377,150 +334,6 @@ empty:{
 
 
     color:"#666"
-
-
-},
-
-
-
-
-
-
-unit:{
-
-
-    width:"85px",
-
-
-    minWidth:"85px",
-
-
-    height:"140px",
-
-
-    minHeight:"140px",
-
-
-    flex:"0 0 auto",
-
-
-    background:"#252525",
-
-
-    borderRadius:"10px",
-
-
-    padding:"4px",
-
-
-    display:"flex",
-
-
-    flexDirection:"column",
-
-
-    boxSizing:"border-box",
-
-
-    overflow:"hidden",
-
-
-    cursor:"pointer",
-
-
-    boxShadow:
-        "0 4px 10px rgba(0,0,0,0.5)"
-
-
-},
-
-
-
-
-
-
-name:{
-
-
-    height:"18px",
-
-
-    textAlign:"center",
-
-
-    fontSize:"9px",
-
-
-    fontWeight:"bold",
-
-
-    overflow:"hidden"
-
-
-},
-
-
-
-
-
-
-imageBox:{
-
-
-    width:"100%",
-
-
-    height:"80px",
-
-
-    background:"#000",
-
-
-    borderRadius:"6px",
-
-
-    overflow:"hidden"
-
-
-},
-
-
-
-
-
-
-image:{
-
-
-    width:"100%",
-
-
-    height:"100%",
-
-
-    objectFit:"cover"
-
-
-},
-
-
-
-
-
-
-stats:{
-
-
-    marginTop:"auto",
-
-
-    textAlign:"center",
-
-
-    fontSize:"10px",
-
-
-    fontWeight:"bold"
 
 
 }
