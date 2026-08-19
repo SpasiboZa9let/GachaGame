@@ -9,6 +9,13 @@
 */
 
 
+window.Utils =
+window.Utils || {};
+
+
+
+
+
 function addCombatLog(
     state,
     text
@@ -37,5 +44,10 @@ function addCombatLog(
 
 
 
-window.addCombatLog =
+
+
+
+
+window.Utils.addCombatLog =
+
 addCombatLog;
