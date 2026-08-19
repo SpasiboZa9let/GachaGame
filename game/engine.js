@@ -38,15 +38,12 @@ function createInitialGameState() {
 
             maxMana: 1,
 
-            deck: [],
+            deck:
+    createDeck(),
 
-            hand: [
-                "baba_yaga",
-                "shaman",
-                "voin_pikhotinets",
-                "volk",
-                "viy"
-            ],
+
+hand:
+    createStartingHand(),
 
             board: []
 
@@ -65,15 +62,12 @@ function createInitialGameState() {
 
             maxMana: 1,
 
-            deck: [],
+            deck:
+    createDeck(),
 
-            hand: [
-                "voin_pikhotinets",
-                "volk",
-                "zmey_gorynych",
-                "svetogor",
-                "viy"
-            ],
+
+hand:
+    createStartingHand(),
 
             board: []
 
