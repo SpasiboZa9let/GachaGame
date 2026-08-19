@@ -6,14 +6,16 @@ GameBoard.jsx
 
 Отвечает только за сборку:
 
-- противник
-- игрок
-- поле
-- руки
+- окончание боя
+- игровое поле
 - кнопки
 - лог
 
-Игровая логика находится в Game.jsx
+Данные подготавливает GameData
+
+Отображение поля:
+Battlefield.jsx
+
 ============================
 */
 
@@ -49,7 +51,7 @@ function GameBoard({
         <GameData gameState={gameState}>
 
 
-            {({
+            ({
 
 
                 player,
@@ -64,7 +66,10 @@ function GameBoard({
             }) => (
 
 
+
                 <div style={window.gameStyles.game}>
+
+
 
 
 
@@ -80,57 +85,45 @@ function GameBoard({
 
 
 
-                    <OpponentArea
-
-                        opponent={opponent}
-
-                        opponentHandCards={opponentHandCards}
-
-                        selectedAttacker={selectedAttacker}
-
-                        onOpponentUnitClick={onOpponentUnitClick}
-
-                        onOpponentHeroClick={onOpponentHeroClick}
-
-                    />
 
 
+                    <Battlefield
 
-
-
-                    <GameTurn
-
-                        selectedAttacker={selectedAttacker}
-
-                        turn={gameState.turn}
-
-                    />
-
-
-
-
-
-                    <PlayerArea
 
                         player={player}
 
+
+                        opponent={opponent}
+
+
+                        handCards={handCards}
+
+
+                        opponentHandCards={opponentHandCards}
+
+
                         selectedAttacker={selectedAttacker}
 
-                        onPlayerUnitClick={onPlayerUnitClick}
-
-                    />
-
-
-
-
-
-                    <PlayerHand
-
-                        cards={handCards}
 
                         onCardClick={onCardClick}
 
+
+                        onPlayerUnitClick={onPlayerUnitClick}
+
+
+                        onOpponentUnitClick={onOpponentUnitClick}
+
+
+                        onOpponentHeroClick={onOpponentHeroClick}
+
+
+                        turn={gameState.turn}
+
+
                     />
+
+
+
 
 
 
@@ -138,11 +131,18 @@ function GameBoard({
 
                     <GameControls
 
+
                         onEndTurn={onEndTurn}
+
 
                         onTestBoard={onTestBoard}
 
+
                     />
+
+
+
+
 
 
 
@@ -150,15 +150,20 @@ function GameBoard({
 
                     <GameLog
 
+
                         log={gameState.combatLog}
 
+
                     />
+
+
+
 
 
                 </div>
 
 
-            )}
+            )
 
 
         </GameData>
