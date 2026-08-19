@@ -1,38 +1,11 @@
-/*
-============================
-
-Card.jsx
-
-Игровая карта
-
-Отвечает за:
-- отображение карты
-- стоимость
-- название
-- изображение
-- характеристики
-- редкость
-
-Логики игры здесь нет
-
-============================
-*/
-
-
-function Card({
-
-    card,
-
+function Card({ 
+    card, 
     onClick,
-
     mode="hand"
-
-
 }) {
 
-
-
-    if(!card){
+console.log("CARD RENDER", card?.name, mode);
+    if (!card) {
 
         return null;
 
@@ -41,43 +14,27 @@ function Card({
 
 
 
-
-    const className =
-
-
-        mode === "board"
-
-
-        ?
-
-
-        "card card-board"
-
-
-        :
-
-
-        "card card-hand";
+    const isBoard = mode === "board";
 
 
 
-
-
-
-
-    const rarity =
-
-
-        card.rarity
+    const size = isBoard
 
         ?
 
-        `rarity-${card.rarity}`
+        {
+            width:"90px",
+            height:"150px",
+            minWidth:"90px"
+        }
 
         :
 
-        "";
-
+        {
+            width:"180px",
+            height:"260px",
+            minWidth:"180px"
+        };
 
 
 
@@ -86,32 +43,60 @@ function Card({
 
     return (
 
-
-
         <div
 
 
-
-            className={
-
-                `${className} ${rarity}`
-
+            onClick={() =>
+                onClick &&
+                onClick(card)
             }
 
 
+            style={{
 
-            onClick={()=>{
+
+                ...size,
 
 
-                if(onClick){
+                flexShrink:0,
 
-                    onClick(card);
 
-                }
+                background:"#292929",
+
+
+                border:
+                    "2px solid #777",
+
+
+                borderRadius:"12px",
+
+
+                padding:isBoard ? "4px" : "8px",
+
+
+                boxSizing:"border-box",
+
+
+                display:"flex",
+
+
+                flexDirection:"column",
+
+
+                cursor:"pointer",
+
+
+                position:"relative",
+
+
+                overflow:"hidden",
+
+
+                boxShadow:
+                    "0 5px 15px rgba(0,0,0,0.5)"
 
 
             }}
-
 
 
         >
@@ -120,16 +105,41 @@ function Card({
 
 
 
+            <div
 
+                style={{
 
-            {/* СТОИМОСТЬ */}
+                    position:"absolute",
 
+                    top:"4px",
 
-            <div className="card-cost">
+                    left:"4px",
 
+                    width:isBoard ? "18px" : "30px",
 
-                {card.cost || 0}
+                    height:isBoard ? "18px" : "30px",
 
+                    borderRadius:"50%",
+
+                    background:"#3478db",
+
+                    display:"flex",
+
+                    alignItems:"center",
+
+                    justifyContent:"center",
+
+                    fontSize:isBoard ? "10px" : "14px",
+
+                    fontWeight:"bold",
+
+                    zIndex:3
+
+                }}
+
+            >
+
+                {card.cost}
 
             </div>
 
@@ -141,16 +151,26 @@ function Card({
 
 
 
-            {/* НАЗВАНИЕ */}
+            <div
 
+                style={{
 
-            <div className="card-name">
+                    textAlign:"center",
 
+                    fontWeight:"bold",
+
+                    fontSize:isBoard ? "9px" : "14px",
+
+                    height:isBoard ? "18px" : "25px",
+
+                    overflow:"hidden"
+
+                }}
+
+            >
 
                 {card.name}
 
-
-
             </div>
 
 
@@ -161,47 +181,71 @@ function Card({
 
 
 
-            {/* АРТ */}
+            <div
+
+                style={{
+
+                    width:"100%",
 
 
-            <div className="card-image">
+                    height:isBoard ? "75px" : "120px",
 
+
+                    background:"#111",
+
+
+                    overflow:"hidden",
+
+
+                    borderRadius:"6px"
+
+                }}
+
+            >
 
 
                 {
 
-                    card.image
+                card.image
 
 
-                    ?
+                ?
 
 
-                    <img
+                <img
+
+                    src={card.image}
+
+                    alt=""
+
+                    style={{
+
+                        width:"100%",
 
 
-                        src={card.image}
+                        height:"100%",
 
 
-                        alt={card.name || ""}
+                        objectFit:"cover"
+
+                    }}
+
+                />
 
 
-                    />
+                :
 
 
-                    :
+                <div>
 
+                    АРТ
 
-                    <span>
-
-                        АРТ
-
-                    </span>
+                </div>
 
 
                 }
 
 
-
             </div>
 
 
@@ -212,100 +256,44 @@ function Card({
 
 
 
-            {/* ХАРАКТЕРИСТИКИ */}
+            <div
 
+                style={{
 
+                    marginTop:"auto",
 
-            <div className="card-stats">
+                    display:"flex",
 
+                    justifyContent:"space-around",
 
+                    fontWeight:"bold",
+
+                    fontSize:isBoard ? "10px" : "14px"
+
+                }}
+
+            >
 
                 <span>
-
-
-                    ⚔️
-
-                    {
-
-                        card.attack || 0
-
-                    }
-
-
+                    ⚔️ {card.attack}
                 </span>
 
 
-
-
-
-
-
                 <span>
-
-
-                    ❤️
-
-                    {
-
-                        card.health || 0
-
-                    }
-
-
+                    ❤️ {card.health}
                 </span>
-
 
 
             </div>
-
-
-
-
-
-
-
-
-
-            {/* ФРАКЦИЯ */}
-
-
-
-            {
-
-                card.faction &&
-
-
-
-                <div className="card-faction">
-
-
-                    {card.faction}
-
-
-
-                </div>
-
-
-            }
-
-
-
 
 
 
 
         </div>
 
-
-
     );
 
-
 }
-
-
-
-
 
 
 

@@ -21,58 +21,112 @@ GameActions.js
 function Game(){
 
 
-    const [gameState,setGameState] = React.useState(
-        () => window.State.createInitialGameState()
-    );
+    const [gameState,setGameState] =
+
+        React.useState(
+
+            () =>
+
+            window.State.createInitialGameState()
+
+        );
 
 
-    const [selectedAttacker,setSelectedAttacker] = React.useState(null);
 
 
 
-    const actions = window.createGameActions({
 
-        gameState,
+    const [selectedAttacker,setSelectedAttacker] =
 
-        setGameState,
+        React.useState(null);
 
-        selectedAttacker,
 
-        setSelectedAttacker
 
-    });
+
+
+
+
+
+    const actions =
+
+        window.createGameActions({
+
+
+            gameState,
+
+            setGameState,
+
+            selectedAttacker,
+
+            setSelectedAttacker
+
+
+        });
+
+
+
+
+
+
 
 
 
     return (
 
+
         <GameBoard
 
+
             gameState={gameState}
+
+
 
             selectedAttacker={selectedAttacker}
 
 
+
+
+
+
             onCardClick={actions.playCard}
+
+
 
             onPlayerUnitClick={actions.selectAttacker}
 
+
+
             onOpponentUnitClick={actions.attackUnit}
+
+
 
             onOpponentHeroClick={actions.attackHero}
 
+
+
             onEndTurn={actions.endTurn}
+
+
 
             onRestart={actions.restart}
 
+
+
             onTestBoard={actions.testBoard}
 
+
+
         />
+
 
     );
 
 
 }
+
+
+
+
 
 
 
