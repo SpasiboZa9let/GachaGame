@@ -20,6 +20,8 @@
 
 
 
+
+
 function applyEffect(
     state,
     target,
@@ -39,19 +41,34 @@ function applyEffect(
 
 
 
-    let unit={
+
+
+    let unit = {
 
 
         ...target,
 
 
+
         stats:{
+
+
+            attack:0,
+
+            health:0,
+
+            maxHealth:0,
+
+            defense:0,
+
+            strength:0,
 
 
             ...(target.stats || {})
 
 
         },
+
 
 
         status:[
@@ -68,6 +85,8 @@ function applyEffect(
 
 
 
+
+
     switch(effect.type){
 
 
@@ -76,12 +95,22 @@ function applyEffect(
 
 
 
-            unit.stats.health -=
-                effect.value;
+            unit.stats.health =
+
+                Math.max(
+
+                    0,
+
+                    unit.stats.health -
+
+                    (Number(effect.value) || 0)
+
+                );
 
 
 
             break;
+
 
 
 
@@ -100,9 +129,11 @@ function applyEffect(
                     unit.stats.maxHealth,
 
                     unit.stats.health +
-                    effect.value
+
+                    (Number(effect.value) || 0)
 
                 );
+
 
 
             break;
@@ -119,7 +150,8 @@ function applyEffect(
 
 
             unit.stats.attack +=
-                effect.value;
+
+                Number(effect.value) || 0;
 
 
 
@@ -136,12 +168,16 @@ function applyEffect(
 
 
 
-            unit.stats.health +=
-                effect.value;
-
-
             unit.stats.maxHealth +=
-                effect.value;
+
+                Number(effect.value) || 0;
+
+
+
+            unit.stats.health +=
+
+                Number(effect.value) || 0;
+
 
 
             break;
@@ -152,14 +188,6 @@ function applyEffect(
 
 
 
-
-
-        /*
-            ЯРОСТЬ МЕДВЕДЯ
-
-            За каждые потерянные 20%
-            здоровья +5 атаки
-        */
 
 
         case "rage":
@@ -169,18 +197,29 @@ function applyEffect(
             const lostHealth =
 
                 unit.stats.maxHealth -
+
                 unit.stats.health;
+
 
 
 
             const lostPercent =
 
+                unit.stats.maxHealth > 0
+
+                ?
+
                 (
                     lostHealth /
+
                     unit.stats.maxHealth
-                )
-                *
-                100;
+
+                ) * 100
+
+                :
+
+                0;
+
 
 
 
@@ -188,24 +227,24 @@ function applyEffect(
             const bonus =
 
                 Math.floor(
+
                     lostPercent / 20
+
                 )
+
                 *
-                effect.value;
+
+                (Number(effect.value) || 0);
 
 
 
 
 
-            unit.stats.attack =
-
-                unit.stats.attack +
-                bonus;
+            unit.stats.attack += bonus;
 
 
 
             break;
-
 
 
 
@@ -221,16 +260,20 @@ function applyEffect(
 
             unit.status.push({
 
+
                 type:"shield",
 
+
                 value:
-                    effect.value
+
+                    Number(effect.value) || 0
+
 
             });
 
 
-            break;
 
+            break;
 
 
 
@@ -246,16 +289,21 @@ function applyEffect(
 
             unit.status.push({
 
+
                 type:"stun",
 
+
                 turns:
+
                     effect.value || 1
+
 
             });
 
 
 
             unit.canAttack=false;
+
 
 
             break;
@@ -274,16 +322,21 @@ function applyEffect(
 
             unit.status.push({
 
+
                 type:"fear",
 
+
                 turns:
+
                     effect.value || 1
+
 
             });
 
 
 
             unit.canAttack=false;
+
 
 
             break;
@@ -294,16 +347,23 @@ function applyEffect(
 
 
 
+
+
         default:
 
 
+
             console.log(
+
                 "Неизвестный эффект",
+
                 effect
+
             );
 
 
     }
+
 
 
 
@@ -339,10 +399,13 @@ function hasStatus(
 
 
 
+
+
     return unit.status.some(
 
         status =>
-            status.type===type
+
+        status.type === type
 
     );
 
@@ -369,7 +432,9 @@ function removeStatus(
         ...unit,
 
 
+
         status:
+
 
             (unit.status || [])
 
@@ -377,7 +442,7 @@ function removeStatus(
 
                 status =>
 
-                status.type!==type
+                status.type !== type
 
             )
 
@@ -415,8 +480,11 @@ function triggerEffects(
 
 
 
-    let result =
-        unit;
+
+
+    let result = unit;
+
+
 
 
 
@@ -427,13 +495,18 @@ function triggerEffects(
         effect => {
 
 
+
             if(
+
                 effect.trigger !== trigger
+
             ){
 
                 return;
 
             }
+
+
 
 
 
@@ -450,11 +523,11 @@ function triggerEffects(
                 );
 
 
-
         }
 
 
     );
+
 
 
 
@@ -473,17 +546,30 @@ function triggerEffects(
 
 
 
-window.applyEffect =
+window.Effects =
+
+window.Effects || {};
+
+
+
+window.Effects.applyEffect =
+
 applyEffect;
 
 
-window.hasStatus =
+
+window.Effects.hasStatus =
+
 hasStatus;
 
 
-window.removeStatus =
+
+window.Effects.removeStatus =
+
 removeStatus;
 
 
-window.triggerEffects =
+
+window.Effects.triggerEffects =
+
 triggerEffects;
