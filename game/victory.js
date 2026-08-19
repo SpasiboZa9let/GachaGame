@@ -1,20 +1,17 @@
 /*
     ============================
-    VICTORY.JS
+    VICTORY
 
-    Победа / поражение
+    Проверка конца игры
     ============================
 */
-
 
 
 function checkGameOver(state){
 
 
 
-    if(
-        state.player.hp <= 0
-    ){
+    if(state.player.hp <= 0){
 
 
         return {
@@ -37,9 +34,8 @@ function checkGameOver(state){
 
 
 
-    if(
-        state.opponent.hp <= 0
-    ){
+
+    if(state.opponent.hp <= 0){
 
 
         return {
@@ -66,7 +62,6 @@ function checkGameOver(state){
 
 
 }
-
 
 
 
