@@ -1,20 +1,21 @@
 /*
 ============================
+
 PlayerHand.jsx
 
 Рука игрока
 
-Показывает карты,
-которые можно разыграть.
+Отвечает за:
+- отображение карт игрока
+- клики по картам
 
-Логика игры остаётся в Game.jsx
+Логики игры нет
 
 ============================
 */
 
 
 function PlayerHand({
-
 
     cards,
 
@@ -27,13 +28,45 @@ function PlayerHand({
     return (
 
 
-        <Hand
+        <div className="player-hand">
 
-            cards={cards}
 
-            onCardClick={onCardClick}
 
-        />
+            {
+
+                (cards || []).map((card,index)=>(
+
+
+                    <Card
+
+
+                        key={
+
+                            card.id + "_" + index
+
+                        }
+
+
+                        card={card}
+
+
+                        mode="hand"
+
+
+                        onClick={onCardClick}
+
+
+                    />
+
+
+                ))
+
+
+            }
+
+
+
+        </div>
 
 
     );
