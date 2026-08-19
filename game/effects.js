@@ -2,7 +2,7 @@
     ============================
     GAME EFFECTS
 
-    Система эффектов
+    Система эффектов карт
 
     Поддерживает:
 
@@ -13,18 +13,10 @@
     shield
     stun
     fear
+    rage
 
-
-    Работает через:
-
-    modifiers.js
-
-    ============================
+============================
 */
-
-
-
-
 
 
 
@@ -33,7 +25,6 @@ function applyEffect(
     target,
     effect
 ){
-
 
 
     if(
@@ -48,31 +39,29 @@ function applyEffect(
 
 
 
-
-
-    let unit = {
+    let unit={
 
 
         ...target,
+
+
+        stats:{
+
+
+            ...(target.stats || {})
+
+
+        },
 
 
         status:[
 
             ...(target.status || [])
 
-        ],
-
-
-        modifiers:[
-
-            ...(target.modifiers || [])
-
         ]
 
 
-
     };
-
 
 
 
@@ -83,30 +72,12 @@ function applyEffect(
 
 
 
-        /*
-            Прямой урон
-        */
-
-
         case "damage":
 
 
 
-            unit.stats = {
-
-
-                ...(unit.stats || {}),
-
-
-                health:
-
-                    unit.stats.health -
-
-                    effect.value
-
-
-
-            };
+            unit.stats.health -=
+                effect.value;
 
 
 
@@ -116,46 +87,22 @@ function applyEffect(
 
 
 
-
-
-
-
-        /*
-            Лечение
-        */
 
 
         case "heal":
 
 
 
-            unit.stats = {
+            unit.stats.health =
 
+                Math.min(
 
-                ...(unit.stats || {}),
+                    unit.stats.maxHealth,
 
+                    unit.stats.health +
+                    effect.value
 
-
-                health:
-
-
-                    Math.min(
-
-
-                        unit.baseStats.maxHealth,
-
-
-                        unit.stats.health +
-
-                        effect.value
-
-
-                    )
-
-
-
-            };
-
+                );
 
 
             break;
@@ -165,58 +112,14 @@ function applyEffect(
 
 
 
-
-
-
-        /*
-            Бафф атаки
-
-            Теперь НЕ меняем attack напрямую
-
-        */
 
 
         case "buffAttack":
 
 
 
-            if(
-                typeof addModifier === "function"
-            ){
-
-
-
-                unit =
-
-                    addModifier(
-
-                        unit,
-
-
-                        createAttackBuff(
-
-                            effect.value,
-
-
-                            effect.source ||
-
-                            "Эффект"
-
-                        )
-
-
-                    );
-
-
-
-
-                unit =
-
-                    refreshUnitStats(unit);
-
-
-
-            }
+            unit.stats.attack +=
+                effect.value;
 
 
 
@@ -227,57 +130,18 @@ function applyEffect(
 
 
 
-
-
-
-        /*
-            Бафф здоровья
-        */
 
 
         case "buffHealth":
 
 
 
-            if(
-                typeof addModifier === "function"
-            ){
+            unit.stats.health +=
+                effect.value;
 
 
-
-                unit =
-
-
-                    addModifier(
-
-                        unit,
-
-
-                        createHealthBuff(
-
-                            effect.value,
-
-
-                            effect.source ||
-
-                            "Эффект"
-
-                        )
-
-
-                    );
-
-
-
-
-                unit =
-
-                    refreshUnitStats(unit);
-
-
-
-            }
-
+            unit.stats.maxHealth +=
+                effect.value;
 
 
             break;
@@ -291,9 +155,64 @@ function applyEffect(
 
 
         /*
-            Щит
+            ЯРОСТЬ МЕДВЕДЯ
 
+            За каждые потерянные 20%
+            здоровья +5 атаки
         */
+
+
+        case "rage":
+
+
+
+            const lostHealth =
+
+                unit.stats.maxHealth -
+                unit.stats.health;
+
+
+
+            const lostPercent =
+
+                (
+                    lostHealth /
+                    unit.stats.maxHealth
+                )
+                *
+                100;
+
+
+
+
+            const bonus =
+
+                Math.floor(
+                    lostPercent / 20
+                )
+                *
+                effect.value;
+
+
+
+
+
+            unit.stats.attack =
+
+                unit.stats.attack +
+                bonus;
+
+
+
+            break;
+
+
+
+
+
+
+
+
 
 
         case "shield":
@@ -302,17 +221,12 @@ function applyEffect(
 
             unit.status.push({
 
-
                 type:"shield",
-
 
                 value:
                     effect.value
 
-
-
             });
-
 
 
             break;
@@ -324,11 +238,6 @@ function applyEffect(
 
 
 
-
-        /*
-            Оглушение
-
-        */
 
 
         case "stun":
@@ -337,22 +246,16 @@ function applyEffect(
 
             unit.status.push({
 
-
                 type:"stun",
 
-
                 turns:
-
                     effect.value || 1
-
-
 
             });
 
 
 
             unit.canAttack=false;
-
 
 
             break;
@@ -363,12 +266,6 @@ function applyEffect(
 
 
 
-
-
-        /*
-            Страх
-
-        */
 
 
         case "fear":
@@ -377,15 +274,10 @@ function applyEffect(
 
             unit.status.push({
 
-
                 type:"fear",
 
-
                 turns:
-
                     effect.value || 1
-
-
 
             });
 
@@ -394,10 +286,7 @@ function applyEffect(
             unit.canAttack=false;
 
 
-
             break;
-
-
 
 
 
@@ -408,18 +297,13 @@ function applyEffect(
         default:
 
 
-
             console.log(
-
-                "Неизвестный эффект:",
-
+                "Неизвестный эффект",
                 effect
-
             );
 
 
     }
-
 
 
 
@@ -438,15 +322,10 @@ function applyEffect(
 
 
 
-
-
-
-
 function hasStatus(
     unit,
     type
 ){
-
 
 
     if(
@@ -460,22 +339,15 @@ function hasStatus(
 
 
 
-
-
     return unit.status.some(
 
         status =>
-
-            status.type === type
+            status.type===type
 
     );
 
 
 }
-
-
-
-
 
 
 
@@ -499,14 +371,13 @@ function removeStatus(
 
         status:
 
-
             (unit.status || [])
 
             .filter(
 
                 status =>
 
-                    status.type !== type
+                status.type!==type
 
             )
 
@@ -522,24 +393,6 @@ function removeStatus(
 
 
 
-
-
-
-
-
-
-/*
-    Запуск эффектов карты
-
-    Например:
-
-    afterAttack
-
-    onSummon
-
-    onDeath
-
-*/
 
 
 function triggerEffects(
@@ -562,12 +415,8 @@ function triggerEffects(
 
 
 
-
     let result =
-
         unit;
-
-
 
 
 
@@ -578,7 +427,6 @@ function triggerEffects(
         effect => {
 
 
-
             if(
                 effect.trigger !== trigger
             ){
@@ -586,8 +434,6 @@ function triggerEffects(
                 return;
 
             }
-
-
 
 
 
@@ -627,22 +473,16 @@ function triggerEffects(
 
 
 
-
-
-
 window.applyEffect =
 applyEffect;
-
 
 
 window.hasStatus =
 hasStatus;
 
 
-
 window.removeStatus =
 removeStatus;
-
 
 
 window.triggerEffects =
