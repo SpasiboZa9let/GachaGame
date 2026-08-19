@@ -9,14 +9,53 @@
 */
 
 
+
 function getCardById(id){
+
+
+
+    if(!id){
+
+        return null;
+
+    }
+
+
+
+
+
+
+    if(
+        typeof CARDS === "undefined"
+        ||
+        !Array.isArray(CARDS)
+    ){
+
+        console.error(
+
+            "CARDS не загружен"
+
+        );
+
+
+        return null;
+
+    }
+
+
+
+
+
+
 
 
     return (
 
         CARDS.find(
 
-            card => card.id === id
+            card =>
+
+            card.id === id
 
         )
 
@@ -31,5 +70,28 @@ function getCardById(id){
 
 
 
+
+
+
+
+window.Cards =
+
+window.Cards || {};
+
+
+
+window.Cards.getCardById =
+
+getCardById;
+
+
+
+/*
+    Совместимость
+    со старыми файлами
+*/
+
+
 window.getCardById =
+
 getCardById;
