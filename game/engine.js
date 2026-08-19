@@ -1,15 +1,35 @@
+/*
+    ============================
+    ENGINE.JS
+
+    Главный игровой движок
+
+    Создание состояния игры
+    Создание бойцов
+    Розыгрыш карт
+    Проверка победы
+
+    Подготовка под:
+    - амуницию
+    - эффекты
+    - фракции
+    - баффы
+    ============================
+*/
+
+
 function createInitialGameState(){
 
 
     const playerHero =
         HEROES.find(
-            h=>h.id==="ilya_muromets"
+            h => h.id === "ilya_muromets"
         );
 
 
     const opponentHero =
         HEROES.find(
-            h=>h.id==="vasilisa_premudraya"
+            h => h.id === "vasilisa_premudraya"
         );
 
 
@@ -57,8 +77,11 @@ function createInitialGameState(){
         winner:null,
 
 
+
         combatLog:[
+
             "Бой начинается."
+
         ],
 
 
@@ -70,11 +93,17 @@ function createInitialGameState(){
 
 
             hp:
-            playerHero
-            ?
-            playerHero.maxHealth
-            :
-            10000,
+
+                playerHero
+
+                ?
+
+                playerHero.maxHealth
+
+                :
+
+                10000,
+
 
 
             mana:1,
@@ -83,18 +112,23 @@ function createInitialGameState(){
             maxMana:1,
 
 
+
             deck:
                 playerStart.deck,
+
 
 
             hand:
                 playerStart.hand,
 
 
+
             board:[]
 
 
         },
+
+
 
 
 
@@ -105,11 +139,17 @@ function createInitialGameState(){
 
 
             hp:
-            opponentHero
-            ?
-            opponentHero.maxHealth
-            :
-            10000,
+
+                opponentHero
+
+                ?
+
+                opponentHero.maxHealth
+
+                :
+
+                10000,
+
 
 
             mana:1,
@@ -118,12 +158,15 @@ function createInitialGameState(){
             maxMana:1,
 
 
+
             deck:
                 opponentStart.deck,
 
 
+
             hand:
                 opponentStart.hand,
+
 
 
             board:[]
@@ -132,10 +175,13 @@ function createInitialGameState(){
         }
 
 
+
     };
 
 
 }
+
+
 
 
 
@@ -150,16 +196,18 @@ function addCombatLog(
 
     return {
 
+
         ...state,
 
 
         combatLog:[
 
-            ...(state.combatLog||[]),
+            ...(state.combatLog || []),
 
             text
 
         ]
+
 
     };
 
@@ -172,47 +220,67 @@ function addCombatLog(
 
 
 
+
+
 function checkGameOver(state){
 
 
+
     if(
-        state.player.hp<=0
+        state.player.hp <= 0
     ){
+
 
         return {
 
+
             ...state,
 
+
             gameOver:true,
+
 
             winner:"opponent"
 
+
         };
 
+
     }
+
 
 
 
     if(
-        state.opponent.hp<=0
+        state.opponent.hp <= 0
     ){
+
 
         return {
 
+
             ...state,
+
 
             gameOver:true,
 
+
             winner:"player"
+
 
         };
 
+
     }
+
+
 
 
     return state;
 
+
 }
+
 
 
 
@@ -227,9 +295,13 @@ function getCardById(id){
     return (
 
         CARDS.find(
-            c=>c.id===id
+
+            c => c.id === id
+
         )
+
         ||
+
         null
 
     );
@@ -243,6 +315,16 @@ function getCardById(id){
 
 
 
+
+
+/*
+    Создание существа на поле
+
+    Карта -> Боевая единица
+
+*/
+
+
 function createCardInstance(id){
 
 
@@ -250,8 +332,49 @@ function createCardInstance(id){
         getCardById(id);
 
 
+
     if(!card)
         return null;
+
+
+
+
+
+    const stats = {
+
+
+        attack:
+
+            card.attack || 0,
+
+
+
+        health:
+
+            card.health || 0,
+
+
+
+        maxHealth:
+
+            card.health || 0,
+
+
+
+        defense:
+
+            card.defense || 0,
+
+
+
+        strength:
+
+            card.strength || 0
+
+
+    };
+
+
 
 
 
@@ -260,42 +383,124 @@ function createCardInstance(id){
 
         instanceId:
 
-            id+
-            "_"+
-            Date.now()+
+
+            id +
+
+            "_" +
+
+            Date.now() +
+
+            "_" +
+
             Math.random()
+
             .toString(36)
+
             .slice(2),
+
 
 
 
         cardId:id,
 
 
-        attack:card.attack,
+
+        name:
+
+            card.name,
 
 
-        health:card.health,
+
+        rarity:
+
+            card.rarity || "common",
 
 
-        maxHealth:card.health,
 
 
-        defense:card.defense,
+        tags:
+
+            card.tags || [],
 
 
-        strength:card.strength,
 
 
-        canAttack:false,
+
+        baseStats:{
 
 
-        status:[]
+            ...stats
+
+
+        },
+
+
+
+
+
+        stats:{
+
+
+            ...stats
+
+
+        },
+
+
+
+
+
+        /*
+            Будущая система:
+
+            [
+                {
+                    id:"bear_claws"
+                }
+            ]
+
+        */
+
+        equipment:[],
+
+
+
+
+
+        /*
+            Постоянные способности
+
+        */
+
+        effects:[],
+
+
+
+
+
+        /*
+            Временные состояния
+
+            stun
+            fear
+            shield
+
+        */
+
+        status:[],
+
+
+
+
+
+        canAttack:false
+
 
     };
 
 
 }
+
 
 
 
@@ -311,6 +516,7 @@ function playCard(
 ){
 
 
+
     const player =
         state[playerId];
 
@@ -321,20 +527,37 @@ function playCard(
 
 
 
+
     if(!card)
         return state;
+
+
 
 
 
     if(
         player.mana < card.cost
     )
+
         return state;
+
+
 
 
 
     const unit =
         createCardInstance(cardId);
+
+
+
+
+
+    if(!unit)
+
+        return state;
+
+
+
 
 
 
@@ -344,38 +567,59 @@ function playCard(
         ...state,
 
 
+
         [playerId]:{
 
 
             ...player,
 
 
+
             mana:
-                player.mana-card.cost,
+
+                player.mana -
+
+                card.cost,
+
+
+
 
 
             hand:
 
+
                 player.hand.filter(
-                    id=>id!==cardId
+
+                    id => id !== cardId
+
                 ),
+
+
+
 
 
             board:[
 
+
                 ...player.board,
+
 
                 unit
 
+
             ]
 
+
+
         }
+
 
 
     };
 
 
 }
+
 
 
 
@@ -387,47 +631,74 @@ function playCard(
 function preparePlayerTurn(state){
 
 
+
     return {
 
 
         ...state,
 
 
+
         activePlayer:"player",
+
+
 
 
         player:{
 
 
+
             ...state.player,
 
 
+
+
             maxMana:
+
                 Math.min(
+
                     10,
-                    state.player.maxMana+1
+
+                    state.player.maxMana + 1
+
                 ),
+
+
+
 
 
             mana:
+
                 Math.min(
+
                     10,
-                    state.player.maxMana+1
+
+                    state.player.maxMana + 1
+
                 ),
+
+
 
 
 
             board:
 
-            state.player.board.map(
-                unit=>({
 
-                    ...unit,
+                state.player.board.map(
 
-                    canAttack:true
+                    unit => ({
 
-                })
-            )
+
+                        ...unit,
+
+
+                        canAttack:true
+
+
+                    })
+
+                )
+
 
 
         }
@@ -437,6 +708,7 @@ function preparePlayerTurn(state){
 
 
 }
+
 
 
 
@@ -448,47 +720,74 @@ function preparePlayerTurn(state){
 function prepareOpponentTurn(state){
 
 
+
     return {
 
 
         ...state,
 
 
+
         activePlayer:"opponent",
+
+
 
 
         opponent:{
 
 
+
             ...state.opponent,
 
 
+
+
             maxMana:
+
                 Math.min(
+
                     10,
-                    state.opponent.maxMana+1
+
+                    state.opponent.maxMana + 1
+
                 ),
+
+
+
 
 
             mana:
+
                 Math.min(
+
                     10,
-                    state.opponent.maxMana+1
+
+                    state.opponent.maxMana + 1
+
                 ),
+
+
 
 
 
             board:
 
-            state.opponent.board.map(
-                unit=>({
 
-                    ...unit,
+                state.opponent.board.map(
 
-                    canAttack:true
+                    unit => ({
 
-                })
-            )
+
+                        ...unit,
+
+
+                        canAttack:true
+
+
+                    })
+
+                )
+
 
 
         }
@@ -498,6 +797,7 @@ function prepareOpponentTurn(state){
 
 
 }
+
 
 
 
