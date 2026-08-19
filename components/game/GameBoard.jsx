@@ -1,16 +1,15 @@
 /*
 ============================
-
 GameBoard.jsx
 
-Главная игровая сцена
+Главный экран боя
 
-Отвечает только за сборку UI
+Отвечает только за сборку:
 
-Логика находится в:
-Game.jsx
-GameActions.js
-game/
+- окончание боя
+- игровое поле
+- кнопки
+- лог
 
 ============================
 */
@@ -23,7 +22,6 @@ function GameBoard({
 
     selectedAttacker,
 
-
     onCardClick,
 
     onPlayerUnitClick,
@@ -32,7 +30,6 @@ function GameBoard({
 
     onOpponentHeroClick,
 
-
     onEndTurn,
 
     onRestart,
@@ -40,164 +37,83 @@ function GameBoard({
     onTestBoard
 
 
-
 }){
-
-
-    const scale = Math.min(
-
-        window.innerWidth / 1600,
-
-        window.innerHeight / 900
-
-    );
-
-
-
 
 
     return (
 
 
-        <div className="game-viewport">
+        <GameData gameState={gameState}>
+
+
+            {(data) => {
+
+
+                const player = data.player;
+
+                const opponent = data.opponent;
+
+                const handCards = data.handCards;
+
+                const opponentHandCards = data.opponentHandCards;
 
 
 
-            <div
-
-                className="game-scale"
-
-                style={{
-
-                    transform:
-
-                        `scale(${scale})`
-
-                }}
-
-            >
+                return (
 
 
+                    <div style={window.gameStyles.game}>
 
 
+                        <GameOver
 
-                <div className="game-table">
+                            gameState={gameState}
 
-
-
-
-
-
-                    <aside className="combat-log-panel">
-
-
-                        <GameLog
-
-                            log={gameState.combatLog}
+                            onRestart={onRestart}
 
                         />
 
 
-                    </aside>
 
 
 
+                        <Battlefield
 
 
+                            player={player}
 
 
-                    <main className="battlefield-panel">
+                            opponent={opponent}
 
 
+                            handCards={handCards}
 
-                        <GameData
 
-                            gameState={gameState}
+                            opponentHandCards={opponentHandCards}
 
-                        >
 
+                            selectedAttacker={selectedAttacker}
 
-                            {(data)=> (
 
+                            onCardClick={onCardClick}
 
 
-                                <Battlefield
+                            onPlayerUnitClick={onPlayerUnitClick}
 
 
-                                    player={data.player}
+                            onOpponentUnitClick={onOpponentUnitClick}
 
 
-                                    opponent={data.opponent}
+                            onOpponentHeroClick={onOpponentHeroClick}
 
 
-                                    handCards={data.handCards}
+                            turn={gameState.turn}
 
 
-                                    opponentHandCards={
+                        />
 
-                                        data.opponentHandCards
 
-                                    }
 
-
-
-                                    selectedAttacker={
-
-                                        selectedAttacker
-
-                                    }
-
-
-
-                                    onCardClick={
-
-                                        onCardClick
-
-                                    }
-
-
-                                    onPlayerUnitClick={
-
-                                        onPlayerUnitClick
-
-                                    }
-
-
-                                    onOpponentUnitClick={
-
-                                        onOpponentUnitClick
-
-                                    }
-
-
-                                    onOpponentHeroClick={
-
-                                        onOpponentHeroClick
-
-                                    }
-
-
-
-                                />
-
-
-
-                            )}
-
-
-                        </GameData>
-
-
-
-                    </main>
-
-
-
-
-
-
-
-                    <aside className="game-controls-panel">
 
 
 
@@ -207,35 +123,43 @@ function GameBoard({
                             onEndTurn={onEndTurn}
 
 
-                            onRestart={onRestart}
-
-
                             onTestBoard={onTestBoard}
 
 
                         />
 
 
-                    </aside>
 
 
 
 
 
-
-                </div>
-
-
-            </div>
+                        <GameLog
 
 
-        </div>
+                            log={gameState.combatLog}
+
+
+                        />
+
+
+                    </div>
+
+
+                );
+
+
+            }}
+
+
+        </GameData>
 
 
     );
 
 
 }
+
 
 
 
