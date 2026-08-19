@@ -10,13 +10,12 @@
     - бой существ
     - stats
     - эффекты
+    - баффы
     - триггеры
     - смерть существ
+    - подготовка под амуницию
     ============================
 */
-
-
-
 
 
 
@@ -24,19 +23,13 @@ function canUnitAttack(unit){
 
 
     if(!unit){
-
         return false;
-
     }
 
 
     return unit.canAttack === true;
 
-
 }
-
-
-
 
 
 
@@ -46,6 +39,7 @@ function getUnitAttack(unit){
 
 
     if(
+        unit &&
         unit.stats &&
         typeof unit.stats.attack === "number"
     ){
@@ -57,11 +51,7 @@ function getUnitAttack(unit){
 
     return unit.attack || 0;
 
-
 }
-
-
-
 
 
 
@@ -71,6 +61,7 @@ function getUnitHealth(unit){
 
 
     if(
+        unit &&
         unit.stats &&
         typeof unit.stats.health === "number"
     ){
@@ -82,11 +73,7 @@ function getUnitHealth(unit){
 
     return unit.health || 0;
 
-
 }
-
-
-
 
 
 
@@ -125,9 +112,6 @@ function setUnitHealth(
 
 
 
-
-
-
 function getUnitById(
     board,
     id
@@ -138,13 +122,12 @@ function getUnitById(
 
         unit =>
 
-            unit.instanceId === id
+        unit.instanceId === id
 
     );
 
 
 }
-
 
 
 
@@ -190,26 +173,28 @@ function triggerUnitEffect(
 
 
 
-
-function markUnitDead(
-    unit
+function applyDamage(
+    unit,
+    damage
 ){
 
 
-    return {
+    let health =
+        getUnitHealth(unit);
 
 
-        ...unit,
+
+    health -= damage;
 
 
-        dead:true
 
-
-    };
+    return setUnitHealth(
+        unit,
+        health
+    );
 
 
 }
-
 
 
 
@@ -228,31 +213,21 @@ function attackUnit(
 
 
     const player =
-
         state[playerId];
 
 
 
-
-    const opponentId =
-
-        playerId === "player"
-
+    const enemyId =
+        playerId==="player"
         ?
-
         "opponent"
-
         :
-
         "player";
 
 
 
-
-
-    const opponent =
-
-        state[opponentId];
+    const enemy =
+        state[enemyId];
 
 
 
@@ -260,15 +235,10 @@ function attackUnit(
 
 
     let attacker =
-
         getUnitById(
-
             player.board,
-
             attackerId
-
         );
-
 
 
 
@@ -284,10 +254,7 @@ function attackUnit(
 
 
 
-
-    if(
-        !canUnitAttack(attacker)
-    ){
+    if(!canUnitAttack(attacker)){
 
         return state;
 
@@ -305,7 +272,6 @@ function attackUnit(
 
 
     attacker =
-
         triggerUnitEffect(
 
             state,
@@ -323,7 +289,6 @@ function attackUnit(
 
 
     const damage =
-
         getUnitAttack(attacker);
 
 
@@ -335,30 +300,13 @@ function attackUnit(
 
 
     /*
-        Атака героя
+        Удар по герою
     */
 
 
     if(
-        targetId === "hero"
+        targetId==="hero"
     ){
-
-
-
-        let newAttacker =
-
-            triggerUnitEffect(
-
-                state,
-
-                attacker,
-
-                "afterAttack"
-
-            );
-
-
-
 
 
 
@@ -368,20 +316,21 @@ function attackUnit(
             ...state,
 
 
+            [enemyId]:{
 
-            [opponentId]:{
 
-
-                ...opponent,
+                ...enemy,
 
 
                 hp:
 
-                    opponent.hp - damage
+                Math.max(
+                    0,
+                    enemy.hp - damage
+                )
 
 
             },
-
 
 
             combatLog:[
@@ -390,11 +339,9 @@ function attackUnit(
                 ...state.combatLog,
 
 
-                "«" +
-
                 attacker.name +
 
-                "» атакует героя и наносит " +
+                " наносит герою " +
 
                 damage +
 
@@ -411,9 +358,24 @@ function attackUnit(
 
 
 
+        let updatedAttacker =
+
+            triggerUnitEffect(
+
+                newState,
+
+                attacker,
+
+                "afterAttack"
+
+            );
 
 
-        newState[playerId] = {
+
+
+
+
+        newState[playerId]={
 
 
             ...newState[playerId],
@@ -424,18 +386,16 @@ function attackUnit(
 
                 newState[playerId].board.map(
 
-
                     unit =>
 
 
-                    unit.instanceId === attackerId
+                    unit.instanceId===attackerId
 
                     ?
 
                     {
 
-                        ...newAttacker,
-
+                        ...updatedAttacker,
 
                         canAttack:false
 
@@ -444,7 +404,6 @@ function attackUnit(
                     :
 
                     unit
-
 
                 )
 
@@ -455,11 +414,8 @@ function attackUnit(
 
 
 
-
         return checkGameOver(
-
             newState
-
         );
 
 
@@ -485,12 +441,11 @@ function attackUnit(
 
         getUnitById(
 
-            opponent.board,
+            enemy.board,
 
             targetId
 
         );
-
 
 
 
@@ -505,54 +460,13 @@ function attackUnit(
 
 
 
+    const attackerDamage =
+        getUnitAttack(attacker);
 
-    const targetAttack =
 
+
+    const targetDamage =
         getUnitAttack(target);
-
-
-
-
-
-
-
-    let attackerDamage =
-
-        damage;
-
-
-
-
-
-
-    let targetHealth =
-
-        getUnitHealth(target)
-
-        -
-
-        attackerDamage;
-
-
-
-
-
-
-    let attackerHealth =
-
-        getUnitHealth(attacker)
-
-        -
-
-        targetAttack;
-
-
-
-
-
-
-
-    let deadUnits=[];
 
 
 
@@ -561,37 +475,25 @@ function attackUnit(
 
     let newAttacker =
 
-        setUnitHealth(
+        applyDamage(
 
             attacker,
 
-            attackerHealth
+            targetDamage
 
         );
-
-
-
-
-
-
-    newAttacker.canAttack=false;
-
-
-
-
 
 
 
     let newTarget =
 
-        setUnitHealth(
+        applyDamage(
 
             target,
 
-            targetHealth
+            attackerDamage
 
         );
-
 
 
 
@@ -601,12 +503,24 @@ function attackUnit(
 
 
     /*
-        Получение урона
+        Получили урон
     */
 
 
-    newTarget =
+    newAttacker =
+        triggerUnitEffect(
 
+            state,
+
+            newAttacker,
+
+            "onDamage"
+
+        );
+
+
+
+    newTarget =
         triggerUnitEffect(
 
             state,
@@ -623,15 +537,15 @@ function attackUnit(
 
 
 
-
-
     /*
         После атаки
+
+        Медведь например
+        получает бафф здесь
     */
 
 
     newAttacker =
-
         triggerUnitEffect(
 
             state,
@@ -649,13 +563,17 @@ function attackUnit(
 
 
 
+    /*
+        Смерть
+    */
+
 
     if(
         getUnitHealth(newAttacker)<=0
     ){
 
 
-        deadUnits.push(
+        newAttacker =
 
             triggerUnitEffect(
 
@@ -665,14 +583,10 @@ function attackUnit(
 
                 "onDeath"
 
-            )
-
-        );
+            );
 
 
     }
-
-
 
 
 
@@ -683,7 +597,7 @@ function attackUnit(
     ){
 
 
-        deadUnits.push(
+        newTarget =
 
             triggerUnitEffect(
 
@@ -693,9 +607,7 @@ function attackUnit(
 
                 "onDeath"
 
-            )
-
-        );
+            );
 
 
     }
@@ -707,8 +619,7 @@ function attackUnit(
 
 
 
-
-    let newState = {
+    let newState={
 
 
         ...state,
@@ -724,31 +635,38 @@ function attackUnit(
             board:
 
 
-                player.board.map(
+            player.board
 
-                    unit =>
+            .map(
 
-
-                    unit.instanceId===attackerId
-
-                    ?
-
-                    newAttacker
-
-                    :
-
-                    unit
+                unit =>
 
 
-                )
+                unit.instanceId===attackerId
 
-                .filter(
+                ?
 
-                    unit =>
+                {
 
-                    getUnitHealth(unit)>0
+                    ...newAttacker,
 
-                )
+                    canAttack:false
+
+                }
+
+                :
+
+                unit
+
+            )
+
+            .filter(
+
+                unit =>
+
+                getUnitHealth(unit)>0
+
+            )
 
 
         },
@@ -759,40 +677,41 @@ function attackUnit(
 
 
 
-        [opponentId]:{
+        [enemyId]:{
 
 
-            ...opponent,
+            ...enemy,
 
 
             board:
 
 
-                opponent.board.map(
+            enemy.board
 
-                    unit =>
+            .map(
 
-
-                    unit.instanceId===targetId
-
-                    ?
-
-                    newTarget
-
-                    :
-
-                    unit
+                unit =>
 
 
-                )
+                unit.instanceId===targetId
 
-                .filter(
+                ?
 
-                    unit =>
+                newTarget
 
-                    getUnitHealth(unit)>0
+                :
 
-                )
+                unit
+
+            )
+
+            .filter(
+
+                unit =>
+
+                getUnitHealth(unit)>0
+
+            )
 
 
         },
@@ -813,12 +732,11 @@ function attackUnit(
 
             " атакует " +
 
-            target.name +
-
-            "."
+            target.name
 
 
         ]
+
 
 
     };
@@ -828,28 +746,17 @@ function attackUnit(
 
 
 
-
-
     return checkGameOver(
-
         newState
-
     );
-
-
 
 }
 
 
 
 
-
-
-
-
 window.canUnitAttack =
 canUnitAttack;
-
 
 
 window.attackUnit =
