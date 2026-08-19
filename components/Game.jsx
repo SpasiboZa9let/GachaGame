@@ -2,19 +2,16 @@
     ============================
     GAME.JSX
 
-    Главный контроллер игры
+    Главный компонент игры
 
-    Логика:
+    Отвечает за:
+
     - состояние игры
+    - управление ходом игрока
+    - розыгрыш карт
+    - выбор атакующего
     - атаки
-    - ходы
-    - карты
-    - рестарт
-
-    Отрисовка:
-    - Battlefield
-    - SidePanel
-    - GameOver
+    - вывод поля
 
     ============================
 */
@@ -53,6 +50,8 @@ function Game(){
 
 
 
+
+
     const opponent =
 
         gameState.opponent;
@@ -64,20 +63,30 @@ function Game(){
 
 
 
-    const playerHandCards =
+
+    const handCards =
 
 
         (player.hand || [])
 
         .map(
 
+
             cardId =>
 
-            window.Cards.getCardById(cardId)
+
+            window.Cards.getCardById(
+
+                cardId
+
+            )
+
 
         )
 
+
         .filter(Boolean);
+
 
 
 
@@ -92,11 +101,19 @@ function Game(){
 
         .map(
 
+
             cardId =>
 
-            window.Cards.getCardById(cardId)
+
+            window.Cards.getCardById(
+
+                cardId
+
+            )
+
 
         )
+
 
         .filter(Boolean);
 
@@ -108,7 +125,13 @@ function Game(){
 
 
 
+    /*
+        Разыграть карту
+    */
+
+
     function handleCardClick(card){
+
 
 
         if(!card){
@@ -116,6 +139,8 @@ function Game(){
             return;
 
         }
+
+
 
 
 
@@ -134,17 +159,20 @@ function Game(){
 
 
 
-
         const newState =
 
 
             window.CardPlay.playCard(
 
+
                 gameState,
+
 
                 "player",
 
+
                 card.id
+
 
             );
 
@@ -153,8 +181,11 @@ function Game(){
 
 
 
+        setGameState(
 
-        setGameState(newState);
+            newState
+
+        );
 
 
     }
@@ -165,6 +196,11 @@ function Game(){
 
 
 
+
+
+    /*
+        Выбор своего существа
+    */
 
 
     function handlePlayerUnitClick(unit){
@@ -196,7 +232,6 @@ function Game(){
 
 
 
-
         if(
 
             !window.Combat.canUnitAttack(unit)
@@ -206,7 +241,6 @@ function Game(){
             return;
 
         }
-
 
 
 
@@ -235,6 +269,7 @@ function Game(){
 
 
 
+
         setSelectedAttacker(
 
             unit.instanceId
@@ -250,6 +285,11 @@ function Game(){
 
 
 
+
+
+    /*
+        Атака существа противника
+    */
 
 
     function handleOpponentUnitClick(unit){
@@ -272,19 +312,23 @@ function Game(){
 
 
 
-
         const newState =
 
 
             window.Combat.attackUnit(
 
+
                 gameState,
+
 
                 "player",
 
+
                 selectedAttacker,
 
+
                 unit.instanceId
+
 
             );
 
@@ -294,11 +338,19 @@ function Game(){
 
 
 
-        setGameState(newState);
+
+        setGameState(
+
+            newState
+
+        );
+
+
 
 
 
         setSelectedAttacker(null);
+
 
 
     }
@@ -309,6 +361,11 @@ function Game(){
 
 
 
+
+
+    /*
+        Атака героя
+    */
 
 
     function handleOpponentHeroClick(){
@@ -331,19 +388,23 @@ function Game(){
 
 
 
-
         const newState =
 
 
             window.Combat.attackUnit(
 
+
                 gameState,
+
 
                 "player",
 
+
                 selectedAttacker,
 
+
                 "hero"
+
 
             );
 
@@ -353,7 +414,15 @@ function Game(){
 
 
 
-        setGameState(newState);
+        setGameState(
+
+            newState
+
+        );
+
+
+
+
 
 
 
@@ -368,6 +437,11 @@ function Game(){
 
 
 
+
+
+    /*
+        Завершение хода
+    */
 
 
     function handleEndTurn(){
@@ -390,7 +464,6 @@ function Game(){
 
 
 
-
         const newState =
 
 
@@ -406,7 +479,13 @@ function Game(){
 
 
 
-        setGameState(newState);
+        setGameState(
+
+            newState
+
+        );
+
+
 
 
 
@@ -423,6 +502,11 @@ function Game(){
 
 
 
+    /*
+        Перезапуск
+    */
+
+
     function handleRestart(){
 
 
@@ -432,10 +516,11 @@ function Game(){
 
 
 
-
         setGameState(
 
+
             window.State.createInitialGameState()
+
 
         );
 
@@ -448,6 +533,11 @@ function Game(){
 
 
 
+
+
+    /*
+        Тестовое поле
+    */
 
 
     function handleTestBoard(){
@@ -479,11 +569,13 @@ function Game(){
 
         setGameState(
 
+
             window.createTestBoard(
 
                 gameState
 
             )
+
 
         );
 
@@ -500,153 +592,360 @@ function Game(){
 
     return (
 
-        <div style={styles.page}>
 
+<div style={gameStyles.game}>
 
 
+{
 
 
-            <GameOver
+gameState.gameOver &&
 
 
-                gameOver={gameState.gameOver}
 
+<div style={gameStyles.gameOver}>
 
-                winner={gameState.winner}
 
+<h2>
 
-                onRestart={handleRestart}
 
+{
 
-            />
+gameState.winner === "player"
 
 
+?
 
 
+"🏆 ПОБЕДА"
 
 
+:
 
 
+"☠️ ПОРАЖЕНИЕ"
 
-            <div style={styles.turn}>
 
+}
 
-                {
 
-                selectedAttacker
+</h2>
 
-                ?
 
-                "⚔️ Выберите цель"
 
-                :
 
-                "Ход: " + gameState.turn
+<button
 
-                }
+onClick={handleRestart}
 
+style={gameStyles.restart}
 
-            </div>
+>
 
 
+Начать заново
 
 
+</button>
 
 
+</div>
 
 
+}
 
-            <div style={styles.layout}>
 
 
-                <div style={styles.field}>
 
 
-                    <Battlefield
 
 
 
-                        opponent={opponent}
 
+<section>
 
-                        opponentHandCards={opponentHandCards}
 
+<h3>
 
+Противник
 
-                        player={player}
+</h3>
 
 
-                        playerHandCards={playerHandCards}
 
+<Hand
 
+cards={opponentHandCards}
 
-                        onOpponentHeroClick={
-                            handleOpponentHeroClick
-                        }
+/>
 
 
 
-                        onOpponentUnitClick={
-                            handleOpponentUnitClick
-                        }
 
 
 
-                        onPlayerUnitClick={
-                            handlePlayerUnitClick
-                        }
 
+<div
 
+onClick={handleOpponentHeroClick}
 
-                        onCardClick={
-                            handleCardClick
-                        }
+style={
 
+selectedAttacker
 
+?
 
-                        selectedAttacker={
-                            selectedAttacker
-                        }
+gameStyles.target
 
+:
 
-                    />
+{}
 
+}
 
-                </div>
+>
 
 
+<Hero
 
+hero={opponent.hero}
 
+hp={opponent.hp}
 
+mana={opponent.mana}
 
+maxMana={opponent.maxMana}
 
+/>
 
-                <SidePanel
 
+</div>
 
-                    combatLog={
-                        gameState.combatLog
-                    }
 
 
-                    onEndTurn={
-                        handleEndTurn
-                    }
 
 
-                    onTestBoard={
-                        handleTestBoard
-                    }
 
 
-                />
+<Board
 
 
+units={opponent.board || []}
 
-            </div>
 
+onUnitClick={handleOpponentUnitClick}
 
-        </div>
+
+selectedUnitId={null}
+
+
+/>
+
+
+</section>
+
+
+
+
+
+
+
+
+
+<div style={gameStyles.turn}>
+
+
+{
+
+selectedAttacker
+
+
+?
+
+
+"⚔️ Выберите цель"
+
+
+:
+
+
+"Ход: " + gameState.turn
+
+
+}
+
+
+</div>
+
+
+
+
+
+
+
+
+
+<section>
+
+
+<h3>
+
+Игрок
+
+</h3>
+
+
+
+<Board
+
+
+units={player.board || []}
+
+
+onUnitClick={handlePlayerUnitClick}
+
+
+selectedUnitId={selectedAttacker}
+
+
+/>
+
+
+
+
+
+
+
+<Hero
+
+hero={player.hero}
+
+hp={player.hp}
+
+mana={player.mana}
+
+maxMana={player.maxMana}
+
+/>
+
+
+</section>
+
+
+
+
+
+
+
+
+
+<Hand
+
+
+cards={handCards}
+
+
+onCardClick={handleCardClick}
+
+
+/>
+
+
+
+
+
+
+
+
+
+<button
+
+style={gameStyles.button}
+
+onClick={handleEndTurn}
+
+>
+
+
+Завершить ход
+
+
+</button>
+
+
+
+
+
+
+
+
+<button
+
+style={gameStyles.button}
+
+onClick={handleTestBoard}
+
+>
+
+
+🧪 Тестовое поле
+
+
+</button>
+
+
+
+
+
+
+
+
+
+<div style={gameStyles.log}>
+
+
+<h4>
+
+Лог боя
+
+</h4>
+
+
+
+{
+
+(gameState.combatLog || [])
+
+.slice(-10)
+
+.map(
+
+(text,index)=>(
+
+<div key={index}>
+
+{text}
+
+</div>
+
+)
+
+)
+
+
+}
+
+
+</div>
+
+
+
+
+
+
+
+</div>
+
 
     );
 
@@ -661,89 +960,160 @@ function Game(){
 
 
 
-const styles = {
+const gameStyles = {
 
 
 
-    page:{
+game:{
 
 
-        width:"100%",
+padding:"20px",
 
 
-        minHeight:"100vh",
+display:"flex",
 
 
-        padding:"20px",
+flexDirection:"column",
 
 
-        display:"flex",
+alignItems:"center",
 
 
-        flexDirection:"column",
+gap:"15px"
 
 
-        gap:"15px"
 
-
-    },
-
-
+},
 
 
 
 
 
-    turn:{
+turn:{
 
 
-        textAlign:"center",
+fontSize:"20px",
 
 
-        fontSize:"22px",
+fontWeight:"bold"
 
 
-        fontWeight:"bold"
-
-
-    },
+},
 
 
 
 
 
+button:{
 
 
-    layout:{
+padding:"12px 30px",
 
 
-        display:"flex",
+background:"#444",
 
 
-        alignItems:"flex-start",
+color:"#fff",
 
 
-        gap:"20px",
+border:"none",
 
 
-        width:"100%"
+borderRadius:"8px",
 
 
-    },
+cursor:"pointer"
+
+
+},
 
 
 
 
 
+target:{
 
 
-    field:{
+cursor:"crosshair",
 
 
-        flex:1
+filter:"drop-shadow(0 0 15px red)"
 
 
-    }
+},
+
+
+
+
+
+log:{
+
+
+width:"90%",
+
+
+background:"#111",
+
+
+padding:"10px",
+
+
+borderRadius:"8px",
+
+
+fontSize:"14px"
+
+
+},
+
+
+
+
+
+gameOver:{
+
+
+position:"fixed",
+
+
+top:"40%",
+
+
+left:"50%",
+
+
+transform:"translate(-50%,-50%)",
+
+
+background:"#222",
+
+
+padding:"30px",
+
+
+borderRadius:"15px",
+
+
+zIndex:100
+
+
+},
+
+
+
+
+
+restart:{
+
+
+padding:"10px 25px",
+
+
+cursor:"pointer"
+
+
+}
+
 
 
 };
