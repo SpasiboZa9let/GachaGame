@@ -18,6 +18,7 @@ game/
 
 function GameBoard({
 
+
     gameState,
 
     selectedAttacker,
@@ -37,124 +38,186 @@ function GameBoard({
     onTestBoard
 
 
+
 }){
 
 
 return (
 
-<div className="game-table">
 
+<>
 
 
-    <aside className="combat-log-panel">
 
+    <GameOver
 
-        <GameLog
 
-    log={gameState.combatLog}
+        gameState={gameState}
 
-/>
 
-    </aside>
+        onRestart={onRestart}
 
 
+    />
 
 
 
-    <main className="battlefield-panel">
 
 
-        <GameData gameState={gameState}>
 
+    <div className="game-table">
 
-        {(data)=>{
 
 
-            return (
 
 
-                <Battlefield
+        <aside className="combat-log-panel">
 
 
-                    player={data.player}
 
+            <GameLog
 
-                    opponent={data.opponent}
 
+                log={gameState.combatLog}
 
-                    handCards={data.handCards}
 
+            />
 
-                    opponentHandCards={data.opponentHandCards}
 
 
+        </aside>
 
-                    selectedAttacker={selectedAttacker}
 
 
 
-                    onCardClick={onCardClick}
 
 
-                    onPlayerUnitClick={onPlayerUnitClick}
 
 
-                    onOpponentUnitClick={onOpponentUnitClick}
 
+        <main className="battlefield-panel">
 
-                    onOpponentHeroClick={onOpponentHeroClick}
 
 
-                />
+            <GameData gameState={gameState}>
 
 
-            );
+            {(data)=>{
 
 
-        }}
+                return (
 
 
-        </GameData>
 
+                    <Battlefield
 
-    </main>
 
 
+                        player={data.player}
 
 
 
+                        opponent={data.opponent}
 
 
-    <aside className="game-controls-panel">
 
+                        handCards={data.handCards}
 
-        <GameControls
 
 
-            onEndTurn={onEndTurn}
+                        opponentHandCards={data.opponentHandCards}
 
 
-            onRestart={onRestart}
 
+                        selectedAttacker={selectedAttacker}
 
-            onTestBoard={onTestBoard}
 
 
-        />
+                        onCardClick={onCardClick}
 
 
-    </aside>
 
+                        onPlayerUnitClick={onPlayerUnitClick}
 
 
 
-</div>
+                        onOpponentUnitClick={onOpponentUnitClick}
+
+
+
+                        onOpponentHeroClick={onOpponentHeroClick}
+
+
+
+                    />
+
+
+
+                );
+
+
+            }}
+
+
+
+            </GameData>
+
+
+
+        </main>
+
+
+
+
+
+
+
+
+
+        <aside className="game-controls-panel">
+
+
+
+            <GameControls
+
+
+
+                onEndTurn={onEndTurn}
+
+
+
+                onRestart={onRestart}
+
+
+
+                onTestBoard={onTestBoard}
+
+
+
+            />
+
+
+
+        </aside>
+
+
+
+
+
+
+    </div>
+
+
+
+</>
 
 
 );
 
 
 }
+
+
 
 
 
