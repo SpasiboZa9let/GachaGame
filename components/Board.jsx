@@ -4,106 +4,227 @@ function Board({
     selectedUnitId
 }) {
 
+
     const safeUnits =
         Array.isArray(units)
             ? units
             : [];
 
 
+
+    function getUnitStats(unit){
+
+
+        if(unit.stats){
+
+            return unit.stats;
+
+        }
+
+
+        return {
+
+            attack:
+                unit.attack || 0,
+
+
+            health:
+                unit.health || 0,
+
+
+            defense:
+                unit.defense || 0
+
+        };
+
+    }
+
+
+
+
     return (
 
         <div style={styles.board}>
 
+
             <div style={styles.cardsArea}>
+
 
                 {safeUnits.length === 0 ? (
 
+
                     <div style={styles.empty}>
+
                         Поле пусто
+
                     </div>
+
 
                 ) : (
 
-                    safeUnits.map(function(unit) {
 
-                        if (!unit) {
+                    safeUnits.map(function(unit){
+
+
+                        if(!unit){
+
                             return null;
+
                         }
+
 
 
                         const card =
+
                             CARDS.find(
-                                function(item) {
+
+                                function(item){
+
                                     return (
-                                        item.id ===
-                                        unit.cardId
+
+                                        item.id === unit.cardId
+
                                     );
+
                                 }
+
                             );
 
 
-                        if (!card) {
+
+                        if(!card){
+
                             return null;
+
                         }
 
 
+
+                        const stats =
+
+                            getUnitStats(unit);
+
+
+
+
                         const selected =
+
                             unit.instanceId ===
                             selectedUnitId;
 
 
+
+
+
                         return (
 
+
                             <div
+
+
                                 key={
                                     unit.instanceId
                                 }
 
-                                onClick={
-                                    function() {
 
-                                        if (
-                                            onUnitClick
-                                        ) {
 
-                                            onUnitClick(
-                                                unit
-                                            );
+                                onClick={function(){
 
-                                        }
+
+                                    if(onUnitClick){
+
+
+                                        onUnitClick(unit);
+
 
                                     }
-                                }
+
+
+                                }}
+
+
+
 
                                 style={{
 
+
                                     ...styles.unit,
 
+
+
                                     border:
+
                                         selected
-                                            ? "3px solid #ffd700"
-                                            : "2px solid #777",
+
+                                        ?
+
+                                        "3px solid #ffd700"
+
+                                        :
+
+                                        "2px solid #777",
+
+
+
 
                                     opacity:
+
                                         unit.canAttack
-                                            ? 1
-                                            : 0.65,
+
+                                        ?
+
+                                        1
+
+                                        :
+
+                                        0.65,
+
+
+
 
                                     boxShadow:
+
                                         selected
-                                            ? "0 0 15px rgba(255,215,0,0.6)"
-                                            : "0 5px 12px rgba(0,0,0,0.5)"
+
+                                        ?
+
+                                        "0 0 15px rgba(255,215,0,0.6)"
+
+                                        :
+
+                                        "0 5px 12px rgba(0,0,0,0.5)"
+
 
                                 }}
+
+
+
                             >
+
+
+
+
+
+                                {/* COST */}
+
 
                                 <div
                                     style={
                                         styles.cost
                                     }
                                 >
+
                                     {card.cost}
+
                                 </div>
+
+
+
+
+
+
+
+                                {/* NAME */}
 
 
                                 <div
@@ -111,8 +232,19 @@ function Board({
                                         styles.name
                                     }
                                 >
-                                    {card.name}
+
+                                    {unit.name || card.name}
+
                                 </div>
+
+
+
+
+
+
+
+
+                                {/* IMAGE */}
 
 
                                 <div
@@ -121,330 +253,544 @@ function Board({
                                     }
                                 >
 
+
                                     {card.image ? (
 
+
                                         <img
+
                                             src={
                                                 card.image
                                             }
+
 
                                             alt={
                                                 card.name
                                             }
 
+
                                             style={
                                                 styles.image
                                             }
+
                                         />
+
 
                                     ) : (
 
+
                                         <div
+
                                             style={
                                                 styles.noImage
                                             }
+
                                         >
+
                                             АРТ
+
                                         </div>
+
 
                                     )}
 
+
+
                                 </div>
 
 
+
+
+
+
+
+
+
+                                {/* STATUS */}
+
+
                                 <div
+
                                     style={
                                         styles.status
                                     }
+
                                 >
 
-                                    {unit.canAttack
-                                        ? "⚔️ Готов"
-                                        : "💤 Ожидание"}
+
+                                    {
+
+                                    unit.canAttack
+
+                                    ?
+
+                                    "⚔️ Готов"
+
+                                    :
+
+                                    "💤 Ожидание"
+
+                                    }
+
 
                                 </div>
+
+
+
+
+
+
+
+
+
+                                {/* STATS */}
 
 
                                 <div
+
                                     style={
                                         styles.stats
                                     }
+
                                 >
 
+
                                     <span>
-                                        ⚔️ {
-                                            unit.attack
-                                        }
+
+                                        ⚔️ {stats.attack}
+
                                     </span>
 
 
+
                                     <span>
-                                        ❤️ {
-                                            unit.health
-                                        }
+
+                                        ❤️ {stats.health}
+
                                     </span>
+
+
+
+                                    <span>
+
+                                        🛡️ {stats.defense}
+
+                                    </span>
+
 
                                 </div>
 
+
+
+
+
+
                             </div>
+
 
                         );
 
+
                     })
+
 
                 )}
 
+
+
             </div>
+
 
         </div>
 
+
     );
+
 
 }
 
 
+
+
+
+
+
+
 const styles = {
 
-    board: {
 
-        width: "100%",
+    board:{
 
-        height: "210px",
 
-        minHeight: "210px",
+        width:"100%",
 
-        maxHeight: "210px",
 
-        background: "#202020",
+        height:"210px",
 
-        border: "1px solid #444",
 
-        borderRadius: "10px",
+        minHeight:"210px",
 
-        boxSizing: "border-box",
 
-        overflow: "hidden",
+        maxHeight:"210px",
 
-        padding: "10px"
+
+        background:"#202020",
+
+
+        border:"1px solid #444",
+
+
+        borderRadius:"10px",
+
+
+        boxSizing:"border-box",
+
+
+        overflow:"hidden",
+
+
+        padding:"10px"
+
 
     },
 
 
-    cardsArea: {
 
-        width: "100%",
 
-        height: "100%",
 
-        display: "flex",
+    cardsArea:{
 
-        flexDirection: "row",
 
-        flexWrap: "nowrap",
+        width:"100%",
 
-        alignItems: "flex-start",
 
-        justifyContent: "center",
+        height:"100%",
 
-        gap: "8px",
 
-        padding: "8px 4px 12px 4px",
+        display:"flex",
 
-        boxSizing: "border-box",
 
-        overflow: "hidden"
+        flexDirection:"row",
+
+
+        flexWrap:"nowrap",
+
+
+        alignItems:"flex-start",
+
+
+        justifyContent:"center",
+
+
+        gap:"8px",
+
+
+        padding:"8px 4px 12px 4px",
+
+
+        boxSizing:"border-box",
+
+
+        overflow:"hidden"
+
 
     },
 
 
-    empty: {
 
-        width: "100%",
 
-        height: "100%",
 
-        display: "flex",
+    empty:{
 
-        alignItems: "center",
 
-        justifyContent: "center",
+        width:"100%",
 
-        color: "#555"
+
+        height:"100%",
+
+
+        display:"flex",
+
+
+        alignItems:"center",
+
+
+        justifyContent:"center",
+
+
+        color:"#555"
+
 
     },
 
 
-    unit: {
 
-        position: "relative",
 
-        width: "100px",
 
-        minWidth: "100px",
 
-        maxWidth: "100px",
+    unit:{
 
-        height: "165px",
 
-        minHeight: "165px",
+        position:"relative",
 
-        maxHeight: "165px",
 
-        background: "#292929",
+        width:"100px",
 
-        borderRadius: "10px",
 
-        padding: "5px",
+        minWidth:"100px",
 
-        boxSizing: "border-box",
 
-        display: "flex",
+        maxWidth:"100px",
 
-        flexDirection: "column",
 
-        flexShrink: 0,
+        height:"165px",
 
-        cursor: "pointer",
+
+        background:"#292929",
+
+
+        borderRadius:"10px",
+
+
+        padding:"5px",
+
+
+        boxSizing:"border-box",
+
+
+        display:"flex",
+
+
+        flexDirection:"column",
+
+
+        flexShrink:0,
+
+
+        cursor:"pointer",
+
 
         transition:
+
             "transform 0.15s ease, box-shadow 0.15s ease"
 
-    },
-
-
-    cost: {
-
-        position: "absolute",
-
-        top: "4px",
-
-        left: "4px",
-
-        width: "22px",
-
-        height: "22px",
-
-        borderRadius: "50%",
-
-        background: "#3478db",
-
-        display: "flex",
-
-        alignItems: "center",
-
-        justifyContent: "center",
-
-        fontSize: "11px",
-
-        fontWeight: "bold",
-
-        zIndex: 3
 
     },
 
 
-    name: {
 
-        height: "20px",
 
-        minHeight: "20px",
 
-        lineHeight: "20px",
 
-        textAlign: "center",
+    cost:{
 
-        fontWeight: "bold",
 
-        fontSize: "11px",
+        position:"absolute",
 
-        whiteSpace: "nowrap",
 
-        overflow: "hidden",
+        top:"4px",
 
-        textOverflow: "ellipsis"
+
+        left:"4px",
+
+
+        width:"22px",
+
+
+        height:"22px",
+
+
+        borderRadius:"50%",
+
+
+        background:"#3478db",
+
+
+        display:"flex",
+
+
+        alignItems:"center",
+
+
+        justifyContent:"center",
+
+
+        fontSize:"11px",
+
+
+        fontWeight:"bold",
+
+
+        zIndex:3
+
 
     },
 
 
-    imageBox: {
 
-        width: "100%",
 
-        height: "85px",
 
-        minHeight: "85px",
 
-        background: "#111",
+    name:{
 
-        border: "1px solid #555",
 
-        borderRadius: "6px",
+        height:"20px",
 
-        overflow: "hidden"
+
+        lineHeight:"20px",
+
+
+        textAlign:"center",
+
+
+        fontWeight:"bold",
+
+
+        fontSize:"11px",
+
+
+        whiteSpace:"nowrap",
+
+
+        overflow:"hidden",
+
+
+        textOverflow:"ellipsis"
+
 
     },
 
 
-    image: {
 
-        width: "100%",
 
-        height: "100%",
 
-        objectFit: "cover",
 
-        display: "block"
+    imageBox:{
+
+
+        width:"100%",
+
+
+        height:"85px",
+
+
+        background:"#111",
+
+
+        border:"1px solid #555",
+
+
+        borderRadius:"6px",
+
+
+        overflow:"hidden"
+
 
     },
 
 
-    noImage: {
 
-        width: "100%",
 
-        height: "100%",
 
-        display: "flex",
+    image:{
 
-        alignItems: "center",
 
-        justifyContent: "center",
+        width:"100%",
 
-        color: "#555",
 
-        fontSize: "10px"
+        height:"100%",
+
+
+        objectFit:"cover",
+
+
+        display:"block"
+
 
     },
 
 
-    status: {
 
-        textAlign: "center",
 
-        fontSize: "8px",
 
-        color: "#aaa",
+    noImage:{
 
-        paddingTop: "3px"
+
+        width:"100%",
+
+
+        height:"100%",
+
+
+        display:"flex",
+
+
+        alignItems:"center",
+
+
+        justifyContent:"center",
+
+
+        color:"#555",
+
+
+        fontSize:"10px"
+
 
     },
 
 
-    stats: {
 
-        display: "flex",
 
-        justifyContent: "space-between",
 
-        padding: "3px 2px",
 
-        fontSize: "11px",
+    status:{
 
-        fontWeight: "bold"
+
+        textAlign:"center",
+
+
+        fontSize:"8px",
+
+
+        color:"#aaa",
+
+
+        paddingTop:"3px"
+
+
+    },
+
+
+
+
+
+
+    stats:{
+
+
+        display:"flex",
+
+
+        justifyContent:"space-between",
+
+
+        padding:"3px 2px",
+
+
+        fontSize:"10px",
+
+
+        fontWeight:"bold"
+
 
     }
 
+
 };
+
+
+
 
 
 window.Board = Board;
