@@ -4,7 +4,7 @@ function Card({
     mode="hand"
 }) {
 
-console.log("CARD RENDER", card?.name, mode);
+
     if (!card) {
 
         return null;
@@ -18,14 +18,15 @@ console.log("CARD RENDER", card?.name, mode);
 
 
 
+
     const size = isBoard
 
         ?
 
         {
-            width:"90px",
-            height:"150px",
-            minWidth:"90px"
+            width:"60px",
+            height:"100px",
+            minWidth:"60px"
         }
 
         :
@@ -68,10 +69,10 @@ console.log("CARD RENDER", card?.name, mode);
                     "2px solid #777",
 
 
-                borderRadius:"12px",
+                borderRadius:"10px",
 
 
-                padding:isBoard ? "4px" : "8px",
+                padding:isBoard ? "3px" : "8px",
 
 
                 boxSizing:"border-box",
@@ -105,19 +106,21 @@ console.log("CARD RENDER", card?.name, mode);
 
 
 
+
+
             <div
 
                 style={{
 
                     position:"absolute",
 
-                    top:"4px",
+                    top:"3px",
 
-                    left:"4px",
+                    left:"3px",
 
-                    width:isBoard ? "18px" : "30px",
+                    width:isBoard ? "14px" : "30px",
 
-                    height:isBoard ? "18px" : "30px",
+                    height:isBoard ? "14px" : "30px",
 
                     borderRadius:"50%",
 
@@ -129,7 +132,7 @@ console.log("CARD RENDER", card?.name, mode);
 
                     justifyContent:"center",
 
-                    fontSize:isBoard ? "10px" : "14px",
+                    fontSize:isBoard ? "8px" : "14px",
 
                     fontWeight:"bold",
 
@@ -151,19 +154,24 @@ console.log("CARD RENDER", card?.name, mode);
 
 
 
+
             <div
 
                 style={{
+
 
                     textAlign:"center",
 
                     fontWeight:"bold",
 
-                    fontSize:isBoard ? "9px" : "14px",
+                    fontSize:isBoard ? "7px" : "14px",
 
-                    height:isBoard ? "18px" : "25px",
+
+                    height:isBoard ? "14px" : "25px",
+
 
                     overflow:"hidden"
+
 
                 }}
 
@@ -185,10 +193,11 @@ console.log("CARD RENDER", card?.name, mode);
 
                 style={{
 
+
                     width:"100%",
 
 
-                    height:isBoard ? "75px" : "120px",
+                    height:isBoard ? "50px" : "120px",
 
 
                     background:"#111",
@@ -197,7 +206,8 @@ console.log("CARD RENDER", card?.name, mode);
                     overflow:"hidden",
 
 
-                    borderRadius:"6px"
+                    borderRadius:"5px"
+
 
                 }}
 
@@ -220,6 +230,7 @@ console.log("CARD RENDER", card?.name, mode);
 
                     style={{
 
+
                         width:"100%",
 
 
@@ -227,6 +238,7 @@ console.log("CARD RENDER", card?.name, mode);
 
 
                         objectFit:"cover"
+
 
                     }}
 
@@ -260,31 +272,42 @@ console.log("CARD RENDER", card?.name, mode);
 
                 style={{
 
+
                     marginTop:"auto",
+
 
                     display:"flex",
 
+
                     justifyContent:"space-around",
+
 
                     fontWeight:"bold",
 
-                    fontSize:isBoard ? "10px" : "14px"
+
+                    fontSize:isBoard ? "8px" : "14px"
+
 
                 }}
 
             >
 
                 <span>
+
                     ⚔️ {card.attack}
+
                 </span>
 
 
                 <span>
+
                     ❤️ {card.health}
+
                 </span>
 
 
             </div>
+
 
 
 
@@ -294,6 +317,8 @@ console.log("CARD RENDER", card?.name, mode);
     );
 
 }
+
+
 
 
 
