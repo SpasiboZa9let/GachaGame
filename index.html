@@ -18,35 +18,21 @@
 
 
 
-<link rel="stylesheet" href="./assets/game.css">
-
-
-
 <style>
 
 * {
-
     box-sizing:border-box;
-
 }
-
 
 
 html,
 body {
 
     margin:0;
-
     padding:0;
-
-    width:100%;
-
-    height:100%;
-
-    overflow:hidden;
+    min-height:100%;
 
 }
-
 
 
 body {
@@ -63,7 +49,6 @@ body {
 }
 
 
-
 button {
 
     font-family:inherit;
@@ -71,16 +56,11 @@ button {
 }
 
 
-
 #root {
 
-    width:100%;
-
-    height:100vh;
+    min-height:100vh;
 
 }
-
-
 
 </style>
 
@@ -168,6 +148,7 @@ button {
 
 
 
+
 <!-- =====================
         COMPONENTS
 ===================== -->
@@ -186,10 +167,7 @@ button {
 <script type="text/babel" src="./components/Modal.jsx"></script>
 
 
-
-
 <!-- GAME COMPONENTS -->
-
 
 <script type="text/babel" src="./components/game/GameOver.jsx"></script>
 
@@ -205,10 +183,11 @@ button {
 
 <script type="text/babel" src="./components/game/OpponentArea.jsx"></script>
 
+
 <script type="text/babel" src="./components/game/PlayerArea.jsx"></script>
 
 <script type="text/babel" src="./components/game/PlayerHand.jsx"></script>
-
+  
 <script type="text/babel" src="./components/game/OpponentHand.jsx"></script>
 
 <script type="text/babel" src="./components/game/Battlefield.jsx"></script>
@@ -218,6 +197,7 @@ button {
 <script type="text/babel" src="./components/game/GameActions.js"></script>
 
 <script type="text/babel" src="./components/Game.jsx"></script>
+
 
 
 
