@@ -406,7 +406,62 @@ function removeStatus(
 
 
 
+function triggerEffects(
+    state,
+    unit,
+    trigger
+){
 
+
+    if(
+        !unit ||
+        !unit.effects
+    ){
+
+        return unit;
+
+    }
+
+
+
+    let result =
+        unit;
+
+
+
+    unit.effects.forEach(
+
+        effect => {
+
+
+            if(
+                effect.trigger !== trigger
+            ){
+
+                return;
+
+            }
+
+
+
+            result =
+                applyEffect(
+                    state,
+                    result,
+                    effect
+                );
+
+
+        }
+
+    );
+
+
+
+    return result;
+
+
+}
 
 
 
@@ -422,3 +477,6 @@ hasStatus;
 
 window.removeStatus =
 removeStatus;
+
+window.triggerEffects =
+triggerEffects;
