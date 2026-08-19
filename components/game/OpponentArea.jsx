@@ -50,12 +50,11 @@ function OpponentArea({
 
 
 
-            <Hand
+            <OpponentHand
 
-                cards={opponentHandCards}
+    cards={opponentHandCards}
 
-            />
-
+/>
 
 
 
