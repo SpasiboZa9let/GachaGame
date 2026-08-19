@@ -201,3 +201,29 @@ function opponentAttack(state) {
     return newState;
 
 }
+window.preparePlayerTurn =
+    preparePlayerTurn;
+
+
+window.prepareOpponentTurn =
+    prepareOpponentTurn;
+
+
+window.getRandomPlayableCard =
+    getRandomPlayableCard;
+
+
+window.opponentPlayCards =
+    opponentPlayCards;
+
+
+window.opponentAttack =
+    opponentAttack;
+
+
+window.opponentTurn =
+    opponentTurn;
+
+
+window.endTurn =
+    endTurn;
