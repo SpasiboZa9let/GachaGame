@@ -71,6 +71,7 @@ function GameBoard({
 
 
 
+
     const opponentHandCards =
 
         (opponent.hand || [])
@@ -84,7 +85,6 @@ function GameBoard({
         )
 
         .filter(Boolean);
-
 
 
 
@@ -142,25 +142,13 @@ function GameBoard({
 
 
 
-            <div style={window.gameStyles.turn}>
+            <GameTurn
 
+                selectedAttacker={selectedAttacker}
 
-                {
+                turn={gameState.turn}
 
-                    selectedAttacker
-
-                    ?
-
-                    "⚔️ Выберите цель"
-
-                    :
-
-                    "Ход: " + gameState.turn
-
-                }
-
-
-            </div>
+            />
 
 
 
@@ -225,6 +213,8 @@ function GameBoard({
                 log={gameState.combatLog}
 
             />
+
+
 
 
 
