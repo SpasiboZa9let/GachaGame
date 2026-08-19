@@ -21,17 +21,29 @@ function Board({
 
 
 
-    function getUnitStats(unit){
+    function getRarityColor(rarity){
 
-        return unit.stats || {
+        switch(rarity){
 
-            attack: unit.attack || 0,
+            case "legendary":
+                return "#ffd700";
 
-            health: unit.health || 0,
+            case "epic":
+                return "#b84dff";
 
-            defense: unit.defense || 0
+            case "rare":
+                return "#3d8cff";
 
-        };
+            case "uncommon":
+                return "#4caf50";
+
+            case "common":
+                return "#888";
+
+            default:
+                return "#777";
+
+        }
 
     }
 
@@ -40,24 +52,17 @@ function Board({
 
 
 
-    function getRarityColor(rarity){
+    function getStats(unit){
 
-        const colors = {
 
-            legendary:"#ffd700",
+        return unit.stats || {
 
-            epic:"#b84dff",
+            attack: unit.attack || 0,
 
-            rare:"#3d8cff",
-
-            uncommon:"#4caf50",
-
-            common:"#888"
+            health: unit.health || 0
 
         };
 
-
-        return colors[rarity] || "#777";
 
     }
 
@@ -68,6 +73,7 @@ function Board({
 
 
     return (
+
 
         <div style={styles.board}>
 
@@ -100,11 +106,18 @@ function Board({
 
                 const card =
 
-                    CARDS.find(
+                    window.Cards.getCardById
 
-                        c => c.id === unit.cardId
+                    ?
 
-                    );
+                    window.Cards.getCardById(
+                        unit.cardId
+                    )
+
+                    :
+
+                    null;
+
 
 
 
@@ -117,9 +130,8 @@ function Board({
 
 
 
-                const stats =
 
-                    getUnitStats(unit);
+                const stats = getStats(unit);
 
 
 
@@ -134,13 +146,18 @@ function Board({
 
 
 
+
                 return (
+
 
                     <div
 
+
                         key={unit.instanceId}
 
+
                         onClick={()=>{
+
 
                             if(onUnitClick){
 
@@ -148,11 +165,13 @@ function Board({
 
                             }
 
+
                         }}
 
 
 
                         style={{
+
 
                             ...styles.unit,
 
@@ -163,45 +182,20 @@ function Board({
 
                             ?
 
-                            "3px solid #fff"
+                            "3px solid white"
 
                             :
 
                             "3px solid " +
-                            getRarityColor(card.rarity),
 
-
-
-                            opacity:
-
-                            unit.canAttack
-
-                            ?
-
-                            1
-
-                            :
-
-                            0.65,
-
-
-
-                            transform:
-
-                            selected
-
-                            ?
-
-                            "translateY(-8px)"
-
-                            :
-
-                            "translateY(0)"
+                            getRarityColor(
+                                card.rarity
+                            )
 
                         }}
 
-                    >
 
+                    >
 
 
 
@@ -230,7 +224,7 @@ function Board({
 
                                 src={card.image}
 
-                                alt={card.name}
+                                alt=""
 
                                 style={styles.image}
 
@@ -238,39 +232,12 @@ function Board({
 
                             :
 
-                            <div style={styles.noImage}>
-                                АРТ
-                            </div>
+                            null
 
                             }
 
 
                         </div>
-
-
-
-
-
-
-
-                        <div style={styles.status}>
-
-                            {
-
-                            unit.canAttack
-
-                            ?
-
-                            "⚔️ готов"
-
-                            :
-
-                            "💤"
-
-                            }
-
-                        </div>
-
 
 
 
@@ -280,19 +247,11 @@ function Board({
                         <div style={styles.stats}>
 
 
-                            <span>
+                            ⚔️ {stats.attack}
 
-                                ⚔️ {stats.attack}
+                            &nbsp;
 
-                            </span>
-
-
-
-                            <span>
-
-                                ❤️ {stats.health}
-
-                            </span>
+                            ❤️ {stats.health}
 
 
                         </div>
@@ -301,6 +260,7 @@ function Board({
 
 
                     </div>
+
 
                 );
 
@@ -318,9 +278,12 @@ function Board({
 
         </div>
 
+
     );
 
+
 }
+
 
 
 
@@ -332,39 +295,38 @@ function Board({
 const styles = {
 
 
+
 board:{
 
 
     width:"100%",
 
 
-    height:"200px",
+    height:"180px",
 
 
     display:"flex",
 
 
-    justifyContent:"center",
-
-
     alignItems:"center",
 
 
-    background:
-
-    "linear-gradient(#242424,#111)",
-
-
-    border:"2px solid #555",
-
-
-    borderRadius:"16px",
-
-
-    padding:"10px",
+    justifyContent:"center",
 
 
     overflow:"hidden",
+
+
+    background:"#151515",
+
+
+    border:"2px solid #444",
+
+
+    borderRadius:"12px",
+
+
+    padding:"8px",
 
 
     boxSizing:"border-box"
@@ -395,7 +357,7 @@ cardsArea:{
     justifyContent:"center",
 
 
-    gap:"12px",
+    gap:"10px",
 
 
     width:"100%",
@@ -416,6 +378,7 @@ empty:{
 
     color:"#666"
 
+
 },
 
 
@@ -426,31 +389,28 @@ empty:{
 unit:{
 
 
-    width:"90px",
+    width:"85px",
 
 
-    minWidth:"90px",
+    minWidth:"85px",
 
 
-    height:"150px",
+    height:"140px",
 
 
-    minHeight:"150px",
+    minHeight:"140px",
 
 
     flex:"0 0 auto",
 
 
-    background:"#292929",
+    background:"#252525",
 
 
-    borderRadius:"12px",
+    borderRadius:"10px",
 
 
-    padding:"5px",
-
-
-    cursor:"pointer",
+    padding:"4px",
 
 
     display:"flex",
@@ -462,12 +422,14 @@ unit:{
     boxSizing:"border-box",
 
 
-    transition:"0.2s",
+    overflow:"hidden",
+
+
+    cursor:"pointer",
 
 
     boxShadow:
-
-    "0 5px 15px rgba(0,0,0,0.5)"
+        "0 4px 10px rgba(0,0,0,0.5)"
 
 
 },
@@ -480,16 +442,16 @@ unit:{
 name:{
 
 
+    height:"18px",
+
+
     textAlign:"center",
 
 
-    fontSize:"10px",
+    fontSize:"9px",
 
 
     fontWeight:"bold",
-
-
-    height:"20px",
 
 
     overflow:"hidden"
@@ -508,13 +470,13 @@ imageBox:{
     width:"100%",
 
 
-    height:"75px",
+    height:"80px",
 
 
     background:"#000",
 
 
-    borderRadius:"8px",
+    borderRadius:"6px",
 
 
     overflow:"hidden"
@@ -546,57 +508,17 @@ image:{
 
 
 
-noImage:{
-
-
-    height:"100%",
-
-
-    display:"flex",
-
-    justifyContent:"center",
-
-    alignItems:"center",
-
-    color:"#555"
-
-},
-
-
-
-
-
-
-status:{
-
-
-    textAlign:"center",
-
-    fontSize:"9px",
-
-    height:"18px"
-
-
-},
-
-
-
-
-
-
 stats:{
 
 
     marginTop:"auto",
 
 
-    display:"flex",
-
-
-    justifyContent:"space-around",
+    textAlign:"center",
 
 
     fontSize:"10px",
+
 
     fontWeight:"bold"
 
@@ -604,7 +526,9 @@ stats:{
 }
 
 
+
 };
+
 
 
 
