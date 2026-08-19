@@ -3,8 +3,16 @@
     VICTORY
 
     Проверка конца игры
+
     ============================
 */
+
+
+
+window.Victory =
+window.Victory || {};
+
+
 
 
 
@@ -67,6 +75,7 @@ function checkGameOver(state){
 
 
 
+
     if(
         state.opponent.hp <= 0
     ){
@@ -121,29 +130,7 @@ function checkGameOver(state){
 
 
 
-window.Victory =
-
-window.Victory || {};
-
-
 
 window.Victory.checkGameOver =
-
-checkGameOver;
-
-
-
-
-
-
-
-
-/*
-    Совместимость
-*/
-
-
-
-window.checkGameOver =
 
 checkGameOver;
