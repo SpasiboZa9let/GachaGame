@@ -24,7 +24,7 @@ function Hand({
                 (card,index)=>(
 
 
-                    <Card
+                    <div
 
                         key={
                             card.id+
@@ -32,15 +32,31 @@ function Hand({
                             index
                         }
 
+                        style={{
+                            transform:
+                                `rotate(${(index - cards.length / 2) * 3}deg)`
+                        }}
 
-                        card={card}
+
+                    >
 
 
-                        onClick={
-                            onCardClick
-                        }
+                        <Card
 
-                    />
+                            card={card}
+
+
+                            mode="hand"
+
+
+                            onClick={
+                                onCardClick
+                            }
+
+                        />
+
+
+                    </div>
 
 
                 )
@@ -61,35 +77,51 @@ function Hand({
 
 
 
+
+
 const handStyles={
 
 
-hand:{
+    hand:{
 
 
-display:"flex",
+        display:"flex",
 
 
-gap:"12px",
+        gap:"8px",
 
 
-justifyContent:"center",
+        justifyContent:"center",
 
 
-alignItems:"flex-end",
+        alignItems:"flex-end",
 
 
-width:"100%",
+        width:"100%",
 
 
-minHeight:"230px",
+        minHeight:"280px",
 
 
-overflowX:"auto"
+        padding:"10px",
 
 
-}
+        overflowX:"auto",
+
+
+        overflowY:"hidden"
+
+
+    }
 
 
 
 };
+
+
+
+
+
+
+
+window.Hand = Hand;
