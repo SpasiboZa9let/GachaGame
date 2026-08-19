@@ -50,14 +50,11 @@ function playCard(
 
 
 
-
     if(!player){
 
         return state;
 
     }
-
-
 
 
 
@@ -73,7 +70,6 @@ function playCard(
         ||
 
         window.getCardById;
-
 
 
 
@@ -103,11 +99,9 @@ function playCard(
 
 
 
-
     const cost =
 
         Number(card.cost) || 0;
-
 
 
 
@@ -132,17 +126,9 @@ function playCard(
 
 
 
-    /*
-        Пока только существа
-
-        Заклинания добавим позже
-    */
-
-
-
     if(
 
-        player.board.length >= 5
+        (player.board || []).length >= 5
 
     ){
 
@@ -173,12 +159,9 @@ function playCard(
 
 
 
-
     const unit =
 
-
         createUnit(cardId);
-
 
 
 
@@ -192,6 +175,52 @@ function playCard(
         return state;
 
     }
+
+
+
+
+
+
+
+
+
+    const newHand =
+
+
+        (player.hand || [])
+
+        .filter(
+
+            item => {
+
+
+                if(
+                    typeof item === "string"
+                ){
+
+                    return item !== cardId;
+
+                }
+
+
+
+                if(
+                    item &&
+                    item.id
+                ){
+
+                    return item.id !== cardId;
+
+                }
+
+
+
+                return true;
+
+
+            }
+
+        );
 
 
 
@@ -219,7 +248,6 @@ function playCard(
 
             mana:
 
-
                 player.mana - cost,
 
 
@@ -228,16 +256,8 @@ function playCard(
 
             hand:
 
+                newHand,
 
-                (player.hand || [])
-
-                .filter(
-
-                    id =>
-
-                    id !== cardId
-
-                ),
 
 
 
@@ -270,20 +290,6 @@ function playCard(
 
 
 
-    /*
-        Эффекты входа:
-
-        onPlay
-        battlecry
-        summon
-
-    */
-
-
-
-
-
-
     const trigger =
 
 
@@ -292,7 +298,6 @@ function playCard(
         ||
 
         window.triggerEffects;
-
 
 
 
@@ -311,6 +316,7 @@ function playCard(
 
 
             newState[playerId].board.map(
+
 
                 item =>
 
@@ -341,7 +347,6 @@ function playCard(
 
 
             );
-
 
 
     }
@@ -375,6 +380,8 @@ window.CardPlay || {};
 
 
 
+
+
 window.CardPlay.playCard =
 
 playCard;
@@ -383,13 +390,6 @@ playCard;
 
 
 
-
-
-
-
-/*
-    Совместимость
-*/
 
 
 
