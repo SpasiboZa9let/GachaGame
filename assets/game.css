@@ -1,64 +1,32 @@
-/*
-============================
-
-game.css
-
-Главный стиль игрового стола
-
-Отвечает за:
-- экран игры
-- расположение колонок
-- поле боя
-- журнал
-- кнопки
-- масштаб
-
-============================
-*/
-
-
-
 /* =========================
-   ОСНОВНОЙ ЭКРАН
+   GAME TABLE
 ========================= */
 
 
 .game-table {
 
+    width:100vw;
 
-    width:100%;
-
-
-    min-height:100vh;
-
+    height:100vh;
 
     display:grid;
 
-
     grid-template-columns:
 
+        260px
 
-        280px
+        1fr
 
-
-        minmax(700px,1fr)
-
-
-        240px;
-
+        220px;
 
 
     gap:15px;
 
-
     padding:15px;
 
+    background:#101010;
 
-    background:#111;
-
-
-    overflow:auto;
-
+    overflow:hidden;
 
 }
 
@@ -66,10 +34,8 @@ game.css
 
 
 
-
-
 /* =========================
-   ЛЕВЫЙ ЖУРНАЛ
+LOG
 ========================= */
 
 
@@ -78,30 +44,11 @@ game.css
 
     background:#1b1b1b;
 
+    border-radius:15px;
 
     border:1px solid #333;
 
-
-    border-radius:12px;
-
-
-    padding:12px;
-
-
-    height:calc(100vh - 30px);
-
-
-    overflow:hidden;
-
-
-}
-
-
-
-.combat-log-panel > div {
-
-
-    height:100%;
+    padding:15px;
 
 
     overflow-y:auto;
@@ -114,9 +61,8 @@ game.css
 
 
 
-
 /* =========================
-   ЦЕНТРАЛЬНОЕ ПОЛЕ
+CENTER
 ========================= */
 
 
@@ -125,20 +71,12 @@ game.css
 
     display:flex;
 
-
     justify-content:center;
-
 
     align-items:center;
 
 
-    min-height:900px;
-
-
 }
-
-
-
 
 
 
@@ -147,21 +85,14 @@ game.css
 
     width:100%;
 
-
-    min-height:850px;
+    height:100%;
 
 
     display:flex;
 
-
     flex-direction:column;
 
-
     justify-content:space-between;
-
-
-    gap:15px;
-
 
 
 }
@@ -170,30 +101,21 @@ game.css
 
 
 
+.opponent-zone,
+.player-zone {
 
 
-/* =========================
-   ЗОНЫ БОЯ
-========================= */
-
-
-.opponent-zone {
-
-
-    flex:1;
+    min-height:220px;
 
 
     display:flex;
 
-
     justify-content:center;
-
 
     align-items:center;
 
 
 }
-
 
 
 
@@ -201,36 +123,12 @@ game.css
 .turn-zone {
 
 
-    min-height:60px;
+    height:50px;
 
 
     display:flex;
 
-
     justify-content:center;
-
-
-    align-items:center;
-
-
-}
-
-
-
-
-
-
-.player-zone {
-
-
-    flex:1;
-
-
-    display:flex;
-
-
-    justify-content:center;
-
 
     align-items:center;
 
@@ -244,16 +142,130 @@ game.css
 .hand-zone {
 
 
-    min-height:220px;
+    height:240px;
 
 
     display:flex;
 
+    justify-content:center;
+
+    align-items:center;
+
+
+    overflow-x:auto;
+
+
+}
+
+
+
+
+
+
+/* =========================
+CARDS
+========================= */
+
+
+.card {
+
+
+    background:#252525;
+
+
+    border:2px solid #777;
+
+
+    border-radius:14px;
+
+
+    box-shadow:
+
+        0 8px 20px rgba(0,0,0,.6);
+
+
+    display:flex;
+
+    flex-direction:column;
+
+
+    position:relative;
+
+
+    cursor:pointer;
+
+
+    overflow:hidden;
+
+
+    flex-shrink:0;
+
+
+}
+
+
+
+
+.card-hand {
+
+
+    width:150px;
+
+    height:220px;
+
+
+}
+
+
+
+.card-board {
+
+
+    width:120px;
+
+    height:180px;
+
+
+}
+
+
+
+
+
+
+.card-cost {
+
+
+    position:absolute;
+
+
+    top:5px;
+
+    left:5px;
+
+
+    width:32px;
+
+    height:32px;
+
+
+    background:#3478db;
+
+
+    border-radius:50%;
+
+
+    display:flex;
 
     justify-content:center;
 
-
     align-items:center;
+
+
+    font-weight:bold;
+
+
+    z-index:2;
 
 
 }
@@ -264,9 +276,87 @@ game.css
 
 
 
+.card-name {
+
+
+    text-align:center;
+
+    font-weight:bold;
+
+
+    height:30px;
+
+
+    padding-top:5px;
+
+
+    overflow:hidden;
+
+
+}
+
+
+
+
+
+
+
+.card-image {
+
+
+    flex:1;
+
+
+    background:#111;
+
+
+}
+
+
+.card-image img {
+
+
+    width:100%;
+
+
+    height:100%;
+
+
+    object-fit:cover;
+
+
+}
+
+
+
+
+
+.card-stats {
+
+
+    display:flex;
+
+
+    justify-content:space-around;
+
+
+    padding:6px;
+
+
+    font-size:14px;
+
+    font-weight:bold;
+
+
+}
+
+
+
+
+
 
 /* =========================
-   ПРАВАЯ ПАНЕЛЬ
+RIGHT PANEL
 ========================= */
 
 
@@ -276,17 +366,10 @@ game.css
     background:#1b1b1b;
 
 
-    border:1px solid #333;
-
-
-    border-radius:12px;
+    border-radius:15px;
 
 
     padding:15px;
-
-
-
-    height:fit-content;
 
 
     display:flex;
@@ -298,43 +381,10 @@ game.css
     gap:15px;
 
 
-    align-items:center;
-
-
 }
 
 
 
-
-
-
-
-
-/* =========================
-   ЖУРНАЛ
-========================= */
-
-
-.combat-log-panel h4 {
-
-
-    margin-top:0;
-
-
-    text-align:center;
-
-
-}
-
-
-
-
-
-
-
-/* =========================
-   КНОПКИ
-========================= */
 
 
 .game-controls-panel button {
@@ -343,10 +393,10 @@ game.css
     width:100%;
 
 
-    min-height:45px;
+    height:50px;
 
 
-    font-size:16px;
+    font-size:18px;
 
 
 }
@@ -356,17 +406,16 @@ game.css
 
 
 
-
 /* =========================
-   СКРОЛЛ
+SCROLL
 ========================= */
 
 
 ::-webkit-scrollbar {
 
+    height:10px;
 
     width:10px;
-
 
 }
 
@@ -377,76 +426,7 @@ game.css
 
     background:#555;
 
-
     border-radius:10px;
-
-
-}
-
-
-
-
-
-
-
-/* =========================
-   АДАПТАЦИЯ
-========================= */
-
-
-@media(max-width:1200px){
-
-
-    .game-table {
-
-
-        grid-template-columns:
-
-
-            220px
-
-
-            1fr
-
-
-            180px;
-
-
-
-    }
-
-
-}
-
-
-
-@media(max-width:900px){
-
-
-    .game-table {
-
-
-        display:block;
-
-
-    }
-
-
-
-    .combat-log-panel,
-
-
-    .game-controls-panel {
-
-
-        height:auto;
-
-
-        margin-bottom:15px;
-
-
-    }
-
 
 
 }
