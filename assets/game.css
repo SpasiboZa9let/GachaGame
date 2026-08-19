@@ -578,3 +578,68 @@ overflow:auto;
 
 
 }
+/* =====================
+   РУКА ПРОТИВНИКА
+===================== */
+
+
+.opponent-hand {
+
+
+    display:flex;
+
+
+    justify-content:center;
+
+
+    gap:8px;
+
+
+}
+
+
+
+
+.card-back {
+
+
+    width:70px;
+
+
+    height:100px;
+
+
+    background:
+
+        linear-gradient(
+
+            135deg,
+
+            #333,
+
+            #111
+
+        );
+
+
+    border:
+
+        2px solid #666;
+
+
+    border-radius:10px;
+
+
+    display:flex;
+
+
+    justify-content:center;
+
+
+    align-items:center;
+
+
+    font-size:35px;
+
+
+}
