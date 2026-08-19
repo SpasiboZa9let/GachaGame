@@ -5,19 +5,9 @@ function Board({
 }) {
 
 
-    const safeUnits =
-
-        Array.isArray(units)
-
-        ?
-
-        units
-
-        :
-
-        [];
-
-
+    const safeUnits = Array.isArray(units)
+        ? units
+        : [];
 
 
 
@@ -38,9 +28,6 @@ function Board({
             case "uncommon":
                 return "#4caf50";
 
-            case "common":
-                return "#888";
-
             default:
                 return "#777";
 
@@ -53,31 +40,21 @@ function Board({
 
 
 
-
-
-
     return (
 
         <div style={styles.board}>
 
 
             {
-
             safeUnits.length === 0
-
 
             ?
 
-
             <div style={styles.empty}>
-
                 Поле пусто
-
             </div>
 
-
             :
-
 
             <div style={styles.cardsArea}>
 
@@ -89,19 +66,9 @@ function Board({
 
                 const card =
 
-                    window.Cards?.getCardById
-
-                    ?
-
-                    window.Cards.getCardById(
+                    window.Cards?.getCardById(
                         unit.cardId
-                    )
-
-                    :
-
-                    null;
-
-
+                    );
 
 
                 if(!card){
@@ -114,12 +81,24 @@ function Board({
 
 
 
+                const stats =
+
+                    unit.stats || {
+
+                        attack:0,
+
+                        health:0
+
+                    };
+
+
+
+
+
 
                 const selected =
 
-                    unit.instanceId === selectedUnitId;
-
-
+                    selectedUnitId === unit.instanceId;
 
 
 
@@ -127,7 +106,6 @@ function Board({
 
 
                 return (
-
 
                     <div
 
@@ -137,19 +115,19 @@ function Board({
 
                         onClick={()=>{
 
-
                             if(onUnitClick){
 
                                 onUnitClick(unit);
 
                             }
 
-
                         }}
 
 
 
                         style={{
+
+                            ...styles.card,
 
 
                             border:
@@ -170,10 +148,6 @@ function Board({
 
 
 
-                            borderRadius:"12px",
-
-
-
                             transform:
 
                             selected
@@ -184,36 +158,79 @@ function Board({
 
                             :
 
-                            "translateY(0)",
-
-
-
-                            transition:"0.2s",
-
-
-
-                            cursor:"pointer"
-
-
+                            "none"
 
                         }}
-
 
 
                     >
 
 
 
-                        <Card
 
 
-                            card={card}
+
+                        <div style={styles.name}>
+
+                            {card.name}
+
+                        </div>
 
 
-                            mode="board"
 
 
-                        />
+
+
+
+
+                        <div style={styles.imageBox}>
+
+
+                            {
+                            card.image
+
+                            ?
+
+                            <img
+
+                                src={card.image}
+
+                                alt=""
+
+                                style={styles.image}
+
+                            />
+
+                            :
+
+                            <div>
+                                АРТ
+                            </div>
+
+                            }
+
+
+                        </div>
+
+
+
+
+
+
+
+
+
+                        <div style={styles.stats}>
+
+                            ⚔️ {stats.attack}
+
+                            &nbsp;
+
+                            ❤️ {stats.health}
+
+
+                        </div>
+
 
 
 
@@ -225,20 +242,18 @@ function Board({
 
             })
 
+
             }
 
 
             </div>
-
 
             }
 
 
         </div>
 
-
     );
-
 
 }
 
@@ -283,10 +298,7 @@ board:{
     borderRadius:"12px",
 
 
-    padding:"8px",
-
-
-    boxSizing:"border-box"
+    padding:"8px"
 
 
 },
@@ -330,14 +342,152 @@ cardsArea:{
 
 
 
+card:{
+
+
+    width:"90px",
+
+
+    height:"145px",
+
+
+    minWidth:"90px",
+
+
+    background:"#252525",
+
+
+    borderRadius:"10px",
+
+
+    padding:"4px",
+
+
+    boxSizing:"border-box",
+
+
+    overflow:"hidden",
+
+
+    cursor:"pointer",
+
+
+    transition:"0.2s",
+
+
+    display:"flex",
+
+
+    flexDirection:"column",
+
+
+    boxShadow:
+        "0 4px 10px rgba(0,0,0,0.5)"
+
+},
+
+
+
+
+
+
+name:{
+
+
+    height:"18px",
+
+
+    fontSize:"9px",
+
+
+    fontWeight:"bold",
+
+
+    textAlign:"center",
+
+
+    overflow:"hidden"
+
+
+},
+
+
+
+
+
+
+imageBox:{
+
+
+    width:"100%",
+
+
+    height:"75px",
+
+
+    overflow:"hidden",
+
+
+    background:"#000",
+
+
+    borderRadius:"6px"
+
+
+},
+
+
+
+
+
+
+image:{
+
+
+    width:"100%",
+
+
+    height:"100%",
+
+
+    objectFit:"cover"
+
+
+},
+
+
+
+
+
+
+stats:{
+
+
+    marginTop:"auto",
+
+
+    textAlign:"center",
+
+
+    fontSize:"10px",
+
+
+    fontWeight:"bold"
+
+
+},
+
+
+
+
+
+
 empty:{
 
 
     color:"#666"
 
-
 }
-
 
 
 };
