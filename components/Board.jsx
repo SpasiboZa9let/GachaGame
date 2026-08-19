@@ -12,6 +12,8 @@ function Board({
 
 
 
+
+
     function getUnitStats(unit){
 
 
@@ -42,6 +44,128 @@ function Board({
 
 
 
+
+
+
+    function getRarityColor(rarity){
+
+
+        switch(rarity){
+
+
+            case "legendary":
+
+                return "#ffd700";
+
+
+            case "epic":
+
+                return "#b84dff";
+
+
+            case "rare":
+
+                return "#3d8cff";
+
+
+            case "uncommon":
+
+                return "#4caf50";
+
+
+            case "common":
+
+                return "#888";
+
+
+            default:
+
+                return "#777";
+
+        }
+
+
+    }
+
+
+
+
+
+
+
+
+
+    function getStatusText(unit){
+
+
+        if(
+            !unit.status ||
+            unit.status.length===0
+        ){
+
+            return null;
+
+        }
+
+
+
+        return unit.status.map(
+
+            (status,index)=>{
+
+
+                switch(status.type){
+
+
+                    case "shield":
+
+                        return (
+                            <div key={index}>
+                                🛡 Щит {status.value}
+                            </div>
+                        );
+
+
+                    case "stun":
+
+                        return (
+                            <div key={index}>
+                                💫 Оглушение
+                            </div>
+                        );
+
+
+                    case "fear":
+
+                        return (
+                            <div key={index}>
+                                😨 Страх
+                            </div>
+                        );
+
+
+                    default:
+
+                        return null;
+
+
+                }
+
+
+            }
+
+        );
+
+
+    }
+
+
+
+
+
+
+
+
     return (
 
         <div style={styles.board}>
@@ -50,351 +174,312 @@ function Board({
             <div style={styles.cardsArea}>
 
 
-                {safeUnits.length === 0 ? (
+            {
+            safeUnits.length===0
+
+            ?
+
+            <div style={styles.empty}>
+                Поле пусто
+            </div>
 
 
-                    <div style={styles.empty}>
+            :
 
-                        Поле пусто
+
+            safeUnits.map(function(unit){
+
+
+
+                if(!unit){
+
+                    return null;
+
+                }
+
+
+
+
+                const card =
+
+                    CARDS.find(
+
+                        item =>
+
+                            item.id === unit.cardId
+
+                    );
+
+
+
+
+                if(!card){
+
+                    return null;
+
+                }
+
+
+
+
+
+
+                const stats =
+                    getUnitStats(unit);
+
+
+
+
+
+
+                const selected =
+
+                    unit.instanceId ===
+                    selectedUnitId;
+
+
+
+
+
+
+
+                return (
+
+
+                <div
+
+
+                    key={
+                        unit.instanceId
+                    }
+
+
+                    onClick={()=>{
+
+
+                        if(onUnitClick){
+
+                            onUnitClick(unit);
+
+                        }
+
+
+                    }}
+
+
+
+                    style={{
+
+
+                        ...styles.unit,
+
+
+                        border:
+
+                            selected
+
+                            ?
+
+                            "3px solid #ffd700"
+
+                            :
+
+                            "3px solid " +
+
+                            getRarityColor(
+                                card.rarity
+                            ),
+
+
+
+
+                        opacity:
+
+                            unit.canAttack
+
+                            ?
+
+                            1
+
+                            :
+
+                            0.65,
+
+
+
+                        boxShadow:
+
+                            selected
+
+                            ?
+
+                            "0 0 15px rgba(255,215,0,0.8)"
+
+                            :
+
+                            "0 5px 12px rgba(0,0,0,0.5)"
+
+
+                    }}
+
+
+
+                >
+
+
+
+
+
+
+
+                    <div style={styles.cost}>
+
+                        {card.cost}
 
                     </div>
 
 
-                ) : (
 
 
-                    safeUnits.map(function(unit){
 
 
-                        if(!unit){
 
-                            return null;
+
+                    <div style={styles.name}>
+
+                        {
+                            card.name
+                        }
+
+                    </div>
+
+
+
+
+
+
+
+
+                    <div style={styles.imageBox}>
+
+
+                        {
+                        card.image
+
+                        ?
+
+                        <img
+
+                            src={card.image}
+
+                            alt={card.name}
+
+                            style={styles.image}
+
+                        />
+
+
+                        :
+
+                        <div style={styles.noImage}>
+                            АРТ
+                        </div>
 
                         }
 
 
-
-                        const card =
-
-                            CARDS.find(
-
-                                function(item){
-
-                                    return (
-
-                                        item.id === unit.cardId
-
-                                    );
-
-                                }
-
-                            );
+                    </div>
 
 
 
-                        if(!card){
 
-                            return null;
+
+
+
+
+
+                    <div style={styles.status}>
+
+
+                        {
+                        unit.canAttack
+
+                        ?
+
+                        "⚔️ Готов"
+
+                        :
+
+                        "💤 Ждет"
 
                         }
 
 
+                    </div>
 
-                        const stats =
 
-                            getUnitStats(unit);
 
 
 
 
-                        const selected =
 
-                            unit.instanceId ===
-                            selectedUnitId;
 
 
+                    {
+                    getStatusText(unit)
 
+                    &&
 
+                    <div style={styles.effects}>
 
-                        return (
+                        {
+                            getStatusText(unit)
+                        }
 
+                    </div>
 
-                            <div
+                    }
 
 
-                                key={
-                                    unit.instanceId
-                                }
 
 
 
-                                onClick={function(){
 
 
-                                    if(onUnitClick){
 
+                    <div style={styles.stats}>
 
-                                        onUnitClick(unit);
 
+                        <span>
+                            ⚔️ {stats.attack}
+                        </span>
 
-                                    }
 
+                        <span>
+                            ❤️ {stats.health}
+                        </span>
 
-                                }}
 
+                        <span>
+                            🛡️ {stats.defense || 0}
+                        </span>
 
 
+                    </div>
 
-                                style={{
 
 
-                                    ...styles.unit,
 
 
+                </div>
 
-                                    border:
 
-                                        selected
+                );
 
-                                        ?
 
-                                        "3px solid #ffd700"
+            })
 
-                                        :
-
-                                        "2px solid #777",
-
-
-
-
-                                    opacity:
-
-                                        unit.canAttack
-
-                                        ?
-
-                                        1
-
-                                        :
-
-                                        0.65,
-
-
-
-
-                                    boxShadow:
-
-                                        selected
-
-                                        ?
-
-                                        "0 0 15px rgba(255,215,0,0.6)"
-
-                                        :
-
-                                        "0 5px 12px rgba(0,0,0,0.5)"
-
-
-                                }}
-
-
-
-                            >
-
-
-
-
-
-                                {/* COST */}
-
-
-                                <div
-                                    style={
-                                        styles.cost
-                                    }
-                                >
-
-                                    {card.cost}
-
-                                </div>
-
-
-
-
-
-
-
-                                {/* NAME */}
-
-
-                                <div
-                                    style={
-                                        styles.name
-                                    }
-                                >
-
-                                    {unit.name || card.name}
-
-                                </div>
-
-
-
-
-
-
-
-
-                                {/* IMAGE */}
-
-
-                                <div
-                                    style={
-                                        styles.imageBox
-                                    }
-                                >
-
-
-                                    {card.image ? (
-
-
-                                        <img
-
-                                            src={
-                                                card.image
-                                            }
-
-
-                                            alt={
-                                                card.name
-                                            }
-
-
-                                            style={
-                                                styles.image
-                                            }
-
-                                        />
-
-
-                                    ) : (
-
-
-                                        <div
-
-                                            style={
-                                                styles.noImage
-                                            }
-
-                                        >
-
-                                            АРТ
-
-                                        </div>
-
-
-                                    )}
-
-
-
-                                </div>
-
-
-
-
-
-
-
-
-
-                                {/* STATUS */}
-
-
-                                <div
-
-                                    style={
-                                        styles.status
-                                    }
-
-                                >
-
-
-                                    {
-
-                                    unit.canAttack
-
-                                    ?
-
-                                    "⚔️ Готов"
-
-                                    :
-
-                                    "💤 Ожидание"
-
-                                    }
-
-
-                                </div>
-
-
-
-
-
-
-
-
-
-                                {/* STATS */}
-
-
-                                <div
-
-                                    style={
-                                        styles.stats
-                                    }
-
-                                >
-
-
-                                    <span>
-
-                                        ⚔️ {stats.attack}
-
-                                    </span>
-
-
-
-                                    <span>
-
-                                        ❤️ {stats.health}
-
-                                    </span>
-
-
-
-                                    <span>
-
-                                        🛡️ {stats.defense}
-
-                                    </span>
-
-
-                                </div>
-
-
-
-
-
-
-                            </div>
-
-
-                        );
-
-
-                    })
-
-
-                )}
+            }
 
 
 
@@ -402,7 +487,6 @@ function Board({
 
 
         </div>
-
 
     );
 
@@ -416,375 +500,331 @@ function Board({
 
 
 
+
 const styles = {
 
 
-    board:{
+board:{
 
 
-        width:"100%",
+    width:"100%",
 
 
-        height:"210px",
+    height:"210px",
 
 
-        minHeight:"210px",
+    background:"#202020",
 
 
-        maxHeight:"210px",
+    border:"1px solid #444",
 
 
-        background:"#202020",
+    borderRadius:"10px",
 
 
-        border:"1px solid #444",
+    padding:"10px",
 
 
-        borderRadius:"10px",
+    boxSizing:"border-box",
 
 
-        boxSizing:"border-box",
+    overflow:"hidden"
 
 
-        overflow:"hidden",
+},
 
 
-        padding:"10px"
 
 
-    },
 
 
+cardsArea:{
 
 
+    display:"flex",
 
-    cardsArea:{
 
+    justifyContent:"center",
 
-        width:"100%",
 
+    gap:"8px",
 
-        height:"100%",
 
+    height:"100%",
 
-        display:"flex",
 
+    overflow:"hidden"
 
-        flexDirection:"row",
 
+},
 
-        flexWrap:"nowrap",
 
 
-        alignItems:"flex-start",
 
 
-        justifyContent:"center",
 
+empty:{
 
-        gap:"8px",
 
+    width:"100%",
 
-        padding:"8px 4px 12px 4px",
 
+    height:"100%",
 
-        boxSizing:"border-box",
 
+    display:"flex",
 
-        overflow:"hidden"
 
+    alignItems:"center",
 
-    },
 
+    justifyContent:"center",
 
 
+    color:"#555"
 
 
-    empty:{
+},
 
 
-        width:"100%",
 
 
-        height:"100%",
 
 
-        display:"flex",
+unit:{
 
 
-        alignItems:"center",
+    width:"100px",
 
 
-        justifyContent:"center",
+    height:"165px",
 
 
-        color:"#555"
+    background:"#292929",
 
 
-    },
+    borderRadius:"10px",
 
 
+    padding:"5px",
 
 
+    display:"flex",
 
 
-    unit:{
+    flexDirection:"column",
 
 
-        position:"relative",
+    position:"relative",
 
 
-        width:"100px",
+    boxSizing:"border-box",
 
 
-        minWidth:"100px",
+    cursor:"pointer"
 
 
-        maxWidth:"100px",
+},
 
 
-        height:"165px",
 
 
-        background:"#292929",
 
 
-        borderRadius:"10px",
+cost:{
 
 
-        padding:"5px",
+    position:"absolute",
 
 
-        boxSizing:"border-box",
+    top:"3px",
 
 
-        display:"flex",
+    left:"3px",
 
 
-        flexDirection:"column",
+    width:"22px",
 
 
-        flexShrink:0,
+    height:"22px",
 
 
-        cursor:"pointer",
+    borderRadius:"50%",
 
 
-        transition:
+    background:"#3478db",
 
-            "transform 0.15s ease, box-shadow 0.15s ease"
 
+    display:"flex",
 
-    },
 
+    justifyContent:"center",
 
 
+    alignItems:"center",
 
 
+    fontSize:"11px",
 
-    cost:{
 
+    fontWeight:"bold"
 
-        position:"absolute",
 
+},
 
-        top:"4px",
 
 
-        left:"4px",
 
 
-        width:"22px",
 
+name:{
 
-        height:"22px",
 
+    textAlign:"center",
 
-        borderRadius:"50%",
 
+    fontSize:"11px",
 
-        background:"#3478db",
 
+    fontWeight:"bold",
 
-        display:"flex",
 
+    height:"20px",
 
-        alignItems:"center",
 
+    overflow:"hidden"
 
-        justifyContent:"center",
 
+},
 
-        fontSize:"11px",
 
 
-        fontWeight:"bold",
 
 
-        zIndex:3
 
+imageBox:{
 
-    },
 
+    height:"80px",
 
 
+    background:"#111",
 
 
+    borderRadius:"6px",
 
-    name:{
 
+    overflow:"hidden"
 
-        height:"20px",
 
+},
 
-        lineHeight:"20px",
 
 
-        textAlign:"center",
 
 
-        fontWeight:"bold",
 
+image:{
 
-        fontSize:"11px",
 
+    width:"100%",
 
-        whiteSpace:"nowrap",
 
+    height:"100%",
 
-        overflow:"hidden",
 
+    objectFit:"cover"
 
-        textOverflow:"ellipsis"
 
+},
 
-    },
 
 
 
 
 
+noImage:{
 
-    imageBox:{
 
+    height:"100%",
 
-        width:"100%",
 
+    display:"flex",
 
-        height:"85px",
 
+    justifyContent:"center",
 
-        background:"#111",
 
+    alignItems:"center",
 
-        border:"1px solid #555",
 
+    color:"#555"
 
-        borderRadius:"6px",
 
+},
 
-        overflow:"hidden"
 
 
-    },
 
 
 
+status:{
 
 
-    image:{
+    textAlign:"center",
 
 
-        width:"100%",
+    fontSize:"8px",
 
 
-        height:"100%",
+    color:"#aaa"
 
 
-        objectFit:"cover",
+},
 
 
-        display:"block"
 
 
-    },
 
 
+effects:{
 
 
+    color:"#ffd700",
 
-    noImage:{
 
+    fontSize:"8px",
 
-        width:"100%",
 
+    textAlign:"center"
 
-        height:"100%",
 
+},
 
-        display:"flex",
 
 
-        alignItems:"center",
 
 
-        justifyContent:"center",
 
+stats:{
 
-        color:"#555",
 
+    marginTop:"auto",
 
-        fontSize:"10px"
 
+    display:"flex",
 
-    },
 
+    justifyContent:"space-between",
 
 
+    fontSize:"10px",
 
 
+    fontWeight:"bold"
 
-    status:{
 
-
-        textAlign:"center",
-
-
-        fontSize:"8px",
-
-
-        color:"#aaa",
-
-
-        paddingTop:"3px"
-
-
-    },
-
-
-
-
-
-
-    stats:{
-
-
-        display:"flex",
-
-
-        justifyContent:"space-between",
-
-
-        padding:"3px 2px",
-
-
-        fontSize:"10px",
-
-
-        fontWeight:"bold"
-
-
-    }
+}
 
 
 };
