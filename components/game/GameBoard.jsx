@@ -23,6 +23,7 @@ function GameBoard({
 
     selectedAttacker,
 
+
     onCardClick,
 
     onPlayerUnitClick,
@@ -30,6 +31,7 @@ function GameBoard({
     onOpponentUnitClick,
 
     onOpponentHeroClick,
+
 
     onEndTurn,
 
@@ -42,182 +44,198 @@ function GameBoard({
 }){
 
 
-return (
+    const scale = Math.min(
 
+        window.innerWidth / 1600,
 
-<>
+        window.innerHeight / 900
 
+    );
 
 
-    <GameOver
 
 
-        gameState={gameState}
 
+    return (
 
-        onRestart={onRestart}
 
+        <div className="game-viewport">
 
-    />
 
 
+            <div
 
+                className="game-scale"
 
+                style={{
 
+                    transform:
 
-    <div className="game-table">
+                        `scale(${scale})`
 
+                }}
 
+            >
 
 
 
-        <aside className="combat-log-panel">
 
 
+                <div className="game-table">
 
-            <GameLog
 
 
-                log={gameState.combatLog}
 
 
-            />
 
+                    <aside className="combat-log-panel">
 
 
-        </aside>
+                        <GameLog
 
+                            log={gameState.combatLog}
 
+                        />
 
 
+                    </aside>
 
 
 
 
 
-        <main className="battlefield-panel">
 
 
+                    <main className="battlefield-panel">
 
-            <GameData gameState={gameState}>
 
 
-            {(data)=>{
+                        <GameData
 
+                            gameState={gameState}
 
-                return (
+                        >
 
 
+                            {(data)=> (
 
-                    <Battlefield
 
 
+                                <Battlefield
 
-                        player={data.player}
 
+                                    player={data.player}
 
 
-                        opponent={data.opponent}
+                                    opponent={data.opponent}
 
 
+                                    handCards={data.handCards}
 
-                        handCards={data.handCards}
 
+                                    opponentHandCards={
 
+                                        data.opponentHandCards
 
-                        opponentHandCards={data.opponentHandCards}
+                                    }
 
 
 
-                        selectedAttacker={selectedAttacker}
+                                    selectedAttacker={
 
+                                        selectedAttacker
 
+                                    }
 
-                        onCardClick={onCardClick}
 
 
+                                    onCardClick={
 
-                        onPlayerUnitClick={onPlayerUnitClick}
+                                        onCardClick
 
+                                    }
 
 
-                        onOpponentUnitClick={onOpponentUnitClick}
+                                    onPlayerUnitClick={
 
+                                        onPlayerUnitClick
 
+                                    }
 
-                        onOpponentHeroClick={onOpponentHeroClick}
 
+                                    onOpponentUnitClick={
 
+                                        onOpponentUnitClick
 
-                    />
+                                    }
 
 
+                                    onOpponentHeroClick={
 
-                );
+                                        onOpponentHeroClick
 
+                                    }
 
-            }}
 
 
+                                />
 
-            </GameData>
 
 
+                            )}
 
-        </main>
 
+                        </GameData>
 
 
 
+                    </main>
 
 
 
 
 
-        <aside className="game-controls-panel">
 
 
+                    <aside className="game-controls-panel">
 
-            <GameControls
 
 
+                        <GameControls
 
-                onEndTurn={onEndTurn}
 
+                            onEndTurn={onEndTurn}
 
 
-                onRestart={onRestart}
+                            onRestart={onRestart}
 
 
+                            onTestBoard={onTestBoard}
 
-                onTestBoard={onTestBoard}
 
+                        />
 
 
-            />
+                    </aside>
 
 
 
-        </aside>
 
 
 
+                </div>
 
 
+            </div>
 
-    </div>
 
+        </div>
 
 
-</>
-
-
-);
+    );
 
 
 }
-
-
 
 
 
