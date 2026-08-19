@@ -30,9 +30,22 @@ function playCard(
 
 
 
+    if(!state){
+
+        return state;
+
+    }
+
+
+
+
+
+
     const player =
 
         state[playerId];
+
+
 
 
 
@@ -49,7 +62,11 @@ function playCard(
 
 
 
+
+
+
     const getCard =
+
 
         window.Cards?.getCardById
 
@@ -61,9 +78,14 @@ function playCard(
 
 
 
+
+
+
     const card =
 
         getCard(cardId);
+
+
 
 
 
@@ -80,8 +102,22 @@ function playCard(
 
 
 
+
+
+    const cost =
+
+        Number(card.cost) || 0;
+
+
+
+
+
+
+
+
+
     if(
-        player.mana < card.cost
+        player.mana < cost
     ){
 
         return state;
@@ -94,9 +130,14 @@ function playCard(
 
 
 
+
+
     /*
-        Ограничение поля
+        Пока только существа
+
+        Заклинания добавим позже
     */
+
 
 
     if(
@@ -116,17 +157,29 @@ function playCard(
 
 
 
-    const unit =
+
+    const createUnit =
+
 
         window.Units?.createCardInstance
 
-        ?
+        ||
 
-        window.Units.createCardInstance(cardId)
+        window.createCardInstance;
 
-        :
 
-        createCardInstance(cardId);
+
+
+
+
+
+
+    const unit =
+
+
+        createUnit(cardId);
+
+
 
 
 
@@ -139,6 +192,7 @@ function playCard(
         return state;
 
     }
+
 
 
 
@@ -165,9 +219,8 @@ function playCard(
 
             mana:
 
-                player.mana -
 
-                card.cost,
+                player.mana - cost,
 
 
 
@@ -218,16 +271,21 @@ function playCard(
 
 
     /*
-        Эффекты при выходе
+        Эффекты входа:
 
         onPlay
         battlecry
         summon
+
     */
 
 
 
-    const effectsSystem =
+
+
+
+    const trigger =
+
 
         window.Effects?.triggerEffects
 
@@ -241,8 +299,10 @@ function playCard(
 
 
 
+
+
     if(
-        typeof effectsSystem === "function"
+        typeof trigger === "function"
     ){
 
 
@@ -262,7 +322,7 @@ function playCard(
                 ?
 
 
-                effectsSystem(
+                trigger(
 
                     newState,
 
@@ -279,11 +339,14 @@ function playCard(
                 item
 
 
+
             );
 
 
 
     }
+
+
 
 
 
@@ -303,12 +366,33 @@ function playCard(
 
 
 
+
 window.CardPlay =
 
 window.CardPlay || {};
 
 
 
+
+
 window.CardPlay.playCard =
+
+playCard;
+
+
+
+
+
+
+
+
+
+/*
+    Совместимость
+*/
+
+
+
+window.playCard =
 
 playCard;
