@@ -16,8 +16,16 @@
 */
 
 
+
+
+
 window.Engine =
+
 window.Engine || {};
+
+
+
+
 
 
 
@@ -26,26 +34,69 @@ function addCombatLog(
     text
 ){
 
+
+
+    if(!state){
+
+        return state;
+
+    }
+
+
+
+
+
+
     return {
 
 
         ...state,
 
 
+
         combatLog:[
+
 
             ...(state.combatLog || []),
 
+
+
             text
+
+
 
         ]
 
 
+
     };
+
 
 }
 
 
 
+
+
+
+
 window.Engine.addCombatLog =
+
+addCombatLog;
+
+
+
+
+
+
+
+
+/*
+    Совместимость
+*/
+
+
+
+window.addCombatLog =
+
 addCombatLog;
