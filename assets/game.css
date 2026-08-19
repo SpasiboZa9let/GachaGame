@@ -1,0 +1,251 @@
+/*
+============================
+
+game.css
+
+Основной дизайн игрового стола
+
+Отвечает за:
+- расположение колонок
+- размеры поля
+- журнал
+- панель управления
+- отсутствие прокрутки страницы
+
+============================
+*/
+
+
+/* Общий экран игры */
+
+.game-table {
+
+
+    width:100%;
+
+    height:100vh;
+
+    display:grid;
+
+    grid-template-columns:
+
+        260px
+
+        minmax(600px,1fr)
+
+        220px;
+
+
+    gap:15px;
+
+
+    padding:15px;
+
+
+    overflow:hidden;
+
+
+    background:#111;
+
+
+}
+
+
+
+/* Левая колонка - журнал */
+
+.combat-log-panel {
+
+
+    background:#1b1b1b;
+
+
+    border:
+
+        1px solid #333;
+
+
+    border-radius:12px;
+
+
+    padding:12px;
+
+
+    overflow:hidden;
+
+
+}
+
+
+
+
+
+/* Центральное поле */
+
+.battlefield-panel {
+
+
+    display:flex;
+
+
+    flex-direction:column;
+
+
+    justify-content:center;
+
+
+    align-items:center;
+
+
+    overflow:hidden;
+
+
+}
+
+
+
+
+
+
+/* Правая колонка кнопок */
+
+.game-controls-panel {
+
+
+    background:#1b1b1b;
+
+
+    border:
+
+        1px solid #333;
+
+
+    border-radius:12px;
+
+
+    padding:15px;
+
+
+    display:flex;
+
+
+    flex-direction:column;
+
+
+    gap:15px;
+
+
+    align-items:center;
+
+
+}
+
+
+
+
+
+
+
+/*
+    Внутренний стол боя
+
+    Пока оставляем совместимость
+*/
+
+.battlefield-panel > div {
+
+
+    width:100%;
+
+
+}
+
+
+
+
+
+
+
+/*
+    Журнал
+
+    Скролл только внутри него
+*/
+
+.combat-log-panel > div {
+
+
+    height:100%;
+
+
+    overflow-y:auto;
+
+
+}
+
+
+
+
+
+
+
+/*
+    Красивый скролл
+*/
+
+.combat-log-panel::-webkit-scrollbar {
+
+
+    width:8px;
+
+
+}
+
+
+.combat-log-panel::-webkit-scrollbar-thumb {
+
+
+    background:#555;
+
+
+    border-radius:10px;
+
+
+}
+
+
+
+
+
+
+
+/*
+    Маленькие экраны
+
+*/
+
+@media(max-width:1000px){
+
+
+    .game-table {
+
+
+        grid-template-columns:
+
+            180px
+
+            1fr
+
+            160px;
+
+
+        gap:8px;
+
+
+        padding:8px;
+
+
+    }
+
+
+}
