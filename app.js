@@ -2,120 +2,23 @@
     ============================
     APP.JS
 
-    Запуск игры
+    Точка запуска игры
 
     Отвечает за:
-
-    - создание состояния
-    - запуск боя
-    - хранение текущего state
-    - связь игровых систем
-
-    UI подключается позже
+    
+    - запуск React
+    - создание Game
+    - подключение к DOM
 
     ============================
 */
 
 
 
+const rootElement =
 
-
-
-function startGame(){
-
-
-
-    const createState =
-
-        window.State?.createInitialGameState
-
-        ||
-
-        window.createInitialGameState;
-
-
-
-
-
-    if(
-        typeof createState !== "function"
-    ){
-
-        console.error(
-            "STATE.JS не загружен"
-        );
-
-        return null;
-
-    }
-
-
-
-
-
-
-
-    let state =
-
-        createState();
-
-
-
-
-
-
-
-
-    /*
-        Тестовый режим
-
-        временно оставляем
-
-        потом удалить
-    */
-
-
-    if(
-        typeof TEST_MODE !== "undefined"
-
-        &&
-
-        TEST_MODE
-
-        &&
-
-        typeof createTestBoard === "function"
-
-    ){
-
-        state =
-
-            createTestBoard(state);
-
-    }
-
-
-
-
-
-
-
-
-
-    window.gameState = state;
-
-
-
-
-
-
-
-    console.log(
-
-        "GAME STARTED",
-
-        state
-
+    document.getElementById(
+        "root"
     );
 
 
@@ -123,39 +26,12 @@ function startGame(){
 
 
 
-
-    return state;
-
-
-}
+if(!rootElement){
 
 
-
-
-
-
-
-
-
-function updateGameState(newState){
-
-
-
-    if(!newState){
-
-        return;
-
-    }
-
-
-
-
-
-    window.gameState = newState;
-
-
-
-    return newState;
+    console.error(
+        "ROOT элемент не найден"
+    );
 
 
 }
@@ -166,82 +42,30 @@ function updateGameState(newState){
 
 
 
-
-
-function getGameState(){
+else {
 
 
 
-    return window.gameState || null;
+    const root =
+
+        ReactDOM.createRoot(
+            rootElement
+        );
+
+
+
+
+
+
+    root.render(
+
+        React.createElement(
+            
+            Game
+
+        )
+
+    );
 
 
 }
-
-
-
-
-
-
-
-
-
-/*
-    Глобальный запуск
-*/
-
-
-
-window.Game =
-
-window.Game || {};
-
-
-
-
-window.Game.start =
-
-startGame;
-
-
-
-
-window.Game.updateState =
-
-updateGameState;
-
-
-
-
-window.Game.getState =
-
-getGameState;
-
-
-
-
-
-
-
-
-
-/*
-    Автостарт
-
-    после загрузки всех файлов
-
-*/
-
-
-window.addEventListener(
-
-    "load",
-
-    () => {
-
-
-        startGame();
-
-
-    }
-
-);
