@@ -21,21 +21,22 @@ function Card({
 
     const size = isBoard
 
-    ?
+        ?
 
-    {
-        width:"110px",
-        height:"160px",
-        minWidth:"110px"
-    }
+        {
+            width:"110px",
+            height:"160px",
+            minWidth:"110px"
+        }
 
-    :
+        :
 
-    {
-        width:"180px",
-        height:"260px",
-        minWidth:"180px"
-    };
+        {
+            width:"180px",
+            height:"260px",
+            minWidth:"180px"
+        };
+
 
 
 
@@ -71,7 +72,7 @@ function Card({
                 borderRadius:"10px",
 
 
-                padding:isBoard ? "3px" : "8px",
+                padding:isBoard ? "4px" : "8px",
 
 
                 boxSizing:"border-box",
@@ -113,13 +114,13 @@ function Card({
 
                     position:"absolute",
 
-                    top:"3px",
+                    top:"4px",
 
-                    left:"3px",
+                    left:"4px",
 
-                    width:isBoard ? "14px" : "30px",
+                    width:isBoard ? "20px" : "30px",
 
-                    height:isBoard ? "14px" : "30px",
+                    height:isBoard ? "20px" : "30px",
 
                     borderRadius:"50%",
 
@@ -131,7 +132,7 @@ function Card({
 
                     justifyContent:"center",
 
-                    fontSize:isBoard ? "8px" : "14px",
+                    fontSize:isBoard ? "10px" : "14px",
 
                     fontWeight:"bold",
 
@@ -163,10 +164,10 @@ function Card({
 
                     fontWeight:"bold",
 
-                    fontSize:isBoard ? "7px" : "14px",
+                    fontSize:isBoard ? "10px" : "14px",
 
 
-                    height:isBoard ? "14px" : "25px",
+                    height:isBoard ? "20px" : "25px",
 
 
                     overflow:"hidden"
@@ -196,7 +197,7 @@ function Card({
                     width:"100%",
 
 
-                    height:isBoard ? "50px" : "120px",
+                    height:isBoard ? "90px" : "120px",
 
 
                     background:"#111",
@@ -205,7 +206,7 @@ function Card({
                     overflow:"hidden",
 
 
-                    borderRadius:"5px"
+                    borderRadius:"6px"
 
 
                 }}
@@ -284,7 +285,7 @@ function Card({
                     fontWeight:"bold",
 
 
-                    fontSize:isBoard ? "8px" : "14px"
+                    fontSize:isBoard ? "11px" : "14px"
 
 
                 }}
