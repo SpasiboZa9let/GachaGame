@@ -16,12 +16,18 @@ function Hero({
     return (
 
         <div
+
             style={{
                 ...heroStyles.container,
+
                 ...(hero.frame === "mage"
+
                     ? heroStyles.mage
+
                     : heroStyles.warrior)
+
             }}
+
         >
 
 
@@ -29,9 +35,13 @@ function Hero({
 
 
                 <img
+
                     src={hero.image}
+
                     alt={hero.name}
+
                     style={heroStyles.portrait}
+
                 />
 
 
@@ -39,36 +49,31 @@ function Hero({
 
 
 
+
+
             <div style={heroStyles.info}>
 
 
                 <strong>
+
                     {hero.name}
+
                 </strong>
 
 
+
                 <span>
+
                     ❤️ {hp}
+
                 </span>
 
-
-                <span>
-                    🛡️ {hero.defense}
-                </span>
-
-
-                <span>
-                    ⚔️ Сила {hero.strength}
-                </span>
-
-
-                <span>
-                    ⭐ Ур. {hero.level}
-                </span>
 
 
                 <span style={heroStyles.mana}>
+
                     🔵 {mana}/{maxMana}
+
                 </span>
 
 
@@ -83,66 +88,101 @@ function Hero({
 
 
 
+
+
 const heroStyles = {
 
 
-    container: {
+    container:{
+
 
         display:"flex",
 
         alignItems:"center",
 
-        gap:"15px",
+        gap:"8px",
 
-        padding:"10px 20px",
+        padding:"5px 8px",
 
-        borderRadius:"20px",
+        borderRadius:"12px",
 
         background:"#202020",
 
+        width:"170px",
+
+        boxSizing:"border-box"
+
+
     },
 
 
-    warrior: {
+
+
+
+    warrior:{
+
 
         border:
-        "3px solid #c99a3d",
+
+        "2px solid #c99a3d",
+
 
         boxShadow:
-        "0 0 20px rgba(255,180,40,0.35)"
+
+        "0 0 10px rgba(255,180,40,0.25)"
+
 
     },
 
 
-    mage: {
+
+
+
+    mage:{
+
 
         border:
-        "3px solid #4ca6ff",
+
+        "2px solid #4ca6ff",
+
 
         boxShadow:
-        "0 0 20px rgba(60,160,255,0.35)"
+
+        "0 0 10px rgba(60,160,255,0.25)"
+
 
     },
 
 
-    portraitFrame: {
 
-        width:"120px",
 
-        height:"120px",
+
+    portraitFrame:{
+
+
+        width:"45px",
+
+        height:"45px",
+
+        flexShrink:0,
 
         borderRadius:"50%",
 
         overflow:"hidden",
 
-        border:"6px solid #777",
+        border:"3px solid #777",
 
         background:"#111"
+
 
     },
 
 
-    portrait: {
+
+
+
+    portrait:{
+
 
         width:"100%",
 
@@ -150,34 +190,47 @@ const heroStyles = {
 
         objectFit:"cover"
 
+
     },
 
 
-    info: {
+
+
+
+    info:{
+
 
         display:"flex",
 
         flexDirection:"column",
 
-        gap:"5px",
+        gap:"2px",
 
         color:"#eee",
 
-        fontSize:"15px"
+        fontSize:"11px"
+
 
     },
 
 
-    mana: {
+
+
+
+    mana:{
+
 
         color:"#55aaff",
 
         fontWeight:"bold"
 
+
     }
 
 
 };
+
+
 
 
 
