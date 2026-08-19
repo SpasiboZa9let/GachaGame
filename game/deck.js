@@ -1,56 +1,69 @@
 /*
-    Система колоды и гача-распределения
+    Система создания колоды
+    Тридевятое царство
 */
+
+
+const DECK_SIZE = 20;
+
 
 
 /*
-    Шансы выпадения редкости
-
-    common      55%
-    uncommon    25%
-    rare        12%
-    epic         5%
-    legendary    3%
-
+    Максимум копий карты
 */
 
 
-const RARITY_CHANCES = [
+const COPY_LIMITS = {
 
-    {
-        rarity:"common",
-        chance:55
-    },
+    common: 2,
 
-    {
-        rarity:"uncommon",
-        chance:25
-    },
+    uncommon: 2,
 
-    {
-        rarity:"rare",
-        chance:12
-    },
+    rare: 2,
 
-    {
-        rarity:"epic",
-        chance:5
-    },
+    epic: 1,
 
-    {
-        rarity:"legendary",
-        chance:3
-    }
+    legendary: 1
 
-];
-
+};
 
 
 
 
 
 /*
-    Получить случайную редкость
+    Вес редкостей
+*/
+
+
+const RARITY_WEIGHTS = {
+
+
+    common:55,
+
+
+    uncommon:25,
+
+
+    rare:12,
+
+
+    epic:5,
+
+
+    legendary:3
+
+
+};
+
+
+
+
+
+
+
+/*
+    Случайная редкость
 */
 
 
@@ -58,28 +71,29 @@ function getRandomRarity(){
 
 
     const roll =
-        Math.random() * 100;
+        Math.random()*100;
 
 
 
-    let total = 0;
+    let current = 0;
 
 
 
     for(
-        let item of RARITY_CHANCES
+        let rarity in RARITY_WEIGHTS
     ){
 
 
-        total += item.chance;
+        current +=
+            RARITY_WEIGHTS[rarity];
 
 
 
         if(
-            roll <= total
+            roll <= current
         ){
 
-            return item.rarity;
+            return rarity;
 
         }
 
@@ -89,6 +103,7 @@ function getRandomRarity(){
 
     return "common";
 
+
 }
 
 
@@ -97,20 +112,25 @@ function getRandomRarity(){
 
 
 
+
 /*
-    Получить случайную карту нужной редкости
+    Случайная карта
+    с учетом лимита копий
 */
 
 
-function getRandomCardByRarity(){
+function getRandomCard(
+    usedCards
+){
 
 
-    const rarity =
+
+    let rarity =
         getRandomRarity();
 
 
 
-    const pool =
+    let pool =
 
         CARDS.filter(
 
@@ -118,31 +138,70 @@ function getRandomCardByRarity(){
 
                 card.rarity === rarity
 
+                &&
+
+                (
+                    !usedCards[card.id]
+
+                    ||
+
+                    usedCards[card.id]
+                    <
+                    COPY_LIMITS[rarity]
+                )
+
         );
 
 
 
+
+
     /*
-        Если вдруг нет карт
-        такой редкости
+        если редкость закончилась,
+        ищем любую доступную
     */
 
 
     if(
-        pool.length === 0
+        pool.length===0
     ){
 
-        return CARDS[
 
-            Math.floor(
-                Math.random()
-                *
-                CARDS.length
-            )
+        pool =
 
-        ];
+        CARDS.filter(
+
+            card =>
+
+                (
+                    !usedCards[card.id]
+
+                    ||
+
+                    usedCards[card.id]
+                    <
+                    COPY_LIMITS[card.rarity]
+
+                )
+
+        );
+
 
     }
+
+
+
+
+
+
+    if(
+        pool.length===0
+    ){
+
+        return null;
+
+    }
+
 
 
 
@@ -159,8 +218,8 @@ function getRandomCardByRarity(){
 
     ];
 
-
 }
+
 
 
 
@@ -170,32 +229,43 @@ function getRandomCardByRarity(){
 
 
 /*
-    Создание боевой колоды
-
-
-    Пока формат:
-    20 случайных карт
-
-
+    Создание колоды
 */
 
 
 function createDeck(){
 
 
+
     const deck = [];
 
 
 
-    for(
-        let i = 0;
-        i < 20;
-        i++
+    const usedCards = {};
+
+
+
+
+
+    while(
+
+        deck.length <
+        DECK_SIZE
+
     ){
 
 
+
         const card =
-            getRandomCardByRarity();
+            getRandomCard(
+                usedCards
+            );
+
+
+
+        if(!card)
+            break;
+
 
 
 
@@ -204,7 +274,23 @@ function createDeck(){
         );
 
 
+
+        if(
+            !usedCards[card.id]
+        ){
+
+            usedCards[card.id]=0;
+
+        }
+
+
+        usedCards[card.id]++;
+
+
+
     }
+
+
 
 
 
@@ -212,6 +298,7 @@ function createDeck(){
 
 
 }
+
 
 
 
@@ -228,16 +315,14 @@ function createDeck(){
 function shuffleDeck(deck){
 
 
-    const newDeck =
-        [
-            ...deck
-        ];
+    const result =
+        [...deck];
 
 
 
     for(
-        let i = newDeck.length - 1;
-        i > 0;
+        let i=result.length-1;
+        i>0;
         i--
     ){
 
@@ -247,22 +332,21 @@ function shuffleDeck(deck){
 
                 Math.random()
                 *
-                (i + 1)
+                (i+1)
 
             );
 
 
 
         [
-            newDeck[i],
-            newDeck[j]
+            result[i],
+            result[j]
 
         ] =
 
         [
-
-            newDeck[j],
-            newDeck[i]
+            result[j],
+            result[i]
 
         ];
 
@@ -271,7 +355,8 @@ function shuffleDeck(deck){
 
 
 
-    return newDeck;
+    return result;
+
 
 }
 
@@ -282,16 +367,16 @@ function shuffleDeck(deck){
 
 
 
+
 /*
     Стартовая рука
-
-
-    Всегда 5 карт
-
 */
 
 
-function drawStartingHand(deck, count = 5){
+function drawStartingHand(
+    deck,
+    count=5
+){
 
 
     return {
@@ -325,12 +410,9 @@ function drawStartingHand(deck, count = 5){
 
 
 
+
 /*
-    Добор отключён
-
-
-    Позже подключим
-    нормальный draw
+    Добор пока отключен
 */
 
 
@@ -339,9 +421,7 @@ function drawCard(
     playerId
 ){
 
-
     return state;
-
 
 }
 
@@ -351,17 +431,8 @@ function drawCard(
 
 
 
-
-window.RARITY_CHANCES =
-RARITY_CHANCES;
-
-
-window.getRandomRarity =
-getRandomRarity;
-
-
-window.getRandomCardByRarity =
-getRandomCardByRarity;
+window.DECK_SIZE =
+DECK_SIZE;
 
 
 window.createDeck =
@@ -378,3 +449,7 @@ drawStartingHand;
 
 window.drawCard =
 drawCard;
+
+
+window.getRandomRarity =
+getRandomRarity;
