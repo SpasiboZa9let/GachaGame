@@ -6,19 +6,15 @@
 
     Карта -> Существо на поле
 
-    Отвечает за:
-
-    - характеристики
-    - эффекты
-    - статусы
-    - амуницию
-    - модификаторы
-
-    НЕ содержит боя
+    Поддерживает:
+    - stats
+    - modifiers
+    - equipment
+    - effects
+    - status
+    - refreshUnitStats
     ============================
 */
-
-
 
 
 
@@ -29,9 +25,7 @@ function createCardInstance(id){
 
 
     const card =
-
         getCardById(id);
-
 
 
 
@@ -49,7 +43,6 @@ function createCardInstance(id){
 
 
     const baseStats = {
-
 
 
         attack:
@@ -81,9 +74,7 @@ function createCardInstance(id){
             card.strength || 0
 
 
-
     };
-
 
 
 
@@ -96,8 +87,8 @@ function createCardInstance(id){
 
 
 
-        instanceId:
 
+        instanceId:
 
 
             id +
@@ -118,9 +109,7 @@ function createCardInstance(id){
 
 
 
-
         cardId:id,
-
 
 
 
@@ -128,7 +117,6 @@ function createCardInstance(id){
         name:
 
             card.name,
-
 
 
 
@@ -142,12 +130,9 @@ function createCardInstance(id){
 
 
 
-
         faction:
 
             card.faction || null,
-
-
 
 
 
@@ -165,9 +150,7 @@ function createCardInstance(id){
 
         /*
             Начальные характеристики
-
         */
-
 
         baseStats:{
 
@@ -184,9 +167,7 @@ function createCardInstance(id){
 
         /*
             Текущие характеристики
-
         */
-
 
         stats:{
 
@@ -203,11 +184,10 @@ function createCardInstance(id){
 
 
 
-
         /*
-            Изменения характеристик
+            Баффы
 
-            Пример:
+            пример:
 
             {
                 stat:"attack",
@@ -217,9 +197,7 @@ function createCardInstance(id){
 
         */
 
-
         modifiers:[],
-
 
 
 
@@ -231,17 +209,9 @@ function createCardInstance(id){
         /*
             Экипировка
 
-            Будущая система:
-
-            когти медведя
-            мечи
-            броня
-
         */
 
-
         equipment:[],
-
 
 
 
@@ -255,8 +225,8 @@ function createCardInstance(id){
 
         */
 
-
         effects:
+
 
             card.effects || [],
 
@@ -266,8 +236,10 @@ function createCardInstance(id){
 
 
 
+
+
         /*
-            Временные состояния
+            Состояния
 
             stun
             fear
@@ -275,9 +247,7 @@ function createCardInstance(id){
 
         */
 
-
         status:[],
-
 
 
 
@@ -300,11 +270,9 @@ function createCardInstance(id){
 
 
     /*
-        Перерасчёт характеристик
+        Пересчет модификаторов
 
-        Если модификаторы есть
-        применяем их
-
+        если система существует
     */
 
 
@@ -328,10 +296,7 @@ function createCardInstance(id){
 
 
 
-
-
     return unit;
-
 
 
 }
