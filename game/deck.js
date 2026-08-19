@@ -9,6 +9,12 @@
 */
 
 
+window.Deck =
+window.Deck || {};
+
+
+
+
 
 const DECK_SIZE = 20;
 
@@ -21,15 +27,11 @@ const COPY_LIMITS = {
 
     common:2,
 
-
     uncommon:2,
-
 
     rare:2,
 
-
     epic:1,
-
 
     legendary:1
 
@@ -47,20 +49,17 @@ const RARITY_WEIGHTS = {
 
     common:55,
 
-
     uncommon:25,
-
 
     rare:12,
 
-
     epic:5,
-
 
     legendary:3
 
 
 };
+
 
 
 
@@ -107,8 +106,6 @@ function getRandomRarity(){
 
 
 
-
-
     return "common";
 
 
@@ -142,11 +139,9 @@ function getRandomCard(
 
 
 
-
-    let rarity =
+    const rarity =
 
         getRandomRarity();
-
 
 
 
@@ -160,26 +155,22 @@ function getRandomCard(
             card =>
 
 
-            card.rarity === rarity
+                card.rarity === rarity
 
+                &&
 
-            &&
+                (
+                    !usedCards[card.id]
 
+                    ||
 
-            (
-                !usedCards[card.id]
+                    usedCards[card.id]
 
+                    <
 
-                ||
+                    COPY_LIMITS[rarity]
 
-
-                usedCards[card.id]
-
-                <
-
-                COPY_LIMITS[rarity]
-
-            )
+                )
 
 
         );
@@ -191,9 +182,7 @@ function getRandomCard(
 
 
 
-
     if(pool.length === 0){
-
 
 
         pool =
@@ -204,12 +193,9 @@ function getRandomCard(
                 card =>
 
 
-                (
                     !usedCards[card.id]
 
-
                     ||
-
 
                     usedCards[card.id]
 
@@ -217,15 +203,11 @@ function getRandomCard(
 
                     COPY_LIMITS[card.rarity]
 
-                )
-
 
             );
 
 
     }
-
-
 
 
 
@@ -243,10 +225,7 @@ function getRandomCard(
 
 
 
-
-
     return pool[
-
 
         Math.floor(
 
@@ -257,7 +236,6 @@ function getRandomCard(
             pool.length
 
         )
-
 
     ];
 
@@ -275,9 +253,7 @@ function getRandomCard(
 function createDeck(){
 
 
-
     const deck = [];
-
 
     const usedCards = {};
 
@@ -303,6 +279,7 @@ function createDeck(){
 
 
 
+
     const firstCardPool =
 
 
@@ -311,19 +288,15 @@ function createDeck(){
             card =>
 
 
-            card.rarity === "rare"
+                card.rarity === "rare"
 
+                ||
 
-            ||
+                card.rarity === "epic"
 
+                ||
 
-            card.rarity === "epic"
-
-
-            ||
-
-
-            card.rarity === "legendary"
+                card.rarity === "legendary"
 
 
         );
@@ -334,7 +307,8 @@ function createDeck(){
 
 
 
-    if(firstCardPool.length > 0){
+
+    if(firstCardPool.length){
 
 
 
@@ -342,7 +316,6 @@ function createDeck(){
 
 
             firstCardPool[
-
 
                 Math.floor(
 
@@ -354,7 +327,6 @@ function createDeck(){
 
                 )
 
-
             ];
 
 
@@ -365,7 +337,6 @@ function createDeck(){
             firstCard.id
 
         );
-
 
 
         usedCards[firstCard.id]=1;
@@ -391,13 +362,11 @@ function createDeck(){
 
         const card =
 
-
             getRandomCard(
 
                 usedCards
 
             );
-
 
 
 
@@ -423,16 +392,11 @@ function createDeck(){
 
 
 
-
         usedCards[card.id] =
-
 
             (usedCards[card.id] || 0)
 
-            +
-
-            1;
-
+            + 1;
 
 
     }
@@ -464,6 +428,7 @@ function shuffleDeck(deck){
     const result =
 
         [...deck];
+
 
 
 
@@ -512,7 +477,6 @@ function shuffleDeck(deck){
         ];
 
 
-
     }
 
 
@@ -545,11 +509,8 @@ function drawStartingHand(
         hand:
 
             deck.slice(
-
                 0,
-
                 count
-
             ),
 
 
@@ -557,9 +518,7 @@ function drawStartingHand(
         deck:
 
             deck.slice(
-
                 count
-
             )
 
 
@@ -581,9 +540,7 @@ function drawCard(
     playerId
 ){
 
-
     return state;
-
 
 }
 
@@ -595,9 +552,7 @@ function drawCard(
 
 
 
-window.Deck =
 
-window.Deck || {};
 
 
 
@@ -606,28 +561,14 @@ window.Deck.DECK_SIZE =
 DECK_SIZE;
 
 
+window.Deck.COPY_LIMITS =
 
-window.Deck.createDeck =
-
-createDeck;
-
+COPY_LIMITS;
 
 
-window.Deck.shuffleDeck =
+window.Deck.RARITY_WEIGHTS =
 
-shuffleDeck;
-
-
-
-window.Deck.drawStartingHand =
-
-drawStartingHand;
-
-
-
-window.Deck.drawCard =
-
-drawCard;
+RARITY_WEIGHTS;
 
 
 
@@ -636,48 +577,26 @@ window.Deck.getRandomRarity =
 getRandomRarity;
 
 
+window.Deck.getRandomCard =
+
+getRandomCard;
 
 
-
-
-
-
-/*
-    Совместимость
-*/
-
-
-
-window.DECK_SIZE =
-
-DECK_SIZE;
-
-
-
-window.createDeck =
+window.Deck.createDeck =
 
 createDeck;
 
 
-
-window.shuffleDeck =
+window.Deck.shuffleDeck =
 
 shuffleDeck;
 
 
-
-window.drawStartingHand =
+window.Deck.drawStartingHand =
 
 drawStartingHand;
 
 
-
-window.drawCard =
+window.Deck.drawCard =
 
 drawCard;
-
-
-
-window.getRandomRarity =
-
-getRandomRarity;
