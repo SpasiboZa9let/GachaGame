@@ -62,7 +62,7 @@ function GameBoard({
                 return (
 
 
-                    <div style={window.gameStyles.game}>
+                    <div style={styles.game}>
 
 
                         <GameOver
@@ -77,56 +77,35 @@ function GameBoard({
 
 
 
-                        <Battlefield
+                        <div style={styles.topPanel}>
 
 
-                            player={player}
+                            <GameControls
 
+                                onEndTurn={onEndTurn}
 
-                            opponent={opponent}
+                                onTestBoard={onTestBoard}
 
-
-                            handCards={handCards}
-
-
-                            opponentHandCards={opponentHandCards}
-
-
-                            selectedAttacker={selectedAttacker}
-
-
-                            onCardClick={onCardClick}
-
-
-                            onPlayerUnitClick={onPlayerUnitClick}
-
-
-                            onOpponentUnitClick={onOpponentUnitClick}
-
-
-                            onOpponentHeroClick={onOpponentHeroClick}
-
-
-                            turn={gameState.turn}
-
-
-                        />
+                            />
 
 
 
 
 
-
-                        <GameControls
-
-
-                            onEndTurn={onEndTurn}
+                            <div style={styles.logBox}>
 
 
-                            onTestBoard={onTestBoard}
+                                <GameLog
+
+                                    log={gameState.combatLog}
+
+                                />
 
 
-                        />
+                            </div>
+
+
+                        </div>
 
 
 
@@ -134,13 +113,49 @@ function GameBoard({
 
 
 
-                        <GameLog
+
+                        <div style={styles.field}>
 
 
-                            log={gameState.combatLog}
+                            <Battlefield
 
 
-                        />
+                                player={player}
+
+
+                                opponent={opponent}
+
+
+                                handCards={handCards}
+
+
+                                opponentHandCards={opponentHandCards}
+
+
+                                selectedAttacker={selectedAttacker}
+
+
+                                onCardClick={onCardClick}
+
+
+                                onPlayerUnitClick={onPlayerUnitClick}
+
+
+                                onOpponentUnitClick={onOpponentUnitClick}
+
+
+                                onOpponentHeroClick={onOpponentHeroClick}
+
+
+                                turn={gameState.turn}
+
+
+                            />
+
+
+                        </div>
+
+
 
 
                     </div>
@@ -159,6 +174,107 @@ function GameBoard({
 
 
 }
+
+
+
+
+
+
+
+
+const styles = {
+
+
+    game:{
+
+
+        width:"100%",
+
+
+        minHeight:"100vh",
+
+
+        padding:"10px",
+
+
+        boxSizing:"border-box",
+
+
+        display:"flex",
+
+
+        flexDirection:"column",
+
+
+        gap:"10px",
+
+
+        alignItems:"center"
+
+
+    },
+
+
+
+
+
+    topPanel:{
+
+
+        width:"100%",
+
+
+        display:"flex",
+
+
+        justifyContent:"space-between",
+
+
+        alignItems:"center"
+
+
+    },
+
+
+
+
+
+    logBox:{
+
+
+        width:"220px",
+
+
+        height:"120px",
+
+
+        overflow:"hidden"
+
+
+    },
+
+
+
+
+
+    field:{
+
+
+        width:"100%",
+
+
+        display:"flex",
+
+
+        justifyContent:"center"
+
+
+    }
+
+
+};
+
+
 
 
 
