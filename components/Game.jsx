@@ -890,7 +890,15 @@ const gameStyles = {
 };
 
 
-
+<button
+onClick={()=>{
+    setGameState(
+        createTestBoard(gameState)
+    );
+}}
+>
+🧪 Тестовое поле
+</button>
 
 
 window.Game = Game;
