@@ -36,16 +36,22 @@ function Battlefield({
 
     onOpponentUnitClick,
 
-    onOpponentHeroClick
+    onOpponentHeroClick,
+
+    turn
 
 
 }){
+
 
 
     return (
 
 
         <div>
+
+
+
 
 
             <OpponentArea
@@ -74,13 +80,16 @@ function Battlefield({
 
 
 
+
+
             <GameTurn
 
 
                 selectedAttacker={selectedAttacker}
 
 
-                turn={window.currentTurn}
+                turn={turn}
+
 
             />
 
@@ -127,6 +136,8 @@ function Battlefield({
 
 
 
+
+
         </div>
 
 
@@ -134,6 +145,8 @@ function Battlefield({
 
 
 }
+
+
 
 
 
