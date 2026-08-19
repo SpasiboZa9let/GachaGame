@@ -11,14 +11,16 @@
     - розыгрыш карт
     - выбор атакующего
     - атаки
-    - вывод поля
+
+    Отображение вынесено в:
+    
+    components/game/GameBoard.jsx
 
     ============================
 */
 
 
 function Game(){
-
 
 
     const [gameState,setGameState] =
@@ -44,87 +46,6 @@ function Game(){
 
 
 
-    const player =
-
-        gameState.player;
-
-
-
-
-
-    const opponent =
-
-        gameState.opponent;
-
-
-
-
-
-
-
-
-
-    const handCards =
-
-
-        (player.hand || [])
-
-        .map(
-
-
-            cardId =>
-
-
-            window.Cards.getCardById(
-
-                cardId
-
-            )
-
-
-        )
-
-
-        .filter(Boolean);
-
-
-
-
-
-
-
-
-    const opponentHandCards =
-
-
-        (opponent.hand || [])
-
-        .map(
-
-
-            cardId =>
-
-
-            window.Cards.getCardById(
-
-                cardId
-
-            )
-
-
-        )
-
-
-        .filter(Boolean);
-
-
-
-
-
-
-
-
-
     /*
         Разыграть карту
     */
@@ -133,14 +54,11 @@ function Game(){
     function handleCardClick(card){
 
 
-
         if(!card){
 
             return;
 
         }
-
-
 
 
 
@@ -153,7 +71,6 @@ function Game(){
             return;
 
         }
-
 
 
 
@@ -180,16 +97,10 @@ function Game(){
 
 
 
-
-        setGameState(
-
-            newState
-
-        );
+        setGameState(newState);
 
 
     }
-
 
 
 
@@ -206,13 +117,11 @@ function Game(){
     function handlePlayerUnitClick(unit){
 
 
-
         if(!unit){
 
             return;
 
         }
-
 
 
 
@@ -231,7 +140,6 @@ function Game(){
 
 
 
-
         if(
 
             !window.Combat.canUnitAttack(unit)
@@ -241,7 +149,6 @@ function Game(){
             return;
 
         }
-
 
 
 
@@ -268,8 +175,6 @@ function Game(){
 
 
 
-
-
         setSelectedAttacker(
 
             unit.instanceId
@@ -286,14 +191,12 @@ function Game(){
 
 
 
-
     /*
         Атака существа противника
     */
 
 
     function handleOpponentUnitClick(unit){
-
 
 
         if(
@@ -337,20 +240,10 @@ function Game(){
 
 
 
-
-
-        setGameState(
-
-            newState
-
-        );
-
-
-
+        setGameState(newState);
 
 
         setSelectedAttacker(null);
-
 
 
     }
@@ -362,14 +255,12 @@ function Game(){
 
 
 
-
     /*
-        Атака героя
+        Атака героя противника
     */
 
 
     function handleOpponentHeroClick(){
-
 
 
         if(
@@ -414,23 +305,13 @@ function Game(){
 
 
 
-        setGameState(
-
-            newState
-
-        );
-
-
-
-
-
+        setGameState(newState);
 
 
         setSelectedAttacker(null);
 
 
     }
-
 
 
 
@@ -447,7 +328,6 @@ function Game(){
     function handleEndTurn(){
 
 
-
         if(
 
             gameState.gameOver
@@ -457,7 +337,6 @@ function Game(){
             return;
 
         }
-
 
 
 
@@ -478,15 +357,7 @@ function Game(){
 
 
 
-
-        setGameState(
-
-            newState
-
-        );
-
-
-
+        setGameState(newState);
 
 
         setSelectedAttacker(null);
@@ -501,14 +372,12 @@ function Game(){
 
 
 
-
     /*
-        Перезапуск
+        Перезапуск игры
     */
 
 
     function handleRestart(){
-
 
 
         setSelectedAttacker(null);
@@ -534,7 +403,6 @@ function Game(){
 
 
 
-
     /*
         Тестовое поле
     */
@@ -543,12 +411,12 @@ function Game(){
     function handleTestBoard(){
 
 
-
         if(
 
             typeof window.createTestBoard !== "function"
 
         ){
+
 
             console.warn(
 
@@ -558,6 +426,7 @@ function Game(){
 
 
             return;
+
 
         }
 
@@ -589,537 +458,48 @@ function Game(){
 
 
 
-
     return (
 
 
-<div style={gameStyles.game}>
+        <GameBoard
 
 
-{
+            gameState={gameState}
 
 
-gameState.gameOver &&
+            selectedAttacker={selectedAttacker}
 
 
 
-<div style={gameStyles.gameOver}>
+            onCardClick={handleCardClick}
 
 
-<h2>
+            onPlayerUnitClick={handlePlayerUnitClick}
 
 
-{
+            onOpponentUnitClick={handleOpponentUnitClick}
 
-gameState.winner === "player"
 
+            onOpponentHeroClick={handleOpponentHeroClick}
 
-?
 
 
-"🏆 ПОБЕДА"
+            onEndTurn={handleEndTurn}
 
 
-:
+            onRestart={handleRestart}
 
 
-"☠️ ПОРАЖЕНИЕ"
+            onTestBoard={handleTestBoard}
 
 
-}
-
-
-</h2>
-
-
-
-
-<button
-
-onClick={handleRestart}
-
-style={gameStyles.restart}
-
->
-
-
-Начать заново
-
-
-</button>
-
-
-</div>
-
-
-}
-
-
-
-
-
-
-
-
-
-<section>
-
-
-<h3>
-
-Противник
-
-</h3>
-
-
-
-<Hand
-
-cards={opponentHandCards}
-
-/>
-
-
-
-
-
-
-
-<div
-
-onClick={handleOpponentHeroClick}
-
-style={
-
-selectedAttacker
-
-?
-
-gameStyles.target
-
-:
-
-{}
-
-}
-
->
-
-
-<Hero
-
-hero={opponent.hero}
-
-hp={opponent.hp}
-
-mana={opponent.mana}
-
-maxMana={opponent.maxMana}
-
-/>
-
-
-</div>
-
-
-
-
-
-
-
-<Board
-
-
-units={opponent.board || []}
-
-
-onUnitClick={handleOpponentUnitClick}
-
-
-selectedUnitId={null}
-
-
-/>
-
-
-</section>
-
-
-
-
-
-
-
-
-
-<div style={gameStyles.turn}>
-
-
-{
-
-selectedAttacker
-
-
-?
-
-
-"⚔️ Выберите цель"
-
-
-:
-
-
-"Ход: " + gameState.turn
-
-
-}
-
-
-</div>
-
-
-
-
-
-
-
-
-
-<section>
-
-
-<h3>
-
-Игрок
-
-</h3>
-
-
-
-<Board
-
-
-units={player.board || []}
-
-
-onUnitClick={handlePlayerUnitClick}
-
-
-selectedUnitId={selectedAttacker}
-
-
-/>
-
-
-
-
-
-
-
-<Hero
-
-hero={player.hero}
-
-hp={player.hp}
-
-mana={player.mana}
-
-maxMana={player.maxMana}
-
-/>
-
-
-</section>
-
-
-
-
-
-
-
-
-
-<Hand
-
-
-cards={handCards}
-
-
-onCardClick={handleCardClick}
-
-
-/>
-
-
-
-
-
-
-
-
-
-<button
-
-style={gameStyles.button}
-
-onClick={handleEndTurn}
-
->
-
-
-Завершить ход
-
-
-</button>
-
-
-
-
-
-
-
-
-<button
-
-style={gameStyles.button}
-
-onClick={handleTestBoard}
-
->
-
-
-🧪 Тестовое поле
-
-
-</button>
-
-
-
-
-
-
-
-
-
-<div style={gameStyles.log}>
-
-
-<h4>
-
-Лог боя
-
-</h4>
-
-
-
-{
-
-(gameState.combatLog || [])
-
-.slice(-10)
-
-.map(
-
-(text,index)=>(
-
-<div key={index}>
-
-{text}
-
-</div>
-
-)
-
-)
-
-
-}
-
-
-</div>
-
-
-
-
-
-
-
-</div>
+        />
 
 
     );
 
 
 }
-
-
-
-
-
-
-
-
-
-const gameStyles = {
-
-
-
-game:{
-
-
-padding:"20px",
-
-
-display:"flex",
-
-
-flexDirection:"column",
-
-
-alignItems:"center",
-
-
-gap:"15px"
-
-
-
-},
-
-
-
-
-
-turn:{
-
-
-fontSize:"20px",
-
-
-fontWeight:"bold"
-
-
-},
-
-
-
-
-
-button:{
-
-
-padding:"12px 30px",
-
-
-background:"#444",
-
-
-color:"#fff",
-
-
-border:"none",
-
-
-borderRadius:"8px",
-
-
-cursor:"pointer"
-
-
-},
-
-
-
-
-
-target:{
-
-
-cursor:"crosshair",
-
-
-filter:"drop-shadow(0 0 15px red)"
-
-
-},
-
-
-
-
-
-log:{
-
-
-width:"90%",
-
-
-background:"#111",
-
-
-padding:"10px",
-
-
-borderRadius:"8px",
-
-
-fontSize:"14px"
-
-
-},
-
-
-
-
-
-gameOver:{
-
-
-position:"fixed",
-
-
-top:"40%",
-
-
-left:"50%",
-
-
-transform:"translate(-50%,-50%)",
-
-
-background:"#222",
-
-
-padding:"30px",
-
-
-borderRadius:"15px",
-
-
-zIndex:100
-
-
-},
-
-
-
-
-
-restart:{
-
-
-padding:"10px 25px",
-
-
-cursor:"pointer"
-
-
-}
-
-
-
-};
-
-
-
 
 
 
