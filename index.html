@@ -20,7 +20,6 @@
 <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
 
 
-
 <style>
 
 * {
@@ -33,7 +32,6 @@ body {
 
     margin:0;
     padding:0;
-
     min-height:100%;
 
 }
@@ -82,14 +80,10 @@ button {
 
 
 
-
 <!-- =====================
         DATA
 ===================== -->
 
-
-
-<!-- Карты -->
 
 <script
 type="text/babel"
@@ -122,10 +116,6 @@ src="./data/cards/legendary.js">
 
 
 
-
-
-<!-- Сборщик всех карт -->
-
 <script
 type="text/babel"
 src="./data/cards.js">
@@ -139,10 +129,12 @@ src="./data/heroes.js">
 </script>
 
 
+
 <script
 type="text/babel"
 src="./data/factions.js">
 </script>
+
 
 
 <script
@@ -156,15 +148,12 @@ src="./data/effects.js">
 
 
 
-
-
 <!-- =====================
         GAME CORE
 ===================== -->
 
 
-
-<!-- вспомогательные -->
+<!-- utils -->
 
 <script
 type="text/babel"
@@ -173,7 +162,7 @@ src="./game/utils.js">
 
 
 
-<!-- поиск карт -->
+<!-- карты -->
 
 <script
 type="text/babel"
@@ -182,15 +171,12 @@ src="./game/cards.js">
 
 
 
-<!-- колоды -->
+<!-- колода -->
 
 <script
 type="text/babel"
 src="./game/deck.js">
 </script>
-
-
-
 
 
 
@@ -203,9 +189,6 @@ src="./game/testMode.js">
 
 
 
-
-
-
 <!-- состояние игры -->
 
 <script
@@ -215,18 +198,12 @@ src="./game/state.js">
 
 
 
-
-
-
-<!-- создание существ -->
+<!-- существа -->
 
 <script
 type="text/babel"
 src="./game/units.js">
 </script>
-
-
-
 
 
 
@@ -239,18 +216,12 @@ src="./game/modifiers.js">
 
 
 
-
-
-
 <!-- эффекты -->
 
 <script
 type="text/babel"
 src="./game/effects.js">
 </script>
-
-
-
 
 
 
@@ -263,9 +234,6 @@ src="./game/cardPlay.js">
 
 
 
-
-
-
 <!-- бой -->
 
 <script
@@ -275,16 +243,7 @@ src="./game/combat.js">
 
 
 
-
-
-
 <!-- ходы -->
-
-<script
-type="text/babel"
-src="./game/turnManager.js">
-</script>
-
 
 <script
 type="text/babel"
@@ -293,6 +252,10 @@ src="./game/turns.js">
 
 
 
+<script
+type="text/babel"
+src="./game/turnManager.js">
+</script>
 
 
 
@@ -308,25 +271,9 @@ src="./game/victory.js">
 
 
 
-<!-- ядро -->
-
-<script
-type="text/babel"
-src="./game/engine.js">
-</script>
-
-
-
-
-
-
-
-
-
 <!-- =====================
         COMPONENTS
 ===================== -->
-
 
 
 <script
@@ -335,10 +282,12 @@ src="./components/Card.jsx">
 </script>
 
 
+
 <script
 type="text/babel"
 src="./components/Board.jsx">
 </script>
+
 
 
 <script
@@ -347,10 +296,12 @@ src="./components/Hand.jsx">
 </script>
 
 
+
 <script
 type="text/babel"
 src="./components/Hero.jsx">
 </script>
+
 
 
 <script
@@ -359,10 +310,12 @@ src="./components/Mana.jsx">
 </script>
 
 
+
 <script
 type="text/babel"
 src="./components/Modal.jsx">
 </script>
+
 
 
 <script
