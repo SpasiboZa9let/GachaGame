@@ -1,22 +1,22 @@
 /*
 ============================
+
 GameBoard.jsx
 
-Главный экран боя
+Главная игровая сцена
 
-Отвечает только за сборку:
+Отвечает только за сборку UI
 
-- окончание боя
-- игровое поле
-- кнопки
-- лог
+Логика находится в:
+Game.jsx
+GameActions.js
+game/
 
 ============================
 */
 
 
 function GameBoard({
-
 
     gameState,
 
@@ -40,126 +40,122 @@ function GameBoard({
 }){
 
 
-    return (
+return (
+
+<div className="game-table">
+
+
+
+    <aside className="combat-log-panel">
+
+
+        <GameLog
+
+            gameState={gameState}
+
+        />
+
+
+    </aside>
+
+
+
+
+
+    <main className="battlefield-panel">
 
 
         <GameData gameState={gameState}>
 
 
-            {(data) => {
+        {(data)=>{
 
 
-                const player = data.player;
+            return (
 
-                const opponent = data.opponent;
 
-                const handCards = data.handCards;
+                <Battlefield
 
-                const opponentHandCards = data.opponentHandCards;
 
+                    player={data.player}
 
 
-                return (
+                    opponent={data.opponent}
 
 
-                    <div style={window.gameStyles.game}>
+                    handCards={data.handCards}
 
 
-                        <GameOver
+                    opponentHandCards={data.opponentHandCards}
 
-                            gameState={gameState}
 
-                            onRestart={onRestart}
 
-                        />
+                    selectedAttacker={selectedAttacker}
 
 
 
+                    onCardClick={onCardClick}
 
 
-                        <Battlefield
+                    onPlayerUnitClick={onPlayerUnitClick}
 
 
-                            player={player}
+                    onOpponentUnitClick={onOpponentUnitClick}
 
 
-                            opponent={opponent}
+                    onOpponentHeroClick={onOpponentHeroClick}
 
 
-                            handCards={handCards}
+                />
 
 
-                            opponentHandCards={opponentHandCards}
+            );
 
 
-                            selectedAttacker={selectedAttacker}
-
-
-                            onCardClick={onCardClick}
-
-
-                            onPlayerUnitClick={onPlayerUnitClick}
-
-
-                            onOpponentUnitClick={onOpponentUnitClick}
-
-
-                            onOpponentHeroClick={onOpponentHeroClick}
-
-
-                            turn={gameState.turn}
-
-
-                        />
-
-
-
-
-
-
-                        <GameControls
-
-
-                            onEndTurn={onEndTurn}
-
-
-                            onTestBoard={onTestBoard}
-
-
-                        />
-
-
-
-
-
-
-
-                        <GameLog
-
-
-                            log={gameState.combatLog}
-
-
-                        />
-
-
-                    </div>
-
-
-                );
-
-
-            }}
+        }}
 
 
         </GameData>
 
 
-    );
+    </main>
+
+
+
+
+
+
+
+    <aside className="game-controls-panel">
+
+
+        <GameControls
+
+
+            onEndTurn={onEndTurn}
+
+
+            onRestart={onRestart}
+
+
+            onTestBoard={onTestBoard}
+
+
+        />
+
+
+    </aside>
+
+
+
+
+</div>
+
+
+);
 
 
 }
-
 
 
 
