@@ -51,10 +51,9 @@ return (
 
         <GameLog
 
-            gameState={gameState}
+    log={gameState.log}
 
-        />
-
+/>
 
     </aside>
 
