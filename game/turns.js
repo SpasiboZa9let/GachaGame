@@ -14,33 +14,17 @@ function preparePlayerTurn(state) {
 
 
     let maxMana =
+
         state.player.maxMana;
 
 
 
-    if (
-        maxMana < 10
-    ) {
+    if(maxMana < 10){
 
         maxMana++;
 
     }
 
-
-
-    const refreshedBoard =
-
-        state.player.board.map(
-
-            unit => ({
-
-                ...unit,
-
-                canAttack:true
-
-            })
-
-        );
 
 
 
@@ -66,8 +50,20 @@ function preparePlayerTurn(state) {
             mana:maxMana,
 
 
+
             board:
-                refreshedBoard
+
+                state.player.board.map(
+
+                    unit => ({
+
+                        ...unit,
+
+                        canAttack:true
+
+                    })
+
+                )
 
 
         }
@@ -88,33 +84,18 @@ function prepareOpponentTurn(state) {
 
 
     let maxMana =
+
         state.opponent.maxMana;
 
 
 
-    if (
-        maxMana < 10
-    ) {
+    if(maxMana < 10){
 
         maxMana++;
 
     }
 
 
-
-    const refreshedBoard =
-
-        state.opponent.board.map(
-
-            unit => ({
-
-                ...unit,
-
-                canAttack:true
-
-            })
-
-        );
 
 
 
@@ -140,8 +121,20 @@ function prepareOpponentTurn(state) {
             mana:maxMana,
 
 
+
             board:
-                refreshedBoard
+
+                state.opponent.board.map(
+
+                    unit => ({
+
+                        ...unit,
+
+                        canAttack:true
+
+                    })
+
+                )
 
 
         }
@@ -160,27 +153,39 @@ function prepareOpponentTurn(state) {
 
 
 
-/*
-    Поиск карты для AI
-*/
-
-
-function getRandomPlayableCard(state) {
+function getRandomPlayableCard(state){
 
 
     const opponent =
+
         state.opponent;
 
 
 
-    if (
+    if(
         !opponent ||
         !Array.isArray(opponent.hand)
-    ) {
+    ){
 
         return null;
 
     }
+
+
+
+
+
+
+    const getCard =
+
+        window.Cards?.getCardById
+
+        ||
+
+        window.getCardById;
+
+
+
 
 
 
@@ -194,7 +199,7 @@ function getRandomPlayableCard(state) {
 
             id =>
 
-                window.getCardById(id)
+            getCard(id)
 
         )
 
@@ -214,9 +219,8 @@ function getRandomPlayableCard(state) {
 
 
 
-    if (
-        playable.length === 0
-    ) {
+
+    if(playable.length === 0){
 
         return null;
 
@@ -225,17 +229,20 @@ function getRandomPlayableCard(state) {
 
 
 
+
+
     return playable[
 
         Math.floor(
 
-            Math.random()
-            *
+            Math.random() *
+
             playable.length
 
         )
 
     ];
+
 
 }
 
@@ -247,32 +254,27 @@ function getRandomPlayableCard(state) {
 
 
 
-
-/*
-    AI играет карты
-*/
+function opponentPlayCards(state){
 
 
-function opponentPlayCards(state) {
-
-
-    let newState =
-        state;
+    let newState = state;
 
 
 
-    while(true) {
+    while(true){
 
 
         const card =
 
             getRandomPlayableCard(
+
                 newState
+
             );
 
 
 
-        if(!card) {
+        if(!card){
 
             break;
 
@@ -280,7 +282,9 @@ function opponentPlayCards(state) {
 
 
 
+
         const before =
+
             newState;
 
 
@@ -299,9 +303,9 @@ function opponentPlayCards(state) {
 
 
 
-        if(
-            before === newState
-        ) {
+
+
+        if(before === newState){
 
             break;
 
@@ -325,20 +329,15 @@ function opponentPlayCards(state) {
 
 
 
-/*
-    Атака AI
-*/
+function opponentAttack(state){
 
 
-function opponentAttack(state) {
-
-
-    let newState =
-        state;
+    let newState = state;
 
 
 
-    while(true) {
+
+    while(true){
 
 
 
@@ -351,19 +350,23 @@ function opponentAttack(state) {
 
                 unit =>
 
-                    unit.canAttack === true
+                unit.canAttack === true
 
             );
 
 
 
+
+
         if(
             attackers.length === 0
-        ) {
+        ){
 
             break;
 
         }
+
+
 
 
 
@@ -375,8 +378,8 @@ function opponentAttack(state) {
 
                 Math.floor(
 
-                    Math.random()
-                    *
+                    Math.random() *
+
                     attackers.length
 
                 )
@@ -387,14 +390,11 @@ function opponentAttack(state) {
 
 
 
-        /*
-            Есть существа игрока
-        */
 
 
         if(
             newState.player.board.length > 0
-        ) {
+        ){
 
 
 
@@ -405,8 +405,8 @@ function opponentAttack(state) {
 
                     Math.floor(
 
-                        Math.random()
-                        *
+                        Math.random() *
+
                         newState.player.board.length
 
                     )
@@ -415,9 +415,10 @@ function opponentAttack(state) {
 
 
 
+
             newState =
 
-                window.attackUnit(
+                window.Combat.attackUnit(
 
                     newState,
 
@@ -435,9 +436,8 @@ function opponentAttack(state) {
 
 
 
-        /*
-            Бьем героя
-        */
+
+
 
 
         else {
@@ -445,7 +445,14 @@ function opponentAttack(state) {
 
 
             const damage =
-                attacker.attack;
+
+
+                attacker.stats?.attack
+
+                ||
+
+                0;
+
 
 
 
@@ -453,6 +460,7 @@ function opponentAttack(state) {
 
 
                 ...newState,
+
 
 
                 player:{
@@ -476,40 +484,25 @@ function opponentAttack(state) {
 
 
 
+
                 combatLog:[
 
 
                     ...(newState.combatLog || []),
 
 
+                    attacker.name +
 
-                    "«"
+                    " атакует героя и наносит " +
 
-                    +
-
-                    (
-                        window.getCardById(
-                            attacker.cardId
-                        )?.name
-                        ||
-                        "Существо"
-
-                    )
-
-                    +
-
-                    "» атакует героя и наносит "
-
-                    +
-
-                    damage
-
-                    +
+                    damage +
 
                     " урона."
 
 
                 ]
+
+
 
             };
 
@@ -520,15 +513,14 @@ function opponentAttack(state) {
 
 
 
-        /*
-            Существо больше не атакует
-        */
+
 
 
         newState = {
 
 
             ...newState,
+
 
 
             opponent:{
@@ -544,21 +536,22 @@ function opponentAttack(state) {
 
                         unit =>
 
-                            unit.instanceId === attacker.instanceId
 
-                            ?
+                        unit.instanceId === attacker.instanceId
 
-                            {
+                        ?
 
-                                ...unit,
+                        {
 
-                                canAttack:false
+                            ...unit,
 
-                            }
+                            canAttack:false
 
-                            :
+                        }
 
-                            unit
+                        :
+
+                        unit
 
 
                     )
@@ -573,19 +566,28 @@ function opponentAttack(state) {
 
 
 
+
+
+
         newState =
 
-            window.checkGameOver(
-                newState
-            );
+            window.Victory?.checkGameOver
+
+            ?
+
+            window.Victory.checkGameOver(newState)
+
+            :
+
+            window.checkGameOver(newState);
 
 
 
 
 
-        if(
-            newState.gameOver
-        ) {
+
+
+        if(newState.gameOver){
 
             break;
 
@@ -593,6 +595,7 @@ function opponentAttack(state) {
 
 
     }
+
 
 
 
@@ -609,24 +612,22 @@ function opponentAttack(state) {
 
 
 
-/*
-    Ход AI полностью
-*/
+function opponentTurn(state){
 
 
-function opponentTurn(state) {
+    let newState = state;
 
-
-    let newState =
-        state;
 
 
 
     newState =
 
         prepareOpponentTurn(
+
             newState
+
         );
+
 
 
 
@@ -648,7 +649,10 @@ function opponentTurn(state) {
 
         ]
 
+
+
     };
+
 
 
 
@@ -657,8 +661,12 @@ function opponentTurn(state) {
     newState =
 
         opponentPlayCards(
+
             newState
+
         );
+
+
 
 
 
@@ -666,8 +674,11 @@ function opponentTurn(state) {
     newState =
 
         opponentAttack(
+
             newState
+
         );
+
 
 
 
@@ -686,22 +697,19 @@ function opponentTurn(state) {
 
 
 
-/*
-    Завершение хода игрока
-*/
-
-
-function endTurn(state) {
+function endTurn(state){
 
 
 
     if(
         state.activePlayer !== "player"
-    ) {
+    ){
 
         return state;
 
     }
+
+
 
 
 
@@ -723,7 +731,9 @@ function endTurn(state) {
 
         ]
 
+
     };
+
 
 
 
@@ -732,16 +742,17 @@ function endTurn(state) {
     newState =
 
         opponentTurn(
+
             newState
+
         );
 
 
 
 
 
-    if(
-        newState.gameOver
-    ) {
+
+    if(newState.gameOver){
 
         return newState;
 
@@ -755,8 +766,11 @@ function endTurn(state) {
     newState =
 
         preparePlayerTurn(
+
             newState
+
         );
+
 
 
 
@@ -789,34 +803,35 @@ function endTurn(state) {
 
 
 
-/*
-    GLOBAL EXPORT
-*/
+window.Turns =
+
+window.Turns || {};
 
 
-window.preparePlayerTurn =
-    preparePlayerTurn;
+
+window.Turns.preparePlayerTurn =
+preparePlayerTurn;
 
 
-window.prepareOpponentTurn =
-    prepareOpponentTurn;
+window.Turns.prepareOpponentTurn =
+prepareOpponentTurn;
 
 
-window.getRandomPlayableCard =
-    getRandomPlayableCard;
+window.Turns.getRandomPlayableCard =
+getRandomPlayableCard;
 
 
-window.opponentPlayCards =
-    opponentPlayCards;
+window.Turns.opponentPlayCards =
+opponentPlayCards;
 
 
-window.opponentAttack =
-    opponentAttack;
+window.Turns.opponentAttack =
+opponentAttack;
 
 
-window.opponentTurn =
-    opponentTurn;
+window.Turns.opponentTurn =
+opponentTurn;
 
 
-window.endTurn =
-    endTurn;
+window.Turns.endTurn =
+endTurn;
