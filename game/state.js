@@ -23,6 +23,28 @@
 
 
 
+function safeNumber(value, fallback){
+
+    return (
+        typeof value === "number"
+        &&
+        !isNaN(value)
+    )
+    ?
+    value
+    :
+    fallback;
+
+}
+
+
+
+
+
+
+
+
+
 function createInitialGameState(){
 
 
@@ -52,9 +74,6 @@ function createInitialGameState(){
 
 
 
-
-
-
     let playerDeck =
 
         shuffleDeck(
@@ -62,9 +81,6 @@ function createInitialGameState(){
             createDeck()
 
         );
-
-
-
 
 
 
@@ -81,9 +97,6 @@ function createInitialGameState(){
 
 
 
-
-
-
     const playerStart =
 
         drawStartingHand(
@@ -93,9 +106,6 @@ function createInitialGameState(){
             5
 
         );
-
-
-
 
 
 
@@ -117,42 +127,59 @@ function createInitialGameState(){
 
 
 
+    const playerHP =
+
+        safeNumber(
+
+            playerHero?.maxHealth,
+
+            10000
+
+        );
+
+
+
+
+
+    const opponentHP =
+
+        safeNumber(
+
+            opponentHero?.maxHealth,
+
+            9000
+
+        );
+
+
+
+
+
+
+
 
 
     let state = {
 
 
-
-
         turn:1,
-
 
 
         activePlayer:"player",
 
 
-
         gameOver:false,
-
 
 
         winner:null,
 
 
 
-
-
         combatLog:[
-
 
             "Бой начинается."
 
-
         ],
-
-
-
-
 
 
 
@@ -166,47 +193,26 @@ function createInitialGameState(){
 
 
 
-
-            hp:
-
-
-                playerHero
-
-                ?
-
-                playerHero.maxHealth
-
-                :
-
-                10000,
-
-
+            hp:playerHP,
 
 
 
             mana:1,
 
 
-
             maxMana:1,
-
-
 
 
 
             deck:
 
-                playerStart.deck,
-
-
+                playerStart.deck || [],
 
 
 
             hand:
 
-                playerStart.hand,
-
-
+                playerStart.hand || [],
 
 
 
@@ -222,8 +228,6 @@ function createInitialGameState(){
 
 
 
-
-
         opponent:{
 
 
@@ -232,47 +236,26 @@ function createInitialGameState(){
 
 
 
-
-            hp:
-
-
-                opponentHero
-
-                ?
-
-                opponentHero.maxHealth
-
-                :
-
-                10000,
-
-
+            hp:opponentHP,
 
 
 
             mana:1,
 
 
-
             maxMana:1,
-
-
 
 
 
             deck:
 
-                opponentStart.deck,
-
-
+                opponentStart.deck || [],
 
 
 
             hand:
 
-                opponentStart.hand,
-
-
+                opponentStart.hand || [],
 
 
 
@@ -281,8 +264,6 @@ function createInitialGameState(){
 
 
         }
-
-
 
 
 
@@ -298,7 +279,6 @@ function createInitialGameState(){
 
     /*
         ТЕСТОВЫЙ РЕЖИМ
-
     */
 
 
@@ -316,7 +296,16 @@ function createInitialGameState(){
 
         state.player.hand =
 
-            getTestHand();
+            typeof getTestHand === "function"
+
+            ?
+
+            getTestHand()
+
+            :
+
+            [];
+
 
 
 
@@ -324,8 +313,15 @@ function createInitialGameState(){
 
         state.opponent.hand =
 
-            getTestOpponentHand();
+            typeof getTestOpponentHand === "function"
 
+            ?
+
+            getTestOpponentHand()
+
+            :
+
+            [];
 
 
 
@@ -334,15 +330,14 @@ function createInitialGameState(){
 
         state.player.mana = 10;
 
-
         state.player.maxMana = 10;
 
 
 
 
 
-        state.opponent.mana = 10;
 
+        state.opponent.mana = 10;
 
         state.opponent.maxMana = 10;
 
@@ -354,15 +349,37 @@ function createInitialGameState(){
 
         state.combatLog.push(
 
-
             "🧪 Тестовый режим активирован."
-
 
         );
 
 
     }
 
+
+
+
+
+
+
+
+    console.log(
+
+        "STATE CREATED",
+
+        {
+
+            playerHP:state.player.hp,
+
+            opponentHP:state.opponent.hp,
+
+            playerHero:state.player.hero,
+
+            opponentHero:state.opponent.hero
+
+        }
+
+    );
 
 
 
@@ -384,4 +401,5 @@ function createInitialGameState(){
 
 
 window.createInitialGameState =
+
 createInitialGameState;
