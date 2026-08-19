@@ -2,18 +2,26 @@
     ============================
     STATE.JS
 
-    Создание начального состояния игры
+    Создание состояния игры
 
-    Игроки
-    Герои
-    Колоды
-    Рука
-    Поле
+    Отвечает за:
+
+    - выбор героев
+    - создание колод
+    - стартовую руку
+    - игроков
+    - поле боя
+
+    НЕ содержит боевую логику
     ============================
 */
 
 
+
+
+
 function createInitialGameState(){
+
 
 
     const playerHero =
@@ -23,6 +31,7 @@ function createInitialGameState(){
             h => h.id === "ilya_muromets"
 
         );
+
 
 
 
@@ -38,6 +47,8 @@ function createInitialGameState(){
 
 
 
+
+
     let playerDeck =
 
         shuffleDeck(
@@ -45,6 +56,7 @@ function createInitialGameState(){
             createDeck()
 
         );
+
 
 
 
@@ -60,6 +72,8 @@ function createInitialGameState(){
 
 
 
+
+
     const playerStart =
 
         drawStartingHand(
@@ -69,6 +83,8 @@ function createInitialGameState(){
             5
 
         );
+
+
 
 
 
@@ -87,19 +103,27 @@ function createInitialGameState(){
 
 
 
+
+
+
     return {
+
 
 
         turn:1,
 
 
+
         activePlayer:"player",
+
 
 
         gameOver:false,
 
 
+
         winner:null,
+
 
 
 
@@ -112,10 +136,15 @@ function createInitialGameState(){
 
 
 
+
+
+
         player:{
 
 
+
             hero:playerHero,
+
 
 
             hp:
@@ -132,10 +161,15 @@ function createInitialGameState(){
 
 
 
+
+
             mana:1,
 
 
+
             maxMana:1,
+
+
 
 
 
@@ -145,9 +179,13 @@ function createInitialGameState(){
 
 
 
+
+
             hand:
 
                 playerStart.hand,
+
+
 
 
 
@@ -163,10 +201,14 @@ function createInitialGameState(){
 
 
 
+
+
         opponent:{
 
 
+
             hero:opponentHero,
+
 
 
             hp:
@@ -183,10 +225,15 @@ function createInitialGameState(){
 
 
 
+
+
             mana:1,
 
 
+
             maxMana:1,
+
+
 
 
 
@@ -196,9 +243,13 @@ function createInitialGameState(){
 
 
 
+
+
             hand:
 
                 opponentStart.hand,
+
+
 
 
 
@@ -209,10 +260,18 @@ function createInitialGameState(){
         }
 
 
+
+
+
     };
 
 
+
 }
+
+
+
+
 
 
 
