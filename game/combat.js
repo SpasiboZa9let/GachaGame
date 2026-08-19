@@ -1,18 +1,121 @@
 /*
+    ============================
+    COMBAT.JS
+
     Боевая система
+
+    Поддерживает:
+
+    - атака героя
+    - бой существ
+    - stats
+    - смерть существ
+    - подготовка под эффекты
+    ============================
 */
 
 
-function canUnitAttack(unit) {
+function canUnitAttack(unit){
+
 
     if(!unit){
+
         return false;
+
     }
 
 
     return unit.canAttack === true;
 
+
 }
+
+
+
+
+
+
+function getUnitAttack(unit){
+
+
+    if(
+        unit.stats &&
+        typeof unit.stats.attack === "number"
+    ){
+
+        return unit.stats.attack;
+
+    }
+
+
+    return unit.attack || 0;
+
+
+}
+
+
+
+
+
+
+function getUnitHealth(unit){
+
+
+    if(
+        unit.stats &&
+        typeof unit.stats.health === "number"
+    ){
+
+        return unit.stats.health;
+
+    }
+
+
+    return unit.health || 0;
+
+
+}
+
+
+
+
+
+
+
+
+function setUnitHealth(
+    unit,
+    value
+){
+
+
+    return {
+
+
+        ...unit,
+
+
+        stats:{
+
+
+            ...unit.stats,
+
+
+            health:value
+
+
+        }
+
+
+    };
+
+
+}
+
+
+
+
+
 
 
 
@@ -29,12 +132,14 @@ function attackUnit(
         state[playerId];
 
 
+
     const opponentId =
-        playerId==="player"
+        playerId === "player"
         ?
         "opponent"
         :
         "player";
+
 
 
     const opponent =
@@ -42,30 +147,66 @@ function attackUnit(
 
 
 
+
+
     const attacker =
+
         player.board.find(
+
             unit =>
-                unit.instanceId===attackerId
+                unit.instanceId === attackerId
+
         );
 
 
+
+
+
     if(!attacker){
+
         return state;
+
     }
 
 
 
 
+
+    if(!canUnitAttack(attacker)){
+
+
+        return state;
+
+
+    }
+
+
+
+
+
+    const damage =
+        getUnitAttack(attacker);
+
+
+
+
+
+
+
     /*
-        Атака по герою
+        Атака героя
     */
 
-    if(targetId==="hero"){
+
+    if(targetId === "hero"){
 
 
-        let newState={
+
+        const newState = {
+
 
             ...state,
+
 
 
             [opponentId]:{
@@ -75,88 +216,87 @@ function attackUnit(
 
 
                 hp:
-                    opponent.hp -
-                    attacker.attack
+
+                    opponent.hp - damage
 
 
             },
 
 
+
             combatLog:[
+
 
                 ...state.combatLog,
 
 
-                "«"+
-                (
-                    getCardById(
-                        attacker.cardId
-                    )?.name
-                    ||
-                    "Существо"
-                )
-                +
-                "» атакует героя и наносит "
-                +
-                attacker.attack
-                +
+                "«" +
+
+                attacker.name +
+
+                "» атакует героя и наносит " +
+
+                damage +
+
                 " урона."
 
+
             ]
+
 
         };
 
 
 
-        newState.player =
-            playerId==="player"
-            ?
-            {
 
-                ...newState.player,
 
-                board:
-                newState.player.board.map(
+
+        newState[playerId] = {
+
+
+            ...newState[playerId],
+
+
+
+            board:
+
+
+                newState[playerId].board.map(
+
+
                     unit =>
-                    unit.instanceId===attackerId
+
+
+                    unit.instanceId === attackerId
+
+
                     ?
+
+
                     {
+
+
                         ...unit,
+
+
                         canAttack:false
+
+
                     }
+
+
                     :
+
+
                     unit
+
+
                 )
 
-            }
-            :
-            newState.player;
+
+        };
 
 
-
-        newState.opponent =
-            playerId==="opponent"
-            ?
-            {
-
-                ...newState.opponent,
-
-                board:
-                newState.opponent.board.map(
-                    unit =>
-                    unit.instanceId===attackerId
-                    ?
-                    {
-                        ...unit,
-                        canAttack:false
-                    }
-                    :
-                    unit
-                )
-
-            }
-            :
-            newState.opponent;
 
 
 
@@ -164,7 +304,11 @@ function attackUnit(
             newState
         );
 
+
     }
+
+
+
 
 
 
@@ -175,40 +319,60 @@ function attackUnit(
     */
 
 
+
+
+
     const target =
+
         opponent.board.find(
+
             unit =>
-                unit.instanceId===targetId
+                unit.instanceId === targetId
+
         );
 
 
 
+
+
     if(!target){
+
         return state;
+
     }
 
 
 
-    if(!canUnitAttack(attacker)){
-        return state;
-    }
+
+
+
+    const targetAttack =
+
+        getUnitAttack(target);
 
 
 
     const attackerHealth =
-        attacker.health -
-        target.attack;
+
+        getUnitHealth(attacker)
+        -
+        targetAttack;
+
 
 
 
     const targetHealth =
-        target.health -
-        attacker.attack;
+
+        getUnitHealth(target)
+        -
+        damage;
 
 
 
 
-    return checkGameOver({
+
+
+    let newState = {
 
 
         ...state,
@@ -221,39 +385,59 @@ function attackUnit(
             ...player,
 
 
+
             board:
 
-            player.board
 
-            .map(
-                unit =>
-                unit.instanceId===attackerId
+                player.board.map(
 
-                ?
+                    unit =>
 
-                {
 
-                    ...unit,
+                    unit.instanceId === attackerId
 
-                    health:
-                        attackerHealth,
 
-                    canAttack:false
+                    ?
 
-                }
 
-                :
+                    setUnitHealth(
 
-                unit
-            )
+                        {
 
-            .filter(
-                unit =>
-                    unit.health>0
-            )
+                            ...unit,
+
+
+                            canAttack:false
+
+                        },
+
+
+                        attackerHealth
+
+                    )
+
+
+                    :
+
+
+                    unit
+
+
+                )
+
+
+                .filter(
+
+                    unit =>
+
+                    getUnitHealth(unit) > 0
+
+                )
 
 
         },
+
+
 
 
 
@@ -263,41 +447,84 @@ function attackUnit(
             ...opponent,
 
 
+
             board:
 
-            opponent.board
 
-            .map(
-                unit =>
-                unit.instanceId===targetId
+                opponent.board.map(
 
-                ?
+                    unit =>
 
-                {
 
-                    ...unit,
+                    unit.instanceId === targetId
 
-                    health:
+
+                    ?
+
+
+                    setUnitHealth(
+
+                        unit,
+
                         targetHealth
 
-                }
-
-                :
-
-                unit
-            )
-
-            .filter(
-                unit =>
-                    unit.health>0
-            )
+                    )
 
 
-        }
+                    :
+
+
+                    unit
+
+
+                )
+
+
+                .filter(
+
+                    unit =>
+
+                    getUnitHealth(unit) > 0
+
+                )
+
+
+        },
 
 
 
-    });
+
+
+        combatLog:[
+
+
+            ...state.combatLog,
+
+
+            attacker.name +
+
+            " атакует " +
+
+            target.name +
+
+            "."
+
+
+        ]
+
+
+
+    };
+
+
+
+
+
+
+    return checkGameOver(
+        newState
+    );
+
 
 
 }
@@ -305,8 +532,11 @@ function attackUnit(
 
 
 
+
+
 window.canUnitAttack =
 canUnitAttack;
+
 
 
 window.attackUnit =
