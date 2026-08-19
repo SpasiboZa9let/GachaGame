@@ -3,9 +3,10 @@
     CARDS.JS
 
     Работа с картами
+
+    Поиск карты
     ============================
 */
-
 
 
 function getCardById(id){
@@ -15,7 +16,7 @@ function getCardById(id){
 
         CARDS.find(
 
-            c => c.id === id
+            card => card.id === id
 
         )
 
