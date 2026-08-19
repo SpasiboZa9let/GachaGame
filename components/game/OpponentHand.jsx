@@ -1,12 +1,11 @@
 /*
 ============================
+
 OpponentHand.jsx
 
 Рука противника
 
-Показывает карты противника.
-
-Логика игры отсутствует.
+Карты скрыты
 
 ============================
 */
@@ -14,9 +13,7 @@ OpponentHand.jsx
 
 function OpponentHand({
 
-
-    cards
-
+    cards=[]
 
 }){
 
@@ -24,17 +21,53 @@ function OpponentHand({
     return (
 
 
-        <Hand
+        <div className="opponent-hand">
 
-            cards={cards}
 
-        />
+
+            {
+
+                cards.map((card,index)=>(
+
+
+                    <div
+
+
+                        key={index}
+
+
+                        className="card card-back"
+
+
+                    >
+
+
+                        <div>
+
+
+                            🂠
+
+
+                        </div>
+
+
+                    </div>
+
+
+                ))
+
+            }
+
+
+
+        </div>
 
 
     );
 
 
 }
+
 
 
 
