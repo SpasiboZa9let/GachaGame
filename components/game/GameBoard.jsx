@@ -87,51 +87,13 @@ return (
 <div style={gameStyles.game}>
 
 
-{
+<GameOver
 
-gameState.gameOver &&
+    gameState={gameState}
 
+    onRestart={onRestart}
 
-<div style={gameStyles.gameOver}>
-
-
-<h2>
-
-{
-
-gameState.winner === "player"
-
-?
-
-"🏆 ПОБЕДА"
-
-:
-
-"☠️ ПОРАЖЕНИЕ"
-
-}
-
-</h2>
-
-
-
-<button
-
-onClick={onRestart}
-
-style={gameStyles.restart}
-
->
-
-Начать заново
-
-</button>
-
-
-</div>
-
-
-}
+/>
 
 
 
