@@ -1,68 +1,95 @@
-function Hand({ cards, onCardClick }) {
+function Hand({
+    cards,
+    onCardClick
+}) {
 
-    if (!cards || cards.length === 0) {
+
+    if(
+        !cards ||
+        cards.length===0
+    ){
         return null;
     }
+
 
 
     return (
 
         <div style={handStyles.hand}>
 
-            {cards.map((card, index) => {
 
-                if (!card) {
-                    return null;
-                }
+        {
 
+            cards.map(
+                (card,index)=>(
 
-                return (
 
                     <Card
-                        key={card.id || index}
+
+                        key={
+                            card.id+
+                            "_" +
+                            index
+                        }
+
+
                         card={card}
-                        onClick={onCardClick}
+
+
+                        onClick={
+                            onCardClick
+                        }
+
                     />
 
-                );
 
-            })}
+                )
+
+            )
+
+        }
+
 
         </div>
 
     );
 
+
 }
 
 
-const handStyles = {
 
-    hand: {
 
-        display: "flex",
 
-        flexDirection: "row",
+const handStyles={
 
-        flexWrap: "nowrap",
 
-        justifyContent: "center",
+hand:{
 
-        alignItems: "flex-end",
 
-        gap: "12px",
+display:"flex",
 
-        width: "100%",
 
-        minHeight: "230px",
+gap:"12px",
 
-        padding: "15px 10px",
 
-        boxSizing: "border-box",
+justifyContent:"center",
 
-        overflowX: "auto",
 
-        overflowY: "hidden"
+alignItems:"flex-end",
 
-    }
+
+width:"100%",
+
+
+minHeight:"230px",
+
+
+overflowX:"auto"
+
+
+}
+
+
 
 };
