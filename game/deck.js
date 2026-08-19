@@ -1,272 +1,52 @@
 /*
-    ============================
-    DECK.JS
-
-    Генерация колод
-    Рандомные карты
-    Гача-шансы
-    ============================
+    Работа с колодой
 */
 
 
-/*
-    Шансы редкости
-*/
+function createDeck() {
 
-const RARITY_CHANCES = [
+    if (!Array.isArray(CARDS)) {
 
-    {
-        rarity:"common",
-        chance:60
-    },
-
-    {
-        rarity:"uncommon",
-        chance:22
-    },
-
-    {
-        rarity:"rare",
-        chance:12
-    },
-
-    {
-        rarity:"epic",
-        chance:5
-    },
-
-    {
-        rarity:"legendary",
-        chance:1
-    }
-
-];
-
-
-
-
-
-/*
-    Получение случайной редкости
-*/
-
-function getRandomRarity(){
-
-
-    const roll =
-        Math.random() * 100;
-
-
-
-    let current = 0;
-
-
-
-    for(
-        const item of RARITY_CHANCES
-    ){
-
-        current += item.chance;
-
-
-        if(
-            roll <= current
-        ){
-
-            return item.rarity;
-
-        }
-
-    }
-
-
-
-    return "common";
-
-}
-
-
-
-
-
-
-
-/*
-    Получение карты по редкости
-*/
-
-
-function getRandomCardByRarity(
-    rarity
-){
-
-    const cards =
-
-        CARDS.filter(
-
-            card =>
-                card.rarity === rarity
-
+        console.error(
+            "CARDS не найден"
         );
 
-
-
-    if(
-        cards.length === 0
-    ){
-
-        return null;
+        return [];
 
     }
-
-
-
-    return cards[
-
-        Math.floor(
-
-            Math.random()
-            *
-            cards.length
-
-        )
-
-    ];
-
-}
-
-
-
-
-
-
-
-/*
-    Получение любой случайной карты
-*/
-
-
-function getRandomCard(){
-
-
-    const rarity =
-        getRandomRarity();
-
-
-
-    let card =
-        getRandomCardByRarity(
-            rarity
-        );
-
 
 
     /*
-        если вдруг нет карты
-        такой редкости
+        Создаем колоду.
+        Пока тест:
+        каждая карта встречается 1 раз.
     */
 
 
-    if(!card){
-
-        card =
-            CARDS[
-
-                Math.floor(
-
-                    Math.random()
-                    *
-                    CARDS.length
-
-                )
-
-            ];
-
-    }
-
-
-
-    return card;
-
-}
-
-
-
-
-
-
-
-
-/*
-    Создание колоды
-
-    30 карт
-*/
-
-function createDeck(){
-
-
-    const deck = [];
-
-
-
-    for(
-        let i = 0;
-        i < 30;
-        i++
-    ){
-
-        const card =
-            getRandomCard();
-
-
-
-        if(card){
-
-            deck.push(
-                card.id
-            );
-
-        }
-
-    }
-
-
-
-    return shuffleDeck(
-        deck
+    return CARDS.map(
+        card => card.id
     );
 
 }
 
 
 
-
-
-
-
-
 /*
-    Перемешивание
+    Перемешивание колоды
 */
 
-
-function shuffleDeck(deck){
+function shuffleDeck(deck) {
 
 
     const newDeck =
         [...deck];
 
 
-
-    for(
-        let i =
-            newDeck.length - 1;
-
+    for (
+        let i = newDeck.length - 1;
         i > 0;
-
         i--
-    ){
+    ) {
 
         const j =
             Math.floor(
@@ -289,15 +69,9 @@ function shuffleDeck(deck){
     }
 
 
-
     return newDeck;
 
 }
-
-
-
-
-
 
 
 
@@ -305,150 +79,23 @@ function shuffleDeck(deck){
     Стартовая рука
 */
 
-
-function createStartingHand(){
-
-
-    const hand = [];
-
-
-
-    for(
-        let i = 0;
-        i < 5;
-        i++
-    ){
-
-        const card =
-            getRandomCard();
-
-
-
-        if(card){
-
-            hand.push(
-                card.id
-            );
-
-        }
-
-    }
-
-
-
-
-
-    /*
-        3% шанс легендарки
-    */
-
-
-    if(
-        Math.random() < 0.03
-    ){
-
-        const legendary =
-            getRandomCardByRarity(
-                "legendary"
-            );
-
-
-        if(
-            legendary &&
-            hand.length > 0
-        ){
-
-            const index =
-                Math.floor(
-                    Math.random()
-                    *
-                    hand.length
-                );
-
-
-            hand[index] =
-                legendary.id;
-
-        }
-
-    }
-
-
-
-    return hand;
-
-}
-
-
-
-
-
-
-
-
-/*
-    Добор карты
-*/
-
-
-function drawCard(
-    state,
-    playerId
-){
-
-
-    const player =
-        state[playerId];
-
-
-
-    if(
-        !player ||
-        !player.deck ||
-        player.deck.length === 0
-    ){
-
-        return state;
-
-    }
-
-
-
-    const cardId =
-        player.deck[0];
-
+function drawStartingHand(deck, count = 5) {
 
 
     return {
 
-
-        ...state,
-
-
-        [playerId]:{
-
-
-            ...player,
+        hand:
+            deck.slice(
+                0,
+                count
+            ),
 
 
-            deck:
+        deck:
 
-                player.deck.slice(1),
-
-
-
-            hand:
-
-                [
-                    ...player.hand,
-
-                    cardId
-
-                ]
-
-
-        }
-
+            deck.slice(
+                count
+            )
 
     };
 
@@ -457,33 +104,35 @@ function drawCard(
 
 
 
+/*
+    Будущий добор карт.
+    Сейчас отключен.
+*/
+
+function drawCard(
+    state,
+    playerId
+) {
 
 
+    return state;
+
+}
 
 
-window.getRandomRarity =
-    getRandomRarity;
-
-
-window.getRandomCardByRarity =
-    getRandomCardByRarity;
-
-
-window.getRandomCard =
-    getRandomCard;
 
 
 window.createDeck =
-    createDeck;
+createDeck;
 
 
 window.shuffleDeck =
-    shuffleDeck;
+shuffleDeck;
 
 
-window.createStartingHand =
-    createStartingHand;
+window.drawStartingHand =
+drawStartingHand;
 
 
 window.drawCard =
-    drawCard;
+drawCard;
