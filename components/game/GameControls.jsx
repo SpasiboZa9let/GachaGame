@@ -4,27 +4,35 @@ GameControls.jsx
 
 Кнопки управления боем
 
+Отвечает за:
+- завершение хода
+- запуск тестового поля
+
+Логику не содержит
 ============================
 */
 
 
 function GameControls({
 
+
     onEndTurn,
 
     onTestBoard
+
 
 }){
 
 
     return (
 
+
         <>
 
 
             <button
 
-                style={gameStyles.button}
+                style={window.gameStyles.button}
 
                 onClick={onEndTurn}
 
@@ -38,9 +46,10 @@ function GameControls({
 
 
 
+
             <button
 
-                style={gameStyles.button}
+                style={window.gameStyles.button}
 
                 onClick={onTestBoard}
 
@@ -53,10 +62,12 @@ function GameControls({
 
         </>
 
+
     );
 
 
 }
+
 
 
 
