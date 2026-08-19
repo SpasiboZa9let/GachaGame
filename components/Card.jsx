@@ -2,37 +2,12 @@ function Card({ card, onClick }) {
 
 
     if (!card) {
+
         return null;
+
     }
 
 
-    const rarityColors = {
-
-        common: "#777",
-
-        uncommon: "#32a852",
-
-        rare: "#2980db",
-
-        epic: "#9b59b6",
-
-        legendary: "#f1c40f"
-
-    };
-
-
-    const rarityGlow = {
-
-        legendary:
-            "0 0 15px rgba(241,196,15,0.7)",
-
-        epic:
-            "0 0 12px rgba(155,89,182,0.6)",
-
-        rare:
-            "0 0 8px rgba(41,128,219,0.5)"
-
-    };
 
 
     return (
@@ -47,95 +22,62 @@ function Card({ card, onClick }) {
 
             style={{
 
+                width:"180px",
 
-                width: "180px",
+                height:"260px",
 
-                height: "260px",
+                minWidth:"180px",
 
-                minWidth: "180px",
+                flexShrink:0,
 
-                flexShrink: 0,
-
-
-                background: "#292929",
-
+                background:"#292929",
 
                 border:
-                    `3px solid ${rarityColors[card.rarity] || "#777"}`,
+                    "2px solid #777",
 
+                borderRadius:"12px",
 
-                borderRadius: "12px",
+                padding:"8px",
 
+                boxSizing:"border-box",
 
-                padding: "8px",
+                display:"flex",
 
+                flexDirection:"column",
 
-                boxSizing: "border-box",
+                cursor:"pointer",
 
-
-                display: "flex",
-
-                flexDirection: "column",
-
-
-                cursor: "pointer",
-
-
-                position: "relative",
-
+                position:"relative",
 
                 boxShadow:
-
-                    rarityGlow[card.rarity] ||
-
                     "0 5px 15px rgba(0,0,0,0.5)",
 
-
                 transition:
-                    "transform 0.15s ease, box-shadow 0.15s ease"
-
+                    "transform 0.15s ease"
 
             }}
 
 
 
-            onMouseEnter={(e) => {
-
+            onMouseEnter={(e)=>{
 
                 e.currentTarget.style.transform =
                     "translateY(-15px)";
 
-
-                e.currentTarget.style.boxShadow =
-
-                    rarityGlow[card.rarity] ||
-
-                    "0 12px 25px rgba(0,0,0,0.7)";
-
-
             }}
 
 
 
-            onMouseLeave={(e) => {
-
+            onMouseLeave={(e)=>{
 
                 e.currentTarget.style.transform =
                     "translateY(0)";
 
-
-                e.currentTarget.style.boxShadow =
-
-                    rarityGlow[card.rarity] ||
-
-                    "0 5px 15px rgba(0,0,0,0.5)";
-
-
             }}
 
-
-
         >
+
+
 
 
             {/* COST */}
@@ -144,37 +86,29 @@ function Card({ card, onClick }) {
 
                 style={{
 
-                    position: "absolute",
+                    position:"absolute",
 
-                    top: "6px",
+                    top:"6px",
 
-                    left: "6px",
+                    left:"6px",
 
+                    width:"30px",
 
-                    width: "30px",
+                    height:"30px",
 
-                    height: "30px",
+                    borderRadius:"50%",
 
+                    background:"#3478db",
 
-                    borderRadius: "50%",
+                    display:"flex",
 
+                    alignItems:"center",
 
-                    background: "#3478db",
+                    justifyContent:"center",
 
+                    fontWeight:"bold",
 
-                    display: "flex",
-
-
-                    alignItems: "center",
-
-
-                    justifyContent: "center",
-
-
-                    fontWeight: "bold",
-
-
-                    zIndex: 3
+                    zIndex:3
 
                 }}
 
@@ -187,36 +121,30 @@ function Card({ card, onClick }) {
 
 
 
+
+
+
             {/* NAME */}
 
             <div
 
                 style={{
 
+                    textAlign:"center",
 
-                    textAlign: "center",
+                    fontWeight:"bold",
 
+                    fontSize:"14px",
 
-                    fontWeight: "bold",
+                    height:"25px",
 
+                    lineHeight:"25px",
 
-                    fontSize: "14px",
+                    whiteSpace:"nowrap",
 
+                    overflow:"hidden",
 
-                    height: "25px",
-
-
-                    lineHeight: "25px",
-
-
-                    whiteSpace: "nowrap",
-
-
-                    overflow: "hidden",
-
-
-                    textOverflow: "ellipsis"
-
+                    textOverflow:"ellipsis"
 
                 }}
 
@@ -224,43 +152,11 @@ function Card({ card, onClick }) {
 
                 {card.name}
 
-
             </div>
 
 
 
 
-            {/* RARITY */}
-
-            <div
-
-                style={{
-
-
-                    textAlign: "center",
-
-
-                    fontSize: "10px",
-
-
-                    color:
-                        rarityColors[card.rarity] || "#aaa",
-
-
-                    fontWeight: "bold",
-
-
-                    height: "14px"
-
-
-                }}
-
-            >
-
-                {card.rarity?.toUpperCase()}
-
-
-            </div>
 
 
 
@@ -272,106 +168,146 @@ function Card({ card, onClick }) {
 
                 style={{
 
+                    width:"100%",
 
-                    width: "100%",
+                    height:"120px",
+
+                    background:"#111",
+
+                    overflow:"hidden",
+
+                    borderRadius:"7px",
+
+                    border:"1px solid #555"
+
+                }}
+
+            >
+
+                {
+
+                card.image
+
+                ?
+
+                <img
+
+                    src={card.image}
+
+                    alt={card.name}
+
+                    style={{
+
+                        width:"100%",
+
+                        height:"100%",
+
+                        objectFit:"cover"
+
+                    }}
+
+                />
+
+                :
+
+                <div
+
+                    style={{
+
+                        height:"100%",
+
+                        display:"flex",
+
+                        alignItems:"center",
+
+                        justifyContent:"center",
+
+                        color:"#555"
+
+                    }}
+
+                >
+
+                    АРТ
+
+                </div>
+
+                }
+
+            </div>
 
 
-                    height: "135px",
 
 
-                    minHeight: "135px",
 
 
-                    background: "#111",
 
 
-                    overflow: "hidden",
 
+            {/* ABILITIES */}
 
-                    borderRadius: "7px",
+            {
 
+            card.abilities &&
 
-                    border:
-                        "1px solid #555"
+            card.abilities.length > 0
 
+            &&
+
+            <div
+
+                style={{
+
+                    marginTop:"5px",
+
+                    padding:"4px",
+
+                    background:"#151515",
+
+                    borderRadius:"6px",
+
+                    fontSize:"10px",
+
+                    color:"#ffd700",
+
+                    height:"35px",
+
+                    overflow:"hidden"
 
                 }}
 
             >
 
 
-                {card.image ? (
+                {
 
+                card.abilities.map(
 
-                    <img
-
-
-                        src={card.image}
-
-
-                        alt={card.name}
-
-
-                        style={{
-
-
-                            width: "100%",
-
-
-                            height: "100%",
-
-
-                            objectFit: "cover",
-
-
-                            display: "block"
-
-
-                        }}
-
-
-                    />
-
-
-                ) : (
-
+                    ability =>
 
                     <div
 
-                        style={{
-
-
-                            width: "100%",
-
-
-                            height: "100%",
-
-
-                            display: "flex",
-
-
-                            alignItems: "center",
-
-
-                            justifyContent: "center",
-
-
-                            color: "#555"
-
-
-                        }}
+                        key={ability.id}
 
                     >
 
-                        АРТ
+                        ⭐ {ability.name}
 
                     </div>
 
+                )
 
-                )}
+                }
 
 
             </div>
+
+
+            }
+
+
+
+
 
 
 
@@ -383,36 +319,46 @@ function Card({ card, onClick }) {
 
                 style={{
 
+                    flex:1,
 
-                    flex: 1,
+                    fontSize:"10px",
 
+                    lineHeight:"12px",
 
-                    fontSize: "11px",
+                    color:"#aaa",
 
+                    textAlign:"center",
 
-                    lineHeight: "14px",
+                    padding:"3px",
 
-
-                    color: "#aaa",
-
-
-                    textAlign: "center",
-
-
-                    padding: "5px",
-
-
-                    overflow: "hidden"
-
+                    overflow:"hidden"
 
                 }}
 
             >
 
-                {card.description}
+                {
+
+                card.abilities &&
+
+                card.abilities[0]
+
+                ?
+
+                card.abilities[0].description
+
+                :
+
+                card.description
+
+                }
 
 
             </div>
+
+
+
+
 
 
 
@@ -424,45 +370,33 @@ function Card({ card, onClick }) {
 
                 style={{
 
+                    display:"flex",
 
-                    display: "flex",
+                    justifyContent:"space-between",
 
+                    fontWeight:"bold",
 
-                    justifyContent:
-                        "space-between",
+                    fontSize:"14px",
 
-
-                    fontWeight: "bold",
-
-
-                    fontSize: "14px",
-
-
-                    padding:
-                        "3px 5px"
-
+                    padding:"3px"
 
                 }}
 
             >
 
-
                 <span>
-
                     ⚔️ {card.attack}
-
                 </span>
 
 
-
                 <span>
-
                     ❤️ {card.health}
-
                 </span>
 
 
             </div>
+
+
 
 
 
@@ -472,3 +406,7 @@ function Card({ card, onClick }) {
     );
 
 }
+
+
+
+window.Card = Card;
