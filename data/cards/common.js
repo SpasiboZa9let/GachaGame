@@ -1,0 +1,298 @@
+const COMMON_CARDS = [
+
+    {
+
+        id: "medved",
+
+        name: "Медведь",
+
+        rarity: "common",
+
+        type: "creature",
+
+        cost: 5,
+
+        health: 1600,
+
+        attack: 650,
+
+        defense: 550,
+
+        strength: 7,
+
+        faction: "forest",
+
+        image:
+            "./assets/cards/common/medved.png",
+
+        abilities: [
+
+            {
+
+                id: "den_of_rage",
+
+                name: "Ярость берлоги",
+
+                type: "buff",
+
+                description:
+                    "Получает +5 урона за каждые потерянные 20% здоровья."
+
+            }
+
+        ]
+
+    },
+
+
+
+    {
+
+        id: "razboynik",
+
+        name: "Разбойник",
+
+        rarity: "common",
+
+        type: "creature",
+
+        cost: 1,
+
+        health: 350,
+
+        attack: 150,
+
+        defense: 100,
+
+        strength: 2,
+
+        faction: "forest",
+
+        image:
+            "./assets/cards/common/razboynik.png",
+
+        abilities: [
+
+            {
+
+                id: "forest_thief",
+
+                name: "Лесной вор",
+
+                type: "passive",
+
+                description:
+                    "В лесу получает шанс уклонения."
+
+            }
+
+        ]
+
+    },
+
+
+
+    {
+
+        id: "kort_aika",
+
+        name: "Корт-айка",
+
+        rarity: "common",
+
+        type: "creature",
+
+        cost: 4,
+
+        health: 1400,
+
+        attack: 600,
+
+        defense: 500,
+
+        strength: 6,
+
+        faction: "forest",
+
+        image:
+            "./assets/cards/common/kort_aika.png",
+
+        abilities: [
+
+            {
+
+                id: "row_defense",
+
+                name: "Защита ряда",
+
+                type: "armor",
+
+                description:
+                    "Первый враг, атакующий этот ряд, получает ограничение атаки."
+
+            }
+
+        ]
+
+    },
+
+
+
+    {
+
+        id: "voin_pikhotinets",
+
+        name: "Воин-пехотинец",
+
+        rarity: "common",
+
+        type: "creature",
+
+        cost: 2,
+
+        health: 650,
+
+        attack: 210,
+
+        defense: 180,
+
+        strength: 3,
+
+        faction: "yav",
+
+        image:
+            "./assets/cards/common/voin_pikhotinets.png",
+
+        abilities: [
+
+            {
+
+                id: "wooden_shield",
+
+                name: "Деревянный щит",
+
+                type: "armor",
+
+                description:
+                    "На один ход блокирует 15% входящего урона."
+
+            }
+
+        ]
+
+    },
+
+
+
+    {
+
+        id: "lyagushka",
+
+        name: "Лягушка",
+
+        rarity: "common",
+
+        type: "creature",
+
+        cost: 1,
+
+        health: 210,
+
+        attack: 100,
+
+        defense: 90,
+
+        strength: 2,
+
+        faction: "swamp",
+
+        image:
+            "./assets/cards/common/lyagushka.png",
+
+        abilities: [
+
+            {
+
+                id: "swamp_jump",
+
+                name: "Болотная прыгучесть",
+
+                type: "evasion",
+
+                description:
+                    "Имеет шанс уклониться от физической атаки."
+
+            }
+
+        ]
+
+    },
+
+
+
+    {
+
+        id: "voin_s_kopem",
+
+        name: "Воин с копьём",
+
+        rarity: "common",
+
+        type: "creature",
+
+        cost: 1,
+
+        health: 90,
+
+        attack: 20,
+
+        defense: 40,
+
+        strength: 1,
+
+        faction: "yav",
+
+        image:
+            "./assets/cards/common/voin_s_kopem.png",
+
+        abilities: []
+
+    },
+
+
+
+    {
+
+        id: "volk",
+
+        name: "Волк",
+
+        rarity: "common",
+
+        type: "creature",
+
+        cost: 2,
+
+        health: 600,
+
+        attack: 250,
+
+        defense: 150,
+
+        strength: 8,
+
+        faction: "forest",
+
+        image:
+            "./assets/cards/common/volk.png",
+
+        abilities: []
+
+    }
+
+];
+
+
+
+window.COMMON_CARDS =
+    COMMON_CARDS;
