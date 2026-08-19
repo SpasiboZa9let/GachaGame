@@ -15,9 +15,11 @@ GameOver.jsx
 
 function GameOver({
 
+
     gameState,
 
     onRestart
+
 
 }){
 
@@ -32,31 +34,34 @@ function GameOver({
 
 
 
+
     return (
 
 
-        <div style={gameStyles.gameOver}>
+        <div style={window.gameStyles.gameOver}>
 
 
             <h2>
 
 
-            {
+                {
 
-                gameState.winner === "player"
+                    gameState.winner === "player"
 
-                ?
+                    ?
 
-                "🏆 ПОБЕДА"
+                    "🏆 ПОБЕДА"
 
-                :
+                    :
 
-                "☠️ ПОРАЖЕНИЕ"
+                    "☠️ ПОРАЖЕНИЕ"
 
-            }
+                }
 
 
             </h2>
+
+
 
 
 
@@ -66,13 +71,17 @@ function GameOver({
 
                 onClick={onRestart}
 
-                style={gameStyles.restart}
+                style={window.gameStyles.restart}
 
             >
 
+
                 Начать заново
 
+
             </button>
+
+
 
 
 
