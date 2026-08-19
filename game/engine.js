@@ -19,6 +19,75 @@
 
 
 
+/*
+    ============================
+    TEST MODE
+    ============================
+*/
+
+
+const TEST_MODE = true;
+
+
+
+function getTestHand(){
+
+
+    if(!TEST_MODE){
+
+        return null;
+
+    }
+
+
+    return [
+
+        "medved",
+
+        "razboynik",
+
+        "kort_aika",
+
+        "voin_pikhotinets",
+
+        "lyagushka"
+
+    ];
+
+
+}
+
+
+
+
+
+function getTestOpponentHand(){
+
+
+    if(!TEST_MODE){
+
+        return null;
+
+    }
+
+
+    return [
+
+        "volk",
+
+        "voin_s_kopem",
+
+        "medved"
+
+    ];
+
+
+}
+
+
+
+
+
 
 
 
@@ -97,7 +166,9 @@ function createInitialGameState(){
 
 
 
-    return {
+
+    let state = {
+
 
 
         turn:1,
@@ -122,10 +193,13 @@ function createInitialGameState(){
 
 
 
+
         player:{
 
 
+
             hero:playerHero,
+
 
 
             hp:
@@ -173,10 +247,13 @@ function createInitialGameState(){
 
 
 
+
         opponent:{
 
 
+
             hero:opponentHero,
+
 
 
             hp:
@@ -219,7 +296,65 @@ function createInitialGameState(){
         }
 
 
+
     };
+
+
+
+
+
+
+    /*
+        Активация тестового режима
+    */
+
+
+    if(TEST_MODE){
+
+
+
+        state.player.hand =
+
+            getTestHand();
+
+
+
+
+        state.opponent.hand =
+
+            getTestOpponentHand();
+
+
+
+
+        state.player.mana = 10;
+
+        state.player.maxMana = 10;
+
+
+
+
+        state.opponent.mana = 10;
+
+        state.opponent.maxMana = 10;
+
+
+
+
+        state.combatLog.push(
+
+            "🧪 Тестовый режим активирован."
+
+        );
+
+
+    }
+
+
+
+
+
+    return state;
 
 
 }
@@ -367,7 +502,6 @@ function getCardById(id){
 */
 
 
-
 function createCardInstance(id){
 
 
@@ -439,7 +573,6 @@ function createCardInstance(id){
         instanceId:
 
 
-
             id +
 
             "_" +
@@ -453,7 +586,6 @@ function createCardInstance(id){
             .toString(36)
 
             .slice(2),
-
 
 
 
@@ -491,7 +623,6 @@ function createCardInstance(id){
 
 
 
-
         baseStats:{
 
 
@@ -499,6 +630,7 @@ function createCardInstance(id){
 
 
         },
+
 
 
 
@@ -518,17 +650,6 @@ function createCardInstance(id){
 
 
 
-
-        /*
-            Баффы / дебаффы
-
-            {
-                stat:"attack",
-                value:50,
-                source:"Ярость берлоги"
-            }
-        */
-
         modifiers:[],
 
 
@@ -537,15 +658,6 @@ function createCardInstance(id){
 
 
 
-        /*
-            Амуниция
-
-            {
-                id:"bear_claws"
-            }
-
-        */
-
         equipment:[],
 
 
@@ -553,10 +665,6 @@ function createCardInstance(id){
 
 
 
-
-        /*
-            Постоянные эффекты карты
-        */
 
         effects:
 
@@ -567,15 +675,6 @@ function createCardInstance(id){
 
 
 
-
-        /*
-            Временные состояния
-
-            stun
-            fear
-            shield
-
-        */
 
         status:[],
 
@@ -596,9 +695,6 @@ function createCardInstance(id){
 
 
 
-    /*
-        Пересчет характеристик
-    */
 
     if(
         typeof refreshUnitStats === "function"
@@ -970,3 +1066,7 @@ prepareOpponentTurn;
 
 window.restartGame =
 createInitialGameState;
+
+
+window.TEST_MODE =
+TEST_MODE;
