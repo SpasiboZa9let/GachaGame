@@ -314,7 +314,7 @@ description:
 {
 id:"voin_s_kopem",
 
-name:"Воин с копьём",
+name:"Крестьянин с копьём",
 
 rarity:"common",
 
