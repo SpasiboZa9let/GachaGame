@@ -44,95 +44,106 @@ function Battlefield({
 }){
 
 
-
     return (
 
 
-        <div>
+        <div style={styles.battlefield}>
 
 
 
 
 
-            <OpponentArea
+            <div style={styles.enemySide}>
 
 
-                opponent={opponent}
+                <OpponentArea
 
 
-                opponentHandCards={opponentHandCards}
+                    opponent={opponent}
 
 
-                selectedAttacker={selectedAttacker}
+                    opponentHandCards={opponentHandCards}
 
 
-                onOpponentUnitClick={onOpponentUnitClick}
+                    selectedAttacker={selectedAttacker}
 
 
-                onOpponentHeroClick={onOpponentHeroClick}
+                    onOpponentUnitClick={onOpponentUnitClick}
 
 
-            />
+                    onOpponentHeroClick={onOpponentHeroClick}
 
 
+                />
 
 
+            </div>
 
 
 
 
 
-            <GameTurn
 
 
-                selectedAttacker={selectedAttacker}
 
+            <div style={styles.center}>
 
-                turn={turn}
 
+                <GameTurn
 
-            />
 
+                    selectedAttacker={selectedAttacker}
 
 
+                    turn={turn}
 
 
+                />
 
 
 
+            </div>
 
-            <PlayerArea
 
 
-                player={player}
 
 
-                selectedAttacker={selectedAttacker}
 
 
-                onPlayerUnitClick={onPlayerUnitClick}
 
+            <div style={styles.playerSide}>
 
-            />
 
+                <PlayerArea
 
 
+                    player={player}
 
 
+                    selectedAttacker={selectedAttacker}
 
 
+                    onPlayerUnitClick={onPlayerUnitClick}
 
 
-            <PlayerHand
+                />
 
 
-                cards={handCards}
 
 
-                onCardClick={onCardClick}
+                <PlayerHand
 
 
-            />
+                    cards={handCards}
+
+
+                    onCardClick={onCardClick}
+
+
+                />
+
+
+            </div>
 
 
 
@@ -145,6 +156,85 @@ function Battlefield({
 
 
 }
+
+
+
+
+
+
+
+const styles = {
+
+
+    battlefield:{
+
+
+        width:"100%",
+
+
+        display:"flex",
+
+
+        flexDirection:"column",
+
+
+        gap:"10px"
+
+
+    },
+
+
+
+
+
+    enemySide:{
+
+
+        display:"flex",
+
+        justifyContent:"flex-start",
+
+        width:"100%"
+
+
+    },
+
+
+
+
+
+    center:{
+
+
+        display:"flex",
+
+        justifyContent:"center",
+
+        width:"100%"
+
+
+    },
+
+
+
+
+
+    playerSide:{
+
+
+        display:"flex",
+
+        flexDirection:"column",
+
+        gap:"10px",
+
+        width:"100%"
+
+
+    }
+
+
+};
 
 
 
