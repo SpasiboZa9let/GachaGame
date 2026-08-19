@@ -9,6 +9,7 @@
 */
 
 
+
 function preparePlayerTurn(state) {
 
 
@@ -16,9 +17,10 @@ function preparePlayerTurn(state) {
         state.player.maxMana;
 
 
-    if(
+
+    if (
         maxMana < 10
-    ){
+    ) {
 
         maxMana++;
 
@@ -78,25 +80,7 @@ function preparePlayerTurn(state) {
 
 
 
-    /*
-        Добор карты
-    */
 
-    if (
-        window.drawCard
-    ) {
-
-        newState =
-            window.drawCard(
-                newState,
-                "player"
-            );
-
-    }
-
-
-
-    return newState;
 
 
 
@@ -118,8 +102,8 @@ function prepareOpponentTurn(state) {
 
 
 
-
     const refreshedBoard =
+
         state.opponent.board.map(
 
             unit => ({
@@ -131,7 +115,6 @@ function prepareOpponentTurn(state) {
             })
 
         );
-
 
 
 
@@ -157,7 +140,8 @@ function prepareOpponentTurn(state) {
             mana:maxMana,
 
 
-            board:refreshedBoard
+            board:
+                refreshedBoard
 
 
         }
@@ -175,9 +159,9 @@ function prepareOpponentTurn(state) {
 
 
 
+
 /*
-    Получить случайную карту,
-    которую AI может сыграть.
+    Поиск карты для AI
 */
 
 
@@ -191,9 +175,7 @@ function getRandomPlayableCard(state) {
 
     if (
         !opponent ||
-        !Array.isArray(
-            opponent.hand
-        )
+        !Array.isArray(opponent.hand)
     ) {
 
         return null;
@@ -202,7 +184,8 @@ function getRandomPlayableCard(state) {
 
 
 
-    const cards =
+
+    const playable =
 
 
         opponent.hand
@@ -210,48 +193,20 @@ function getRandomPlayableCard(state) {
         .map(
 
             id =>
+
                 window.getCardById(id)
 
         )
 
         .filter(
 
-            card => {
+            card =>
 
+                card &&
 
-                if (!card) {
+                card.cost <= opponent.mana &&
 
-                    return false;
-
-                }
-
-
-
-                if (
-                    card.cost >
-                    opponent.mana
-                ) {
-
-                    return false;
-
-                }
-
-
-
-                if (
-                    opponent.board.length >= 5
-                ) {
-
-                    return false;
-
-                }
-
-
-
-                return true;
-
-
-            }
+                opponent.board.length < 5
 
         );
 
@@ -260,7 +215,7 @@ function getRandomPlayableCard(state) {
 
 
     if (
-        cards.length === 0
+        playable.length === 0
     ) {
 
         return null;
@@ -270,12 +225,14 @@ function getRandomPlayableCard(state) {
 
 
 
-    return cards[
+    return playable[
 
         Math.floor(
+
             Math.random()
             *
-            cards.length
+            playable.length
+
         )
 
     ];
@@ -290,6 +247,12 @@ function getRandomPlayableCard(state) {
 
 
 
+
+/*
+    AI играет карты
+*/
+
+
 function opponentPlayCards(state) {
 
 
@@ -298,11 +261,11 @@ function opponentPlayCards(state) {
 
 
 
-
     while(true) {
 
 
         const card =
+
             getRandomPlayableCard(
                 newState
             );
@@ -317,11 +280,8 @@ function opponentPlayCards(state) {
 
 
 
-
-
-        const previous =
+        const before =
             newState;
-
 
 
 
@@ -339,10 +299,8 @@ function opponentPlayCards(state) {
 
 
 
-
-
         if(
-            previous === newState
+            before === newState
         ) {
 
             break;
@@ -351,8 +309,6 @@ function opponentPlayCards(state) {
 
 
     }
-
-
 
 
 
@@ -394,11 +350,10 @@ function opponentAttack(state) {
             .filter(
 
                 unit =>
+
                     unit.canAttack === true
 
             );
-
-
 
 
 
@@ -413,7 +368,6 @@ function opponentAttack(state) {
 
 
 
-
         const attacker =
 
 
@@ -422,16 +376,12 @@ function opponentAttack(state) {
                 Math.floor(
 
                     Math.random()
-
                     *
-
                     attackers.length
 
                 )
 
             ];
-
-
 
 
 
@@ -448,30 +398,20 @@ function opponentAttack(state) {
 
 
 
-            const targets =
-                newState.player.board;
-
-
-
-
             const target =
 
 
-                targets[
+                newState.player.board[
 
                     Math.floor(
 
                         Math.random()
-
                         *
-
-                        targets.length
+                        newState.player.board.length
 
                     )
 
                 ];
-
-
 
 
 
@@ -490,15 +430,13 @@ function opponentAttack(state) {
                 );
 
 
+
         }
 
 
 
-
-
         /*
-            Нет существ —
-            удар героя
+            Бьем героя
         */
 
 
@@ -508,7 +446,6 @@ function opponentAttack(state) {
 
             const damage =
                 attacker.attack;
-
 
 
 
@@ -530,9 +467,7 @@ function opponentAttack(state) {
 
                             0,
 
-                            newState.player.hp
-                            -
-                            damage
+                            newState.player.hp - damage
 
                         )
 
@@ -573,6 +508,7 @@ function opponentAttack(state) {
 
                     " урона."
 
+
                 ]
 
             };
@@ -584,10 +520,8 @@ function opponentAttack(state) {
 
 
 
-
-
         /*
-            После атаки отключаем
+            Существо больше не атакует
         */
 
 
@@ -608,27 +542,19 @@ function opponentAttack(state) {
 
                     newState.opponent.board.map(
 
-
                         unit =>
 
-
-                            unit.instanceId ===
-                            attacker.instanceId
-
+                            unit.instanceId === attacker.instanceId
 
                             ?
 
                             {
 
-
                                 ...unit,
-
 
                                 canAttack:false
 
-
                             }
-
 
                             :
 
@@ -647,8 +573,8 @@ function opponentAttack(state) {
 
 
 
-
         newState =
+
             window.checkGameOver(
                 newState
             );
@@ -670,7 +596,6 @@ function opponentAttack(state) {
 
 
 
-
     return newState;
 
 
@@ -684,6 +609,11 @@ function opponentAttack(state) {
 
 
 
+/*
+    Ход AI полностью
+*/
+
+
 function opponentTurn(state) {
 
 
@@ -692,8 +622,8 @@ function opponentTurn(state) {
 
 
 
-
     newState =
+
         prepareOpponentTurn(
             newState
         );
@@ -725,6 +655,7 @@ function opponentTurn(state) {
 
 
     newState =
+
         opponentPlayCards(
             newState
         );
@@ -732,8 +663,8 @@ function opponentTurn(state) {
 
 
 
-
     newState =
+
         opponentAttack(
             newState
         );
@@ -755,6 +686,11 @@ function opponentTurn(state) {
 
 
 
+/*
+    Завершение хода игрока
+*/
+
+
 function endTurn(state) {
 
 
@@ -766,8 +702,6 @@ function endTurn(state) {
         return state;
 
     }
-
-
 
 
 
@@ -795,14 +729,11 @@ function endTurn(state) {
 
 
 
-
-
     newState =
+
         opponentTurn(
             newState
         );
-
-
 
 
 
@@ -821,12 +752,11 @@ function endTurn(state) {
 
 
 
-
     newState =
+
         preparePlayerTurn(
             newState
         );
-
 
 
 
