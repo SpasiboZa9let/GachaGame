@@ -2,12 +2,7 @@
     ============================
     TEST MODE
 
-    Режим проверки карт
-
-    Позволяет:
-    - выдавать карты
-    - менять стартовую руку
-    - тестировать эффекты
+    Тестовые колоды
     ============================
 */
 
@@ -26,7 +21,6 @@ function getTestHand(){
     }
 
 
-
     return [
 
         "medved",
@@ -41,11 +35,7 @@ function getTestHand(){
 
     ];
 
-
 }
-
-
-
 
 
 
@@ -60,7 +50,6 @@ function getTestOpponentHand(){
     }
 
 
-
     return [
 
         "volk",
@@ -71,83 +60,7 @@ function getTestOpponentHand(){
 
     ];
 
-
 }
-
-
-
-
-
-
-function applyTestMode(state){
-
-
-    if(!TEST_MODE){
-
-        return state;
-
-    }
-
-
-
-
-
-    const playerHand =
-        getTestHand();
-
-
-
-    const opponentHand =
-        getTestOpponentHand();
-
-
-
-
-
-    return {
-
-
-        ...state,
-
-
-
-        player:{
-
-
-            ...state.player,
-
-
-            hand:
-
-                playerHand
-
-        },
-
-
-
-
-
-        opponent:{
-
-
-            ...state.opponent,
-
-
-            hand:
-
-                opponentHand
-
-        }
-
-
-    };
-
-
-}
-
-
-
-
 
 
 
@@ -155,5 +68,9 @@ window.TEST_MODE =
 TEST_MODE;
 
 
-window.applyTestMode =
-applyTestMode;
+window.getTestHand =
+getTestHand;
+
+
+window.getTestOpponentHand =
+getTestOpponentHand;
