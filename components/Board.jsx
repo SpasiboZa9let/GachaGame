@@ -1,7 +1,8 @@
 function Board({
     units,
     onUnitClick,
-    selectedUnitId
+    selectedUnitId,
+    returnId = false
 }) {
 
 
@@ -105,6 +106,7 @@ function Board({
 
 
 
+
                 return (
 
                     <div
@@ -117,7 +119,21 @@ function Board({
 
                             if(onUnitClick){
 
-                                onUnitClick(unit);
+
+                                onUnitClick(
+
+                                    returnId
+
+                                    ?
+
+                                    unit.instanceId
+
+                                    :
+
+                                    unit
+
+                                );
+
 
                             }
 
@@ -164,6 +180,8 @@ function Board({
 
 
                     >
+
+
 
 
 
@@ -308,6 +326,7 @@ board:{
 
 
 
+
 cardsArea:{
 
 
@@ -336,6 +355,7 @@ cardsArea:{
 
 
 },
+
 
 
 
@@ -391,6 +411,7 @@ card:{
 
 
 
+
 name:{
 
 
@@ -410,6 +431,7 @@ name:{
 
 
 },
+
 
 
 
@@ -441,6 +463,7 @@ imageBox:{
 
 
 
+
 image:{
 
 
@@ -454,6 +477,7 @@ image:{
 
 
 },
+
 
 
 
@@ -476,6 +500,7 @@ stats:{
 
 
 },
+
 
 
 
