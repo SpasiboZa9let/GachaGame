@@ -61,7 +61,8 @@ function removeModifier(
             .filter(
 
                 mod =>
-                    mod.source !== source
+
+                mod.source !== source
 
             )
 
@@ -84,22 +85,29 @@ function calculateStat(
 
     let base =
 
+
         unit.baseStats &&
 
         typeof unit.baseStats[stat] === "number"
 
+
         ?
+
 
         unit.baseStats[stat]
 
+
         :
+
 
         0;
 
 
 
 
+
     let bonus = 0;
+
 
 
 
@@ -115,7 +123,9 @@ function calculateStat(
                 mod.stat === stat
             ){
 
-                bonus += mod.value || 0;
+                bonus +=
+
+                    Number(mod.value) || 0;
 
             }
 
@@ -127,8 +137,8 @@ function calculateStat(
 
 
 
-    return base + bonus;
 
+    return base + bonus;
 
 }
 
@@ -145,12 +155,49 @@ function refreshUnitStats(
 ){
 
 
-    const health =
+
+    const oldHealth =
+
+
+        unit.stats &&
+
+        typeof unit.stats.health === "number"
+
+
+        ?
+
+
+        unit.stats.health
+
+
+        :
+
 
         calculateStat(
+
             unit,
+
             "health"
+
         );
+
+
+
+
+
+    const maxHealth =
+
+
+        calculateStat(
+
+            unit,
+
+            "health"
+
+        );
+
+
+
 
 
 
@@ -170,39 +217,62 @@ function refreshUnitStats(
 
             attack:
 
+
                 calculateStat(
+
                     unit,
+
                     "attack"
+
                 ),
 
 
 
 
-            health:health,
+            health:
+
+
+                Math.min(
+
+                    oldHealth,
+
+                    maxHealth
+
+                ),
 
 
 
 
-            maxHealth:health,
+            maxHealth:maxHealth,
+
 
 
 
 
             defense:
 
+
                 calculateStat(
+
                     unit,
+
                     "defense"
+
                 ),
+
 
 
 
 
             strength:
 
+
                 calculateStat(
+
                     unit,
+
                     "strength"
+
                 )
 
 
@@ -231,13 +301,18 @@ function createAttackBuff(
 
     return {
 
+
         type:"buff",
+
 
         stat:"attack",
 
+
         value:value,
 
+
         source:source
+
 
     };
 
@@ -257,13 +332,18 @@ function createHealthBuff(
 
     return {
 
+
         type:"buff",
+
 
         stat:"health",
 
+
         value:value,
 
+
         source:source
+
 
     };
 
@@ -277,25 +357,42 @@ function createHealthBuff(
 
 
 
-window.addModifier =
+window.Modifiers =
+
+window.Modifiers || {};
+
+
+
+window.Modifiers.addModifier =
+
 addModifier;
 
 
-window.removeModifier =
+
+window.Modifiers.removeModifier =
+
 removeModifier;
 
 
-window.calculateStat =
+
+window.Modifiers.calculateStat =
+
 calculateStat;
 
 
-window.refreshUnitStats =
+
+window.Modifiers.refreshUnitStats =
+
 refreshUnitStats;
 
 
-window.createAttackBuff =
+
+window.Modifiers.createAttackBuff =
+
 createAttackBuff;
 
 
-window.createHealthBuff =
+
+window.Modifiers.createHealthBuff =
+
 createHealthBuff;
