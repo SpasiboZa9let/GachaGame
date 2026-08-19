@@ -764,9 +764,9 @@ effects:[
 {
 trigger:"afterAttack",
 
-type:"fear",
+type:"buffAttack",
 
-value:1
+value:50
 }
 
 ],
