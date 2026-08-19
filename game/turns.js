@@ -16,9 +16,9 @@ function preparePlayerTurn(state) {
         state.player.maxMana;
 
 
-    if (
+    if(
         maxMana < 10
-    ) {
+    ){
 
         maxMana++;
 
@@ -27,6 +27,7 @@ function preparePlayerTurn(state) {
 
 
     const refreshedBoard =
+
         state.player.board.map(
 
             unit => ({
@@ -41,7 +42,7 @@ function preparePlayerTurn(state) {
 
 
 
-    let newState = {
+    return {
 
 
         ...state,
@@ -50,7 +51,8 @@ function preparePlayerTurn(state) {
         activePlayer:"player",
 
 
-        player: {
+
+        player:{
 
 
             ...state.player,
@@ -62,13 +64,17 @@ function preparePlayerTurn(state) {
             mana:maxMana,
 
 
-            board:refreshedBoard
+            board:
+                refreshedBoard
 
 
         }
 
 
     };
+
+
+}
 
 
 
