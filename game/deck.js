@@ -247,12 +247,58 @@ function createDeck(){
 
 
 
-    while(
+    /*
+    Гарантируем одну сильную карту
+*/
 
-        deck.length <
-        DECK_SIZE
 
-    ){
+const firstCardPool =
+
+CARDS.filter(
+
+    card =>
+
+        card.rarity === "rare"
+        ||
+        card.rarity === "epic"
+        ||
+        card.rarity === "legendary"
+
+);
+
+
+
+const firstCard =
+
+firstCardPool[
+
+    Math.floor(
+        Math.random()
+        *
+        firstCardPool.length
+    )
+
+];
+
+
+
+deck.push(
+    firstCard.id
+);
+
+
+usedCards[firstCard.id]=1;
+
+
+
+
+
+while(
+
+    deck.length <
+    DECK_SIZE
+
+){
 
 
 
