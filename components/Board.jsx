@@ -23,9 +23,7 @@ function Board({
 
     function getUnitStats(unit){
 
-
         return unit.stats || {
-
 
             attack: unit.attack || 0,
 
@@ -33,9 +31,7 @@ function Board({
 
             defense: unit.defense || 0
 
-
         };
-
 
     }
 
@@ -44,13 +40,9 @@ function Board({
 
 
 
-
-
     function getRarityColor(rarity){
 
-
         const colors = {
-
 
             legendary:"#ffd700",
 
@@ -62,15 +54,12 @@ function Board({
 
             common:"#888"
 
-
         };
 
 
         return colors[rarity] || "#777";
 
-
     }
-
 
 
 
@@ -127,6 +116,7 @@ function Board({
 
 
 
+
                 const stats =
 
                     getUnitStats(unit);
@@ -148,19 +138,15 @@ function Board({
 
                     <div
 
-
                         key={unit.instanceId}
 
-
                         onClick={()=>{
-
 
                             if(onUnitClick){
 
                                 onUnitClick(unit);
 
                             }
-
 
                         }}
 
@@ -182,10 +168,8 @@ function Board({
                             :
 
                             "3px solid " +
+                            getRarityColor(card.rarity),
 
-                            getRarityColor(
-                                card.rarity
-                            ),
 
 
                             opacity:
@@ -201,6 +185,7 @@ function Board({
                             0.65,
 
 
+
                             transform:
 
                             selected
@@ -213,12 +198,12 @@ function Board({
 
                             "translateY(0)"
 
-
                         }}
 
-
-
                     >
+
+
+
 
 
                         <div style={styles.name}>
@@ -226,6 +211,7 @@ function Board({
                             {card.name}
 
                         </div>
+
 
 
 
@@ -244,7 +230,7 @@ function Board({
 
                                 src={card.image}
 
-                                alt=""
+                                alt={card.name}
 
                                 style={styles.image}
 
@@ -252,7 +238,9 @@ function Board({
 
                             :
 
-                            "АРТ"
+                            <div style={styles.noImage}>
+                                АРТ
+                            </div>
 
                             }
 
@@ -273,7 +261,7 @@ function Board({
 
                             ?
 
-                            "⚔️"
+                            "⚔️ готов"
 
                             :
 
@@ -294,19 +282,21 @@ function Board({
 
                             <span>
 
-                                ⚔️{stats.attack}
+                                ⚔️ {stats.attack}
 
                             </span>
 
 
+
                             <span>
 
-                                ❤️{stats.health}
+                                ❤️ {stats.health}
 
                             </span>
 
 
                         </div>
+
 
 
 
@@ -339,7 +329,6 @@ function Board({
 
 
 
-
 const styles = {
 
 
@@ -349,7 +338,16 @@ board:{
     width:"100%",
 
 
-    height:"190px",
+    height:"200px",
+
+
+    display:"flex",
+
+
+    justifyContent:"center",
+
+
+    alignItems:"center",
 
 
     background:
@@ -357,21 +355,19 @@ board:{
     "linear-gradient(#242424,#111)",
 
 
-    border:
-
-    "2px solid #555",
+    border:"2px solid #555",
 
 
     borderRadius:"16px",
 
 
-    padding:"12px",
+    padding:"10px",
 
 
-    boxSizing:"border-box",
+    overflow:"hidden",
 
 
-    overflow:"hidden"
+    boxSizing:"border-box"
 
 
 },
@@ -387,10 +383,22 @@ cardsArea:{
     display:"flex",
 
 
+    flexDirection:"row",
+
+
+    flexWrap:"nowrap",
+
+
+    alignItems:"center",
+
+
     justifyContent:"center",
 
 
     gap:"12px",
+
+
+    width:"100%",
 
 
     height:"100%"
@@ -406,17 +414,7 @@ cardsArea:{
 empty:{
 
 
-    height:"100%",
-
-
-    display:"flex",
-
-    justifyContent:"center",
-
-    alignItems:"center",
-
     color:"#666"
-
 
 },
 
@@ -431,7 +429,16 @@ unit:{
     width:"90px",
 
 
-    height:"155px",
+    minWidth:"90px",
+
+
+    height:"150px",
+
+
+    minHeight:"150px",
+
+
+    flex:"0 0 auto",
 
 
     background:"#292929",
@@ -448,7 +455,11 @@ unit:{
 
     display:"flex",
 
+
     flexDirection:"column",
+
+
+    boxSizing:"border-box",
 
 
     transition:"0.2s",
@@ -478,7 +489,7 @@ name:{
     fontWeight:"bold",
 
 
-    height:"22px",
+    height:"20px",
 
 
     overflow:"hidden"
@@ -494,12 +505,17 @@ name:{
 imageBox:{
 
 
-    height:"90px",
+    width:"100%",
+
+
+    height:"75px",
 
 
     background:"#000",
 
+
     borderRadius:"8px",
+
 
     overflow:"hidden"
 
@@ -530,12 +546,35 @@ image:{
 
 
 
+noImage:{
+
+
+    height:"100%",
+
+
+    display:"flex",
+
+    justifyContent:"center",
+
+    alignItems:"center",
+
+    color:"#555"
+
+},
+
+
+
+
+
+
 status:{
 
 
     textAlign:"center",
 
-    height:"15px"
+    fontSize:"9px",
+
+    height:"18px"
 
 
 },
@@ -553,17 +592,20 @@ stats:{
 
     display:"flex",
 
+
     justifyContent:"space-around",
 
-    fontWeight:"bold",
 
-    fontSize:"11px"
+    fontSize:"10px",
+
+    fontWeight:"bold"
 
 
 }
 
 
 };
+
 
 
 
