@@ -472,7 +472,9 @@ function createCardInstance(id){
 
         */
 
-        effects:[],
+        effects:
+
+    card.effects || [],
 
 
 
