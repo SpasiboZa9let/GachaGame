@@ -10,7 +10,7 @@ OpponentArea.jsx
 - героя
 - поле существ
 
-Логика боя остаётся в Game.jsx
+Логика боя остаётся в GameActions
 
 ============================
 */
@@ -52,9 +52,11 @@ function OpponentArea({
 
             <OpponentHand
 
-    cards={opponentHandCards}
+                cards={opponentHandCards}
 
-/>
+            />
+
+
 
 
 
@@ -108,6 +110,7 @@ function OpponentArea({
 
 
 
+
             <Board
 
                 units={opponent.board || []}
@@ -115,6 +118,8 @@ function OpponentArea({
                 onUnitClick={onOpponentUnitClick}
 
                 selectedUnitId={null}
+
+                returnId={true}
 
             />
 
