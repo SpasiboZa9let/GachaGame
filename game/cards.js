@@ -10,6 +10,8 @@
 
 
 
+
+
 function getCardById(id){
 
 
@@ -25,15 +27,41 @@ function getCardById(id){
 
 
 
-    if(
-        typeof CARDS === "undefined"
+
+    const cards =
+
+
+        window.Cards?.list
+
         ||
-        !Array.isArray(CARDS)
+
+        window.CARDS
+
+        ||
+
+        (typeof CARDS !== "undefined"
+            ?
+            CARDS
+            :
+            null
+        );
+
+
+
+
+
+
+
+
+    if(
+
+        !Array.isArray(cards)
+
     ){
 
         console.error(
 
-            "CARDS не загружен"
+            "База карт не загружена"
 
         );
 
@@ -49,9 +77,10 @@ function getCardById(id){
 
 
 
+
     return (
 
-        CARDS.find(
+        cards.find(
 
             card =>
 
@@ -74,9 +103,13 @@ function getCardById(id){
 
 
 
+
+
 window.Cards =
 
 window.Cards || {};
+
+
 
 
 
@@ -86,10 +119,14 @@ getCardById;
 
 
 
+
+
+
+
 /*
     Совместимость
-    со старыми файлами
 */
+
 
 
 window.getCardById =
