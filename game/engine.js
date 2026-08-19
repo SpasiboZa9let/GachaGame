@@ -1,48 +1,40 @@
-function createInitialGameState() {
+/*
+    Основной игровой движок
+*/
+
+
+function createInitialGameState(){
 
 
     const playerHero =
         HEROES.find(
             hero =>
-                hero.id ===
-                "ilya_muromets"
+                hero.id === "ilya_muromets"
         );
 
 
     const opponentHero =
         HEROES.find(
             hero =>
-                hero.id ===
-                "vasilisa_premudraya"
-        );
-
-
-
-    let playerDeck =
-        shuffleDeck(
-            createDeck()
-        );
-
-
-    let opponentDeck =
-        shuffleDeck(
-            createDeck()
+                hero.id === "vasilisa_premudraya"
         );
 
 
 
     const playerStart =
         drawStartingHand(
-            playerDeck,
+            createDeck(),
             5
         );
+
 
 
     const opponentStart =
         drawStartingHand(
-            opponentDeck,
+            createDeck(),
             5
         );
+
 
 
 
@@ -69,11 +61,11 @@ function createInitialGameState() {
 
 
 
+
         player:{
 
 
-            hero:
-                playerHero,
+            hero:playerHero,
 
 
             hp:
@@ -107,11 +99,12 @@ function createInitialGameState() {
 
 
 
+
+
         opponent:{
 
 
-            hero:
-                opponentHero,
+            hero:opponentHero,
 
 
             hp:
@@ -145,8 +138,11 @@ function createInitialGameState() {
 
     };
 
-
 }
+
+
+
+
 
 
 
@@ -154,7 +150,7 @@ function createInitialGameState() {
 function addCombatLog(
     state,
     message
-) {
+){
 
 
     return {
@@ -180,21 +176,29 @@ function addCombatLog(
 
 
 
-function checkGameOver(state) {
 
 
-    if (!state) {
+
+
+
+function checkGameOver(state){
+
+
+    if(!state)
         return state;
-    }
 
 
-    if(state.gameOver){
+
+    if(state.gameOver)
         return state;
-    }
 
 
 
-    if(state.opponent.hp <=0){
+
+
+    if(
+        state.opponent.hp <= 0
+    ){
 
 
         return {
@@ -209,15 +213,28 @@ function checkGameOver(state) {
             winner:"player",
 
 
+            opponent:{
+
+
+                ...state.opponent,
+
+
+                hp:0
+
+
+            },
+
+
             combatLog:[
 
-                ...state.combatLog,
+                ...(state.combatLog || []),
 
                 "Герой противника повержен.",
 
                 "ПОБЕДА."
 
             ]
+
 
         };
 
@@ -227,7 +244,12 @@ function checkGameOver(state) {
 
 
 
-    if(state.player.hp <=0){
+
+
+
+    if(
+        state.player.hp <=0
+    ){
 
 
         return {
@@ -242,15 +264,28 @@ function checkGameOver(state) {
             winner:"opponent",
 
 
+            player:{
+
+
+                ...state.player,
+
+
+                hp:0
+
+
+            },
+
+
             combatLog:[
 
-                ...state.combatLog,
+                ...(state.combatLog || []),
 
                 "Ваш герой пал.",
 
                 "ПОРАЖЕНИЕ."
 
             ]
+
 
         };
 
@@ -261,7 +296,12 @@ function checkGameOver(state) {
 
     return state;
 
+
 }
+
+
+
+
 
 
 
@@ -270,11 +310,27 @@ function checkGameOver(state) {
 function getCardById(cardId){
 
 
+    if(
+        !Array.isArray(CARDS)
+    ){
+
+        console.error(
+            "Карты не загружены"
+        );
+
+        return null;
+
+    }
+
+
+
     return (
 
         CARDS.find(
+
             card =>
                 card.id === cardId
+
         )
         ||
         null
@@ -288,16 +344,23 @@ function getCardById(cardId){
 
 
 
+
+
+
+
 function createCardInstance(cardId){
+
 
 
     const card =
         getCardById(cardId);
 
 
-    if(!card){
+
+    if(!card)
         return null;
-    }
+
+
 
 
 
@@ -306,43 +369,53 @@ function createCardInstance(cardId){
 
         instanceId:
 
-            cardId +
-            "_" +
-            Date.now() +
-            "_" +
+            cardId
+            +
+            "_"
+            +
+            Date.now()
+            +
+            "_"
+            +
             Math.random()
             .toString(36)
             .substring(2,8),
 
 
 
-        cardId,
+        cardId:cardId,
+
 
 
         attack:
-            card.attack,
+            card.attack || 0,
 
 
         health:
-            card.health,
+            card.health || 0,
 
 
         maxHealth:
-            card.health,
+            card.health || 0,
+
 
 
         defense:
-            card.defense,
+            card.defense || 0,
+
 
 
         strength:
-            card.strength,
+            card.strength || 0,
+
 
 
         canAttack:false,
 
 
+
         status:[]
+
 
 
     };
@@ -353,19 +426,43 @@ function createCardInstance(cardId){
 
 
 
+
+
+
+
+
 function getCardFromHand(
     player,
     cardId
 ){
 
 
+    if(
+        !player ||
+        !Array.isArray(player.hand)
+    ){
+
+        return null;
+
+    }
+
+
+
     return player.hand.find(
+
         id =>
             id === cardId
-    );
+
+    )
+    ||
+    null;
 
 
 }
+
+
+
+
 
 
 
@@ -378,15 +475,33 @@ function playCard(
 ){
 
 
+
+    if(
+        !state ||
+        state.gameOver
+    )
+        return state;
+
+
+
+
     const player =
         state[playerId];
 
 
+
+    if(!player)
+        return state;
+
+
+
+
     if(
         state.activePlayer !== playerId
-    ){
+    )
         return state;
-    }
+
+
 
 
 
@@ -396,8 +511,13 @@ function playCard(
             cardId
         )
     ){
+
         return state;
+
     }
+
+
+
 
 
 
@@ -406,69 +526,111 @@ function playCard(
 
 
 
+    if(!card)
+        return state;
+
+
+
+
+
     if(
         player.mana < card.cost
     ){
+
+        console.log(
+            "Недостаточно маны"
+        );
+
         return state;
+
     }
+
+
+
 
 
 
     if(
         player.board.length >=5
     ){
+
         return state;
+
     }
 
 
 
 
+
+
+
     const unit =
-        createCardInstance(cardId);
+        createCardInstance(
+            cardId
+        );
+
+
+
+    if(!unit)
+        return state;
+
+
+
+
+
+
+    const newState = {
+
+
+        ...state,
+
+
+        [playerId]:{
+
+
+            ...player,
+
+
+            mana:
+
+                player.mana -
+                card.cost,
+
+
+
+            hand:
+
+                player.hand.filter(
+
+                    id =>
+                        id !== cardId
+
+                ),
+
+
+
+            board:[
+
+                ...player.board,
+
+                unit
+
+            ]
+
+
+        }
+
+
+    };
+
+
 
 
 
 
     return addCombatLog(
 
-
-        {
-
-
-            ...state,
-
-
-            [playerId]:{
-
-
-                ...player,
-
-
-                mana:
-                    player.mana-card.cost,
-
-
-                hand:
-
-                    player.hand.filter(
-                        id =>
-                            id!==cardId
-                    ),
-
-
-                board:[
-
-                    ...player.board,
-
-                    unit
-
-                ]
-
-
-            }
-
-
-        },
+        newState,
 
 
         (
@@ -478,16 +640,26 @@ function playCard(
             :
             "Василиса"
         )
+
         +
-        " сыграли "
+
+        " сыграли карту «"
+
         +
+
         card.name
 
+        +
+
+        "»."
 
     );
 
-
 }
+
+
+
+
 
 
 
@@ -495,9 +667,15 @@ function playCard(
 
 function restartGame(){
 
+
     return createInitialGameState();
 
+
 }
+
+
+
+
 
 
 
@@ -521,6 +699,10 @@ getCardById;
 
 window.createCardInstance =
 createCardInstance;
+
+
+window.getCardFromHand =
+getCardFromHand;
 
 
 window.playCard =
