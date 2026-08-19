@@ -42,77 +42,29 @@ function GameBoard({
 }){
 
 
-    const player = gameState.player;
-
-    const opponent = gameState.opponent;
-
-
-
-
-
-
-    const handCards =
-
-        (player.hand || [])
-
-        .map(
-
-            cardId =>
-
-            window.Cards.getCardById(cardId)
-
-        )
-
-        .filter(Boolean);
-
-
-
-
-
-
-
-
-    const opponentHandCards =
-
-        (opponent.hand || [])
-
-        .map(
-
-            cardId =>
-
-            window.Cards.getCardById(cardId)
-
-        )
-
-        .filter(Boolean);
-
-
-
-
-
-
-
-
     return (
 
 
-        <div style={window.gameStyles.game}>
+        <GameData gameState={gameState}>
 
 
+            {({
 
 
+                player,
 
+                opponent,
 
+                handCards,
 
-            <GameOver
+                opponentHandCards
 
-                gameState={gameState}
 
-                onRestart={onRestart}
+            }) => (
 
-            />
 
 
+                <div style={window.gameStyles.game}>
 
 
 
@@ -120,35 +72,35 @@ function GameBoard({
 
 
 
-            <OpponentArea
+                    <GameOver
 
-                opponent={opponent}
+                        gameState={gameState}
 
-                opponentHandCards={opponentHandCards}
+                        onRestart={onRestart}
 
-                selectedAttacker={selectedAttacker}
+                    />
 
-                onOpponentUnitClick={onOpponentUnitClick}
 
-                onOpponentHeroClick={onOpponentHeroClick}
 
-            />
 
 
 
 
 
 
+                    <OpponentArea
 
+                        opponent={opponent}
 
+                        opponentHandCards={opponentHandCards}
 
-            <GameTurn
+                        selectedAttacker={selectedAttacker}
 
-                selectedAttacker={selectedAttacker}
+                        onOpponentUnitClick={onOpponentUnitClick}
 
-                turn={gameState.turn}
+                        onOpponentHeroClick={onOpponentHeroClick}
 
-            />
+                    />
 
 
 
@@ -158,15 +110,14 @@ function GameBoard({
 
 
 
-            <PlayerArea
+                    <GameTurn
 
-                player={player}
+                        selectedAttacker={selectedAttacker}
 
-                selectedAttacker={selectedAttacker}
+                        turn={gameState.turn}
 
-                onPlayerUnitClick={onPlayerUnitClick}
+                    />
 
-            />
 
 
 
@@ -175,14 +126,15 @@ function GameBoard({
 
 
 
+                    <PlayerArea
 
-            <PlayerHand
+                        player={player}
 
-                cards={handCards}
+                        selectedAttacker={selectedAttacker}
 
-                onCardClick={onCardClick}
+                        onPlayerUnitClick={onPlayerUnitClick}
 
-            />
+                    />
 
 
 
@@ -192,13 +144,13 @@ function GameBoard({
 
 
 
-            <GameControls
+                    <PlayerHand
 
-                onEndTurn={onEndTurn}
+                        cards={handCards}
 
-                onTestBoard={onTestBoard}
+                        onCardClick={onCardClick}
 
-            />
+                    />
 
 
 
@@ -208,12 +160,13 @@ function GameBoard({
 
 
 
-            <GameLog
+                    <GameControls
 
-                log={gameState.combatLog}
+                        onEndTurn={onEndTurn}
 
-            />
+                        onTestBoard={onTestBoard}
 
+                    />
 
 
 
@@ -221,7 +174,28 @@ function GameBoard({
 
 
 
-        </div>
+
+
+                    <GameLog
+
+                        log={gameState.combatLog}
+
+                    />
+
+
+
+
+
+
+
+                </div>
+
+
+
+            )}
+
+
+        </GameData>
 
 
     );
