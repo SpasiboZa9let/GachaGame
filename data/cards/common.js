@@ -1,305 +1,393 @@
 const COMMON_CARDS = [
 
-    {
+{
+    id:"medved",
 
-        id: "medved",
+    name:"Медведь",
 
-        name: "Медведь",
+    rarity:"common",
 
-        rarity: "common",
+    type:"creature",
 
-        type: "creature",
+    cost:5,
 
-        cost: 5,
+    health:1600,
 
-        health: 1600,
+    attack:650,
 
-        attack: 650,
+    defense:550,
 
-        defense: 550,
+    strength:7,
 
-        strength: 7,
+    faction:"forest",
 
-        faction: "forest",
-        effects:[
-    {
-        trigger:"afterAttack",
-        type:"buffAttack",
-        value:50
-    }
-]
+    effects:[
 
-        image:
-            "./assets/cards/common/medved.png",
+        {
+            trigger:"afterAttack",
 
-        abilities: [
+            type:"buffAttack",
 
-            {
+            value:50
+        }
 
-                id: "den_of_rage",
+    ],
 
-                name: "Ярость берлоги",
+    image:
+        "./assets/cards/common/medved.png",
 
-                type: "buff",
+    abilities:[
 
-                description:
-                    "Получает +5 урона за каждые потерянные 20% здоровья."
+        {
+            id:"den_of_rage",
 
-            }
+            name:"Ярость берлоги",
 
-        ]
+            type:"buff",
 
-    },
+            description:
+            "Получает +5 урона за каждые потерянные 20% здоровья."
+        }
 
+    ]
 
+},
 
-    {
 
-        id: "razboynik",
 
-        name: "Разбойник",
 
-        rarity: "common",
 
-        type: "creature",
+{
+    id:"razboynik",
 
-        cost: 1,
+    name:"Разбойник",
 
-        health: 350,
+    rarity:"common",
 
-        attack: 150,
+    type:"creature",
 
-        defense: 100,
+    cost:1,
 
-        strength: 2,
+    health:350,
 
-        faction: "forest",
+    attack:150,
 
-        image:
-            "./assets/cards/common/razboynik.png",
+    defense:100,
 
-        abilities: [
+    strength:2,
 
-            {
+    faction:"forest",
 
-                id: "forest_thief",
+    effects:[
 
-                name: "Лесной вор",
+        {
+            trigger:"afterAttack",
 
-                type: "passive",
+            type:"buffAttack",
 
-                description:
-                    "В лесу получает шанс уклонения."
+            value:20
+        }
 
-            }
+    ],
 
-        ]
+    image:
+        "./assets/cards/common/razboynik.png",
 
-    },
 
+    abilities:[
 
+        {
+            id:"forest_thief",
 
-    {
+            name:"Лесной вор",
 
-        id: "kort_aika",
+            type:"passive",
 
-        name: "Корт-айка",
+            description:
+            "После атаки получает +20 атаки."
+        }
 
-        rarity: "common",
+    ]
 
-        type: "creature",
+},
 
-        cost: 4,
 
-        health: 1400,
 
-        attack: 600,
 
-        defense: 500,
 
-        strength: 6,
 
-        faction: "forest",
+{
+    id:"kort_aika",
 
-        image:
-            "./assets/cards/common/kort_aika.png",
+    name:"Корт-айка",
 
-        abilities: [
+    rarity:"common",
 
-            {
+    type:"creature",
 
-                id: "row_defense",
+    cost:4,
 
-                name: "Защита ряда",
+    health:1400,
 
-                type: "armor",
+    attack:600,
 
-                description:
-                    "Первый враг, атакующий этот ряд, получает ограничение атаки."
+    defense:500,
 
-            }
+    strength:6,
 
-        ]
+    faction:"forest",
 
-    },
+    effects:[
 
+        {
+            trigger:"onDamage",
 
+            type:"buffAttack",
 
-    {
+            value:30
+        }
 
-        id: "voin_pikhotinets",
+    ],
 
-        name: "Воин-пехотинец",
 
-        rarity: "common",
+    image:
+        "./assets/cards/common/kort_aika.png",
 
-        type: "creature",
 
-        cost: 2,
+    abilities:[
 
-        health: 650,
+        {
+            id:"row_defense",
 
-        attack: 210,
+            name:"Защита ряда",
 
-        defense: 180,
+            type:"armor",
 
-        strength: 3,
+            description:
+            "После получения урона усиливается."
+        }
 
-        faction: "yav",
+    ]
 
-        image:
-            "./assets/cards/common/voin_pikhotinets.png",
+},
 
-        abilities: [
 
-            {
 
-                id: "wooden_shield",
 
-                name: "Деревянный щит",
 
-                type: "armor",
 
-                description:
-                    "На один ход блокирует 15% входящего урона."
+{
+    id:"voin_pikhotinets",
 
-            }
+    name:"Воин-пехотинец",
 
-        ]
+    rarity:"common",
 
-    },
+    type:"creature",
 
+    cost:2,
 
+    health:650,
 
-    {
+    attack:210,
 
-        id: "lyagushka",
+    defense:180,
 
-        name: "Лягушка",
+    strength:3,
 
-        rarity: "common",
+    faction:"yav",
 
-        type: "creature",
+    effects:[
 
-        cost: 1,
+        {
+            trigger:"beforeAttack",
 
-        health: 210,
+            type:"buffAttack",
 
-        attack: 100,
+            value:10
+        }
 
-        defense: 90,
+    ],
 
-        strength: 2,
 
-        faction: "swamp",
+    image:
+        "./assets/cards/common/voin_pikhotinets.png",
 
-        image:
-            "./assets/cards/common/lyagushka.png",
 
-        abilities: [
+    abilities:[
 
-            {
+        {
+            id:"wooden_shield",
 
-                id: "swamp_jump",
+            name:"Деревянный щит",
 
-                name: "Болотная прыгучесть",
+            type:"armor",
 
-                type: "evasion",
+            description:
+            "Перед атакой получает небольшой бонус."
+        }
 
-                description:
-                    "Имеет шанс уклониться от физической атаки."
+    ]
 
-            }
+},
 
-        ]
 
-    },
 
 
 
-    {
 
-        id: "voin_s_kopem",
+{
+    id:"lyagushka",
 
-        name: "Воин с копьём",
+    name:"Лягушка",
 
-        rarity: "common",
+    rarity:"common",
 
-        type: "creature",
+    type:"creature",
 
-        cost: 1,
+    cost:1,
 
-        health: 90,
+    health:210,
 
-        attack: 20,
+    attack:100,
 
-        defense: 40,
+    defense:90,
 
-        strength: 1,
+    strength:2,
 
-        faction: "yav",
+    faction:"swamp",
 
-        image:
-            "./assets/cards/common/voin_s_kopem.png",
+    effects:[
 
-        abilities: []
+        {
+            trigger:"onDamage",
 
-    },
+            type:"heal",
 
+            value:50
+        }
 
+    ],
 
-    {
 
-        id: "volk",
+    image:
+        "./assets/cards/common/lyagushka.png",
 
-        name: "Волк",
 
-        rarity: "common",
+    abilities:[
 
-        type: "creature",
+        {
+            id:"swamp_jump",
 
-        cost: 2,
+            name:"Болотная прыгучесть",
 
-        health: 600,
+            type:"evasion",
 
-        attack: 250,
+            description:
+            "После получения урона восстанавливает здоровье."
+        }
 
-        defense: 150,
+    ]
 
-        strength: 8,
+},
 
-        faction: "forest",
 
-        image:
-            "./assets/cards/common/volk.png",
 
-        abilities: []
 
-    }
+
+
+{
+    id:"voin_s_kopem",
+
+    name:"Воин с копьём",
+
+    rarity:"common",
+
+    type:"creature",
+
+    cost:1,
+
+    health:90,
+
+    attack:20,
+
+    defense:40,
+
+    strength:1,
+
+    faction:"yav",
+
+    effects:[
+
+        {
+            trigger:"afterAttack",
+
+            type:"buffAttack",
+
+            value:5
+        }
+
+    ],
+
+
+    image:
+        "./assets/cards/common/voin_s_kopem.png",
+
+
+    abilities:[]
+
+},
+
+
+
+
+
+
+{
+    id:"volk",
+
+    name:"Волк",
+
+    rarity:"common",
+
+    type:"creature",
+
+    cost:2,
+
+    health:600,
+
+    attack:250,
+
+    defense:150,
+
+    strength:8,
+
+    faction:"forest",
+
+    effects:[
+
+        {
+            trigger:"afterAttack",
+
+            type:"buffAttack",
+
+            value:40
+        }
+
+    ],
+
+
+    image:
+        "./assets/cards/common/volk.png",
+
+
+    abilities:[]
+
+}
 
 ];
 
 
 
 window.COMMON_CARDS =
-    COMMON_CARDS;
+COMMON_CARDS;
