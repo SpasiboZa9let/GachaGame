@@ -297,36 +297,13 @@ function GameBoard({
 
 
 
-            <button
+            <GameControls
 
-                style={gameStyles.button}
+    onEndTurn={onEndTurn}
 
-                onClick={onEndTurn}
+    onTestBoard={onTestBoard}
 
-            >
-
-                Завершить ход
-
-            </button>
-
-
-
-
-
-
-
-
-            <button
-
-                style={gameStyles.button}
-
-                onClick={onTestBoard}
-
-            >
-
-                🧪 Тестовое поле
-
-            </button>
+/>
 
 
 
