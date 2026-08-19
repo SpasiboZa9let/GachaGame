@@ -7,11 +7,27 @@
 */
 
 
+
 function checkGameOver(state){
 
 
 
-    if(state.player.hp <= 0){
+    if(!state){
+
+        return state;
+
+    }
+
+
+
+
+
+
+
+    if(
+        state.player.hp <= 0
+    ){
+
 
 
         return {
@@ -23,7 +39,20 @@ function checkGameOver(state){
             gameOver:true,
 
 
-            winner:"opponent"
+            winner:"opponent",
+
+
+
+            combatLog:[
+
+
+                ...(state.combatLog || []),
+
+
+                "Победил противник."
+
+            ]
+
 
 
         };
@@ -35,7 +64,13 @@ function checkGameOver(state){
 
 
 
-    if(state.opponent.hp <= 0){
+
+
+
+    if(
+        state.opponent.hp <= 0
+    ){
+
 
 
         return {
@@ -47,13 +82,29 @@ function checkGameOver(state){
             gameOver:true,
 
 
-            winner:"player"
+            winner:"player",
+
+
+
+            combatLog:[
+
+
+                ...(state.combatLog || []),
+
+
+                "Победа игрока."
+
+            ]
+
 
 
         };
 
 
     }
+
+
+
 
 
 
@@ -66,5 +117,33 @@ function checkGameOver(state){
 
 
 
+
+
+
+
+window.Victory =
+
+window.Victory || {};
+
+
+
+window.Victory.checkGameOver =
+
+checkGameOver;
+
+
+
+
+
+
+
+
+/*
+    Совместимость
+*/
+
+
+
 window.checkGameOver =
+
 checkGameOver;
