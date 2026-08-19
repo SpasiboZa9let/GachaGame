@@ -4,15 +4,18 @@
 
     Создание состояния игры
 
-    Отвечает за:
+    Создает:
+    - героев
+    - колоды
+    - руки
+    - здоровье
+    - ману
+    - поле
 
-    - выбор героев
-    - создание колод
-    - стартовую руку
-    - игроков
-    - поле боя
-
-    НЕ содержит боевую логику
+    Подготовка под:
+    - режимы игры
+    - сохранения
+    - загрузку боя
     ============================
 */
 
@@ -35,6 +38,7 @@ function createInitialGameState(){
 
 
 
+
     const opponentHero =
 
         HEROES.find(
@@ -42,6 +46,8 @@ function createInitialGameState(){
             h => h.id === "vasilisa_premudraya"
 
         );
+
+
 
 
 
@@ -60,6 +66,8 @@ function createInitialGameState(){
 
 
 
+
+
     let opponentDeck =
 
         shuffleDeck(
@@ -67,6 +75,8 @@ function createInitialGameState(){
             createDeck()
 
         );
+
+
 
 
 
@@ -83,6 +93,9 @@ function createInitialGameState(){
             5
 
         );
+
+
+
 
 
 
@@ -106,7 +119,8 @@ function createInitialGameState(){
 
 
 
-    return {
+    let state = {
+
 
 
 
@@ -127,11 +141,16 @@ function createInitialGameState(){
 
 
 
+
         combatLog:[
+
 
             "Бой начинается."
 
+
         ],
+
+
 
 
 
@@ -147,7 +166,9 @@ function createInitialGameState(){
 
 
 
+
             hp:
+
 
                 playerHero
 
@@ -211,7 +232,9 @@ function createInitialGameState(){
 
 
 
+
             hp:
+
 
                 opponentHero
 
@@ -267,8 +290,91 @@ function createInitialGameState(){
 
 
 
-}
 
+
+
+
+
+
+    /*
+        ТЕСТОВЫЙ РЕЖИМ
+
+    */
+
+
+    if(
+
+        typeof TEST_MODE !== "undefined"
+
+        &&
+
+        TEST_MODE
+
+    ){
+
+
+
+        state.player.hand =
+
+            getTestHand();
+
+
+
+
+
+        state.opponent.hand =
+
+            getTestOpponentHand();
+
+
+
+
+
+
+
+        state.player.mana = 10;
+
+
+        state.player.maxMana = 10;
+
+
+
+
+
+        state.opponent.mana = 10;
+
+
+        state.opponent.maxMana = 10;
+
+
+
+
+
+
+
+        state.combatLog.push(
+
+
+            "🧪 Тестовый режим активирован."
+
+
+        );
+
+
+    }
+
+
+
+
+
+
+
+
+
+    return state;
+
+
+}
 
 
 
