@@ -18,47 +18,82 @@
 */
 
 
+
+
+
+
+
 function createInitialGameState(){
 
 
     const playerHero =
+
         HEROES.find(
+
             h => h.id === "ilya_muromets"
+
         );
+
 
 
     const opponentHero =
+
         HEROES.find(
+
             h => h.id === "vasilisa_premudraya"
+
         );
+
+
 
 
 
     let playerDeck =
+
         shuffleDeck(
+
             createDeck()
+
         );
+
 
 
     let opponentDeck =
+
         shuffleDeck(
+
             createDeck()
+
         );
+
+
 
 
 
     const playerStart =
+
         drawStartingHand(
+
             playerDeck,
+
             5
+
         );
+
 
 
     const opponentStart =
+
         drawStartingHand(
+
             opponentDeck,
+
             5
+
         );
+
+
+
 
 
 
@@ -83,6 +118,7 @@ function createInitialGameState(){
             "Бой начинается."
 
         ],
+
 
 
 
@@ -114,11 +150,13 @@ function createInitialGameState(){
 
 
             deck:
+
                 playerStart.deck,
 
 
 
             hand:
+
                 playerStart.hand,
 
 
@@ -126,7 +164,10 @@ function createInitialGameState(){
             board:[]
 
 
+
         },
+
+
 
 
 
@@ -160,11 +201,13 @@ function createInitialGameState(){
 
 
             deck:
+
                 opponentStart.deck,
 
 
 
             hand:
+
                 opponentStart.hand,
 
 
@@ -172,14 +215,15 @@ function createInitialGameState(){
             board:[]
 
 
-        }
 
+        }
 
 
     };
 
 
 }
+
 
 
 
@@ -207,7 +251,6 @@ function addCombatLog(
             text
 
         ]
-
 
     };
 
@@ -318,29 +361,37 @@ function getCardById(id){
 
 
 /*
-    Создание существа на поле
+    Создание боевой единицы
 
-    Карта -> Боевая единица
-
+    Карта -> Существо
 */
+
 
 
 function createCardInstance(id){
 
 
+
     const card =
+
         getCardById(id);
 
 
 
+
+
     if(!card)
+
         return null;
 
 
 
 
 
-    const stats = {
+
+
+    const baseStats = {
+
 
 
         attack:
@@ -372,16 +423,21 @@ function createCardInstance(id){
             card.strength || 0
 
 
+
     };
 
 
 
 
 
-    return {
+
+
+    let unit = {
+
 
 
         instanceId:
+
 
 
             id +
@@ -397,6 +453,7 @@ function createCardInstance(id){
             .toString(36)
 
             .slice(2),
+
 
 
 
@@ -418,6 +475,13 @@ function createCardInstance(id){
 
 
 
+        faction:
+
+            card.faction || null,
+
+
+
+
         tags:
 
             card.tags || [],
@@ -426,10 +490,12 @@ function createCardInstance(id){
 
 
 
+
+
         baseStats:{
 
 
-            ...stats
+            ...baseStats
 
 
         },
@@ -441,7 +507,7 @@ function createCardInstance(id){
         stats:{
 
 
-            ...stats
+            ...baseStats
 
 
         },
@@ -450,14 +516,33 @@ function createCardInstance(id){
 
 
 
-        /*
-            Будущая система:
 
-            [
-                {
-                    id:"bear_claws"
-                }
-            ]
+
+
+        /*
+            Баффы / дебаффы
+
+            {
+                stat:"attack",
+                value:50,
+                source:"Ярость берлоги"
+            }
+        */
+
+        modifiers:[],
+
+
+
+
+
+
+
+        /*
+            Амуниция
+
+            {
+                id:"bear_claws"
+            }
 
         */
 
@@ -467,14 +552,17 @@ function createCardInstance(id){
 
 
 
-        /*
-            Постоянные способности
 
+
+        /*
+            Постоянные эффекты карты
         */
 
         effects:
 
-    card.effects || [],
+            card.effects || [],
+
+
 
 
 
@@ -495,10 +583,39 @@ function createCardInstance(id){
 
 
 
+
+
         canAttack:false
 
 
+
     };
+
+
+
+
+
+
+    /*
+        Пересчет характеристик
+    */
+
+    if(
+        typeof refreshUnitStats === "function"
+    ){
+
+        unit =
+
+            refreshUnitStats(unit);
+
+    }
+
+
+
+
+
+
+    return unit;
 
 
 }
@@ -520,17 +637,22 @@ function playCard(
 
 
     const player =
+
         state[playerId];
 
 
 
+
     const card =
+
         getCardById(cardId);
 
 
 
 
+
     if(!card)
+
         return state;
 
 
@@ -547,8 +669,11 @@ function playCard(
 
 
 
+
     const unit =
+
         createCardInstance(cardId);
+
 
 
 
@@ -557,6 +682,7 @@ function playCard(
     if(!unit)
 
         return state;
+
 
 
 
@@ -655,6 +781,7 @@ function preparePlayerTurn(state){
 
 
 
+
             maxMana:
 
                 Math.min(
@@ -740,6 +867,7 @@ function prepareOpponentTurn(state){
 
 
             ...state.opponent,
+
 
 
 
