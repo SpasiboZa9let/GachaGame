@@ -4,7 +4,7 @@ function Card({
     mode="hand"
 }) {
 
-
+console.log("CARD RENDER", card?.name, mode);
     if (!card) {
 
         return null;
