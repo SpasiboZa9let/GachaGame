@@ -164,34 +164,47 @@ function Game() {
         Атака героя противника
     */
 
-    function handleOpponentHeroClick(){
+   function handleOpponentHeroClick(){
 
 
-        if(
-            !selectedAttacker
-        ){
+    if(
+        !selectedAttacker
+    ){
 
-            return;
+        return;
 
-        }
-
-
-
-        const attacker =
-            player.board.find(
-                unit =>
-                    unit.instanceId === selectedAttacker
-            );
+    }
 
 
 
-        if(
-            !attacker
-        ){
+    const newState =
 
-            return;
+        attackUnit(
 
-        }
+            gameState,
+
+            "player",
+
+            selectedAttacker,
+
+            "hero"
+
+        );
+
+
+
+    setGameState(
+        newState
+    );
+
+
+
+    setSelectedAttacker(
+        null
+    );
+
+
+}
 
 
 
