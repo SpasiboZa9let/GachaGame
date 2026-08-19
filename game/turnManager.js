@@ -14,12 +14,31 @@
 */
 
 
+window.TurnManager =
+window.TurnManager || {};
+
+
 
 
 
 
 
 function preparePlayerTurn(state){
+
+
+
+    const maxMana =
+
+        Math.min(
+
+            10,
+
+            state.player.maxMana + 1
+
+        );
+
+
+
 
 
 
@@ -45,38 +64,11 @@ function preparePlayerTurn(state){
 
 
 
+            maxMana:maxMana,
 
 
 
-            maxMana:
-
-
-                Math.min(
-
-                    10,
-
-                    state.player.maxMana + 1
-
-                ),
-
-
-
-
-
-
-
-            mana:
-
-
-                Math.min(
-
-                    10,
-
-                    state.player.maxMana + 1
-
-                ),
-
-
+            mana:maxMana,
 
 
 
@@ -121,11 +113,24 @@ function preparePlayerTurn(state){
 
 
 
-
-
-
-
 function prepareOpponentTurn(state){
+
+
+
+    const maxMana =
+
+        Math.min(
+
+            10,
+
+            state.opponent.maxMana + 1
+
+        );
+
+
+
+
+
 
 
 
@@ -151,38 +156,11 @@ function prepareOpponentTurn(state){
 
 
 
+            maxMana:maxMana,
 
 
 
-            maxMana:
-
-
-                Math.min(
-
-                    10,
-
-                    state.opponent.maxMana + 1
-
-                ),
-
-
-
-
-
-
-
-            mana:
-
-
-                Math.min(
-
-                    10,
-
-                    state.opponent.maxMana + 1
-
-                ),
-
-
+            mana:maxMana,
 
 
 
@@ -226,10 +204,13 @@ function prepareOpponentTurn(state){
 
 
 
-window.preparePlayerTurn =
+
+window.TurnManager.preparePlayerTurn =
+
 preparePlayerTurn;
 
 
 
-window.prepareOpponentTurn =
+window.TurnManager.prepareOpponentTurn =
+
 prepareOpponentTurn;
