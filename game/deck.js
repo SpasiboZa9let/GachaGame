@@ -1,29 +1,38 @@
 /*
+    ============================
+    DECK.JS
+
     Система создания колоды
+
     Тридевятое царство
+    ============================
 */
+
 
 
 const DECK_SIZE = 20;
 
 
 
-/*
-    Максимум копий карты
-*/
 
 
 const COPY_LIMITS = {
 
-    common: 2,
 
-    uncommon: 2,
+    common:2,
 
-    rare: 2,
 
-    epic: 1,
+    uncommon:2,
 
-    legendary: 1
+
+    rare:2,
+
+
+    epic:1,
+
+
+    legendary:1
+
 
 };
 
@@ -31,9 +40,6 @@ const COPY_LIMITS = {
 
 
 
-/*
-    Вес редкостей
-*/
 
 
 const RARITY_WEIGHTS = {
@@ -62,20 +68,18 @@ const RARITY_WEIGHTS = {
 
 
 
-/*
-    Случайная редкость
-*/
-
 
 function getRandomRarity(){
 
 
     const roll =
-        Math.random()*100;
+
+        Math.random() * 100;
 
 
 
     let current = 0;
+
 
 
 
@@ -85,6 +89,7 @@ function getRandomRarity(){
 
 
         current +=
+
             RARITY_WEIGHTS[rarity];
 
 
@@ -97,7 +102,10 @@ function getRandomRarity(){
 
         }
 
+
     }
+
+
 
 
 
@@ -113,11 +121,6 @@ function getRandomRarity(){
 
 
 
-/*
-    Случайная карта
-    с учетом лимита копий
-*/
-
 
 function getRandomCard(
     usedCards
@@ -125,77 +128,10 @@ function getRandomCard(
 
 
 
-    let rarity =
-        getRandomRarity();
-
-
-
-    let pool =
-
-        CARDS.filter(
-
-            card =>
-
-                card.rarity === rarity
-
-                &&
-
-                (
-                    !usedCards[card.id]
-
-                    ||
-
-                    usedCards[card.id]
-                    <
-                    COPY_LIMITS[rarity]
-                )
-
-        );
-
-
-
-
-
-    /*
-        если редкость закончилась,
-        ищем любую доступную
-    */
-
-
     if(
-        pool.length===0
-    ){
-
-
-        pool =
-
-        CARDS.filter(
-
-            card =>
-
-                (
-                    !usedCards[card.id]
-
-                    ||
-
-                    usedCards[card.id]
-                    <
-                    COPY_LIMITS[card.rarity]
-
-                )
-
-        );
-
-
-    }
-
-
-
-
-
-
-    if(
-        pool.length===0
+        typeof CARDS === "undefined"
+        ||
+        !Array.isArray(CARDS)
     ){
 
         return null;
@@ -206,17 +142,125 @@ function getRandomCard(
 
 
 
+
+    let rarity =
+
+        getRandomRarity();
+
+
+
+
+
+
+    let pool =
+
+
+        CARDS.filter(
+
+            card =>
+
+
+            card.rarity === rarity
+
+
+            &&
+
+
+            (
+                !usedCards[card.id]
+
+
+                ||
+
+
+                usedCards[card.id]
+
+                <
+
+                COPY_LIMITS[rarity]
+
+            )
+
+
+        );
+
+
+
+
+
+
+
+
+
+    if(pool.length === 0){
+
+
+
+        pool =
+
+
+            CARDS.filter(
+
+                card =>
+
+
+                (
+                    !usedCards[card.id]
+
+
+                    ||
+
+
+                    usedCards[card.id]
+
+                    <
+
+                    COPY_LIMITS[card.rarity]
+
+                )
+
+
+            );
+
+
+    }
+
+
+
+
+
+
+
+
+    if(pool.length === 0){
+
+        return null;
+
+    }
+
+
+
+
+
+
+
+
     return pool[
+
 
         Math.floor(
 
             Math.random()
+
             *
+
             pool.length
 
         )
 
+
     ];
+
 
 }
 
@@ -228,17 +272,11 @@ function getRandomCard(
 
 
 
-/*
-    Создание колоды
-*/
-
-
 function createDeck(){
 
 
 
     const deck = [];
-
 
 
     const usedCards = {};
@@ -247,94 +285,160 @@ function createDeck(){
 
 
 
-    /*
-    Гарантируем одну сильную карту
-*/
 
-
-const firstCardPool =
-
-CARDS.filter(
-
-    card =>
-
-        card.rarity === "rare"
+    if(
+        typeof CARDS === "undefined"
         ||
-        card.rarity === "epic"
-        ||
-        card.rarity === "legendary"
+        !Array.isArray(CARDS)
+    ){
 
-);
+        return deck;
 
-
-
-const firstCard =
-
-firstCardPool[
-
-    Math.floor(
-        Math.random()
-        *
-        firstCardPool.length
-    )
-
-];
-
-
-
-deck.push(
-    firstCard.id
-);
-
-
-usedCards[firstCard.id]=1;
+    }
 
 
 
 
 
-while(
-
-    deck.length <
-    DECK_SIZE
-
-){
 
 
 
-        const card =
-            getRandomCard(
-                usedCards
-            );
+    const firstCardPool =
+
+
+        CARDS.filter(
+
+            card =>
+
+
+            card.rarity === "rare"
+
+
+            ||
+
+
+            card.rarity === "epic"
+
+
+            ||
+
+
+            card.rarity === "legendary"
+
+
+        );
 
 
 
-        if(!card)
-            break;
+
+
+
+
+    if(firstCardPool.length > 0){
+
+
+
+        const firstCard =
+
+
+            firstCardPool[
+
+
+                Math.floor(
+
+                    Math.random()
+
+                    *
+
+                    firstCardPool.length
+
+                )
+
+
+            ];
 
 
 
 
         deck.push(
-            card.id
+
+            firstCard.id
+
         );
 
 
 
-        if(
-            !usedCards[card.id]
-        ){
+        usedCards[firstCard.id]=1;
 
-            usedCards[card.id]=0;
+
+    }
+
+
+
+
+
+
+
+
+
+    while(
+
+        deck.length < DECK_SIZE
+
+    ){
+
+
+
+        const card =
+
+
+            getRandomCard(
+
+                usedCards
+
+            );
+
+
+
+
+
+        if(!card){
+
+            break;
 
         }
 
 
-        usedCards[card.id]++;
+
+
+
+
+        deck.push(
+
+            card.id
+
+        );
+
+
+
+
+
+
+        usedCards[card.id] =
+
+
+            (usedCards[card.id] || 0)
+
+            +
+
+            1;
 
 
 
     }
+
+
+
 
 
 
@@ -353,16 +457,15 @@ while(
 
 
 
-/*
-    Перемешивание
-*/
-
-
 function shuffleDeck(deck){
 
 
+
     const result =
+
         [...deck];
+
+
 
 
 
@@ -373,31 +476,47 @@ function shuffleDeck(deck){
     ){
 
 
+
         const j =
+
+
             Math.floor(
 
                 Math.random()
+
                 *
+
                 (i+1)
 
             );
 
 
 
+
+
+
         [
+
             result[i],
+
             result[j]
 
         ] =
 
         [
+
             result[j],
+
             result[i]
 
         ];
 
 
+
     }
+
+
+
 
 
 
@@ -414,11 +533,6 @@ function shuffleDeck(deck){
 
 
 
-/*
-    Стартовая рука
-*/
-
-
 function drawStartingHand(
     deck,
     count=5
@@ -431,8 +545,11 @@ function drawStartingHand(
         hand:
 
             deck.slice(
+
                 0,
+
                 count
+
             ),
 
 
@@ -440,7 +557,9 @@ function drawStartingHand(
         deck:
 
             deck.slice(
+
                 count
+
             )
 
 
@@ -457,17 +576,14 @@ function drawStartingHand(
 
 
 
-/*
-    Добор пока отключен
-*/
-
-
 function drawCard(
     state,
     playerId
 ){
 
+
     return state;
+
 
 }
 
@@ -477,25 +593,91 @@ function drawCard(
 
 
 
-window.DECK_SIZE =
+
+
+window.Deck =
+
+window.Deck || {};
+
+
+
+window.Deck.DECK_SIZE =
+
 DECK_SIZE;
 
 
-window.createDeck =
+
+window.Deck.createDeck =
+
 createDeck;
 
 
-window.shuffleDeck =
+
+window.Deck.shuffleDeck =
+
 shuffleDeck;
 
 
-window.drawStartingHand =
+
+window.Deck.drawStartingHand =
+
 drawStartingHand;
 
 
-window.drawCard =
+
+window.Deck.drawCard =
+
 drawCard;
 
 
+
+window.Deck.getRandomRarity =
+
+getRandomRarity;
+
+
+
+
+
+
+
+
+/*
+    Совместимость
+*/
+
+
+
+window.DECK_SIZE =
+
+DECK_SIZE;
+
+
+
+window.createDeck =
+
+createDeck;
+
+
+
+window.shuffleDeck =
+
+shuffleDeck;
+
+
+
+window.drawStartingHand =
+
+drawStartingHand;
+
+
+
+window.drawCard =
+
+drawCard;
+
+
+
 window.getRandomRarity =
+
 getRandomRarity;
