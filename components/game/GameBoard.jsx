@@ -51,7 +51,7 @@ return (
 
         <GameLog
 
-    log={gameState.log}
+    log={gameState.combatLog}
 
 />
 
