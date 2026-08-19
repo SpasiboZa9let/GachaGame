@@ -21,8 +21,6 @@
 
 
 
-
-
 function safeNumber(value, fallback){
 
     return (
@@ -41,10 +39,6 @@ function safeNumber(value, fallback){
 
 
 
-
-
-
-
 function createInitialGameState(){
 
 
@@ -55,7 +49,17 @@ function createInitialGameState(){
 
             h => h.id === "ilya_muromets"
 
-        );
+        )
+        ||
+        {
+
+            id:"unknown",
+
+            name:"Неизвестный герой",
+
+            maxHealth:10000
+
+        };
 
 
 
@@ -67,7 +71,17 @@ function createInitialGameState(){
 
             h => h.id === "vasilisa_premudraya"
 
-        );
+        )
+        ||
+        {
+
+            id:"unknown",
+
+            name:"Неизвестный герой",
+
+            maxHealth:9000
+
+        };
 
 
 
@@ -126,40 +140,8 @@ function createInitialGameState(){
 
 
 
-
-    const playerHP =
-
-        safeNumber(
-
-            playerHero?.maxHealth,
-
-            10000
-
-        );
-
-
-
-
-
-    const opponentHP =
-
-        safeNumber(
-
-            opponentHero?.maxHealth,
-
-            9000
-
-        );
-
-
-
-
-
-
-
-
-
     let state = {
+
 
 
         turn:1,
@@ -184,16 +166,21 @@ function createInitialGameState(){
 
 
 
-
         player:{
-
 
 
             hero:playerHero,
 
 
+            hp:
 
-            hp:playerHP,
+                safeNumber(
+
+                    playerHero.maxHealth,
+
+                    10000
+
+                ),
 
 
 
@@ -236,7 +223,15 @@ function createInitialGameState(){
 
 
 
-            hp:opponentHP,
+            hp:
+
+                safeNumber(
+
+                    opponentHero.maxHealth,
+
+                    9000
+
+                ),
 
 
 
@@ -282,6 +277,7 @@ function createInitialGameState(){
     */
 
 
+
     if(
 
         typeof TEST_MODE !== "undefined"
@@ -310,7 +306,6 @@ function createInitialGameState(){
 
 
 
-
         state.opponent.hand =
 
             typeof getTestOpponentHand === "function"
@@ -327,11 +322,9 @@ function createInitialGameState(){
 
 
 
-
         state.player.mana = 10;
 
         state.player.maxMana = 10;
-
 
 
 
@@ -345,8 +338,6 @@ function createInitialGameState(){
 
 
 
-
-
         state.combatLog.push(
 
             "🧪 Тестовый режим активирован."
@@ -355,7 +346,6 @@ function createInitialGameState(){
 
 
     }
-
 
 
 
@@ -387,7 +377,6 @@ function createInitialGameState(){
 
 
 
-
     return state;
 
 
@@ -399,7 +388,12 @@ function createInitialGameState(){
 
 
 
+window.State =
 
-window.createInitialGameState =
+window.State || {};
+
+
+
+window.State.createInitialGameState =
 
 createInitialGameState;
