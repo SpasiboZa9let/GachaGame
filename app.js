@@ -4,124 +4,144 @@
 
     Запуск игры
 
-    Создание состояния
-    Создание колод
-    Старт матча
-    Первичный вывод
+    Отвечает за:
+
+    - создание состояния
+    - запуск боя
+    - хранение текущего state
+    - связь игровых систем
+
+    UI подключается позже
 
     ============================
 */
 
 
 
-window.addEventListener(
-    "load",
-    function(){
 
 
-        console.log(
-            "=== Тридевятое царство запускается ==="
+
+function startGame(){
+
+
+
+    const createState =
+
+        window.State?.createInitialGameState
+
+        ||
+
+        window.createInitialGameState;
+
+
+
+
+
+    if(
+        typeof createState !== "function"
+    ){
+
+        console.error(
+            "STATE.JS не загружен"
         );
 
-
-
-        /*
-            Проверка ядра
-        */
-
-
-        console.log(
-            "CARDS:",
-            window.CARDS
-        );
-
-
-        console.log(
-            "HEROES:",
-            window.HEROES
-        );
-
-
-        console.log(
-            "STATE:",
-            window.GameState
-        );
-
-
-
-        /*
-            Создание игры
-        */
-
-
-        let state = null;
-
-
-
-        if(
-            window.createGameState
-        ){
-
-            state =
-                window.createGameState();
-
-
-        }
-        else {
-
-
-            console.error(
-                "createGameState не найден"
-            );
-
-
-            return;
-
-        }
-
-
-
-        window.GAME_STATE = state;
-
-
-
-        console.log(
-            "GAME STATE CREATED",
-            state
-        );
-
-
-
-        /*
-            Первичный экран
-        */
-
-
-        renderGame(
-            state
-        );
-
-
+        return null;
 
     }
 
-);
 
 
 
 
 
 
-function renderGame(state){
+    let state =
+
+        createState();
 
 
-    let root =
-        document.getElementById(
-            "game"
-        );
 
 
-    if(!root){
+
+
+
+
+    /*
+        Тестовый режим
+
+        временно оставляем
+
+        потом удалить
+    */
+
+
+    if(
+        typeof TEST_MODE !== "undefined"
+
+        &&
+
+        TEST_MODE
+
+        &&
+
+        typeof createTestBoard === "function"
+
+    ){
+
+        state =
+
+            createTestBoard(state);
+
+    }
+
+
+
+
+
+
+
+
+
+    window.gameState = state;
+
+
+
+
+
+
+
+    console.log(
+
+        "GAME STARTED",
+
+        state
+
+    );
+
+
+
+
+
+
+
+    return state;
+
+
+}
+
+
+
+
+
+
+
+
+
+function updateGameState(newState){
+
+
+
+    if(!newState){
 
         return;
 
@@ -129,124 +149,99 @@ function renderGame(state){
 
 
 
-    root.innerHTML = `
 
 
-        <h1>
-        Тридевятое царство:
-        Были и Сказки
-        </h1>
-
-
-        <hr>
-
-
-        <h2>
-        ${state.player.hero.name}
-        </h2>
-
-
-        <p>
-        Здоровье:
-        ${state.player.hp}
-        </p>
-
-
-        <p>
-        Мана:
-        ${state.player.mana}
-        /
-        ${state.player.maxMana}
-        </p>
+    window.gameState = newState;
 
 
 
-        <h3>
-        Поле игрока
-        </h3>
+    return newState;
 
 
-        <div>
-        ${
-            state.player.board.length
-            ?
-            state.player.board.map(
-                unit =>
-                unit.name
-            ).join("<br>")
-            :
-            "Пусто"
-        }
-        </div>
+}
 
 
 
-        <h3>
-        Рука
-        </h3>
-
-
-        <div>
-
-        ${
-            state.player.hand.map(
-                card =>
-                card.name
-            ).join("<br>")
-        }
-
-        </div>
 
 
 
-        <br>
-
-
-        <button id="endTurn">
-
-            Завершить ход
-
-        </button>
-
-
-    `;
 
 
 
-    let button =
-        document.getElementById(
-            "endTurn"
-        );
+function getGameState(){
 
 
-    if(button){
+
+    return window.gameState || null;
 
 
-        button.onclick =
-            function(){
+}
 
 
-                if(
-                    window.endTurn
-                ){
-
-                    window.endTurn(
-                        state
-                    );
 
 
-                    renderGame(
-                        state
-                    );
-
-                }
 
 
-            };
+
+
+
+/*
+    Глобальный запуск
+*/
+
+
+
+window.Game =
+
+window.Game || {};
+
+
+
+
+window.Game.start =
+
+startGame;
+
+
+
+
+window.Game.updateState =
+
+updateGameState;
+
+
+
+
+window.Game.getState =
+
+getGameState;
+
+
+
+
+
+
+
+
+
+/*
+    Автостарт
+
+    после загрузки всех файлов
+
+*/
+
+
+window.addEventListener(
+
+    "load",
+
+    () => {
+
+
+        startGame();
 
 
     }
 
-
-
-}
+);
