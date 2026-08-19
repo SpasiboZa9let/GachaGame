@@ -21,19 +21,38 @@
 
 
 
-function safeNumber(value, fallback){
+
+
+function safeNumber(
+    value,
+    fallback
+){
+
 
     return (
+
         typeof value === "number"
+
         &&
+
         !isNaN(value)
+
     )
+
     ?
+
     value
+
     :
+
     fallback;
 
+
 }
+
+
+
+
 
 
 
@@ -43,23 +62,55 @@ function createInitialGameState(){
 
 
 
+
+
+    const heroes =
+
+        window.Heroes?.list
+
+        ||
+
+        window.HEROES
+
+        ||
+
+        [];
+
+
+
+
+
+
+
     const playerHero =
 
-        HEROES.find(
 
-            h => h.id === "ilya_muromets"
+        heroes.find(
+
+            h =>
+
+            h.id === "ilya_muromets"
 
         )
+
         ||
+
         {
+
 
             id:"unknown",
 
+
             name:"Неизвестный герой",
+
 
             maxHealth:10000
 
+
         };
+
+
+
 
 
 
@@ -67,19 +118,28 @@ function createInitialGameState(){
 
     const opponentHero =
 
-        HEROES.find(
 
-            h => h.id === "vasilisa_premudraya"
+        heroes.find(
+
+            h =>
+
+            h.id === "vasilisa_premudraya"
 
         )
+
         ||
+
         {
+
 
             id:"unknown",
 
+
             name:"Неизвестный герой",
 
+
             maxHealth:9000
+
 
         };
 
@@ -88,23 +148,79 @@ function createInitialGameState(){
 
 
 
-    let playerDeck =
 
-        shuffleDeck(
 
-            createDeck()
+
+    const createDeckFunction =
+
+
+        window.Deck?.createDeck
+
+        ||
+
+        window.createDeck;
+
+
+
+
+
+
+    const shuffleFunction =
+
+
+        window.Deck?.shuffleDeck
+
+        ||
+
+        window.shuffleDeck;
+
+
+
+
+
+
+
+
+    const playerDeck =
+
+
+        shuffleFunction(
+
+            createDeckFunction()
 
         );
 
 
 
-    let opponentDeck =
 
-        shuffleDeck(
 
-            createDeck()
+
+    const opponentDeck =
+
+
+        shuffleFunction(
+
+            createDeckFunction()
 
         );
+
+
+
+
+
+
+
+
+    const drawHand =
+
+
+        window.Deck?.drawStartingHand
+
+        ||
+
+        window.drawStartingHand;
+
+
 
 
 
@@ -113,7 +229,8 @@ function createInitialGameState(){
 
     const playerStart =
 
-        drawStartingHand(
+
+        drawHand(
 
             playerDeck,
 
@@ -125,9 +242,13 @@ function createInitialGameState(){
 
 
 
+
+
+
     const opponentStart =
 
-        drawStartingHand(
+
+        drawHand(
 
             opponentDeck,
 
@@ -140,17 +261,23 @@ function createInitialGameState(){
 
 
 
-    let state = {
+
+
+
+    const state = {
 
 
 
         turn:1,
 
 
+
         activePlayer:"player",
 
 
+
         gameOver:false,
+
 
 
         winner:null,
@@ -159,9 +286,15 @@ function createInitialGameState(){
 
         combatLog:[
 
+
             "Бой начинается."
 
+
         ],
+
+
+
+
 
 
 
@@ -169,10 +302,13 @@ function createInitialGameState(){
         player:{
 
 
+
             hero:playerHero,
 
 
+
             hp:
+
 
                 safeNumber(
 
@@ -184,22 +320,29 @@ function createInitialGameState(){
 
 
 
+
             mana:1,
+
 
 
             maxMana:1,
 
 
 
+
             deck:
+
 
                 playerStart.deck || [],
 
 
 
+
             hand:
 
+
                 playerStart.hand || [],
+
 
 
 
@@ -208,6 +351,8 @@ function createInitialGameState(){
 
 
         },
+
+
 
 
 
@@ -225,6 +370,7 @@ function createInitialGameState(){
 
             hp:
 
+
                 safeNumber(
 
                     opponentHero.maxHealth,
@@ -235,22 +381,29 @@ function createInitialGameState(){
 
 
 
+
             mana:1,
+
 
 
             maxMana:1,
 
 
 
+
             deck:
+
 
                 opponentStart.deck || [],
 
 
 
+
             hand:
 
+
                 opponentStart.hand || [],
+
 
 
 
@@ -272,104 +425,29 @@ function createInitialGameState(){
 
 
 
-    /*
-        ТЕСТОВЫЙ РЕЖИМ
-    */
-
-
-
-    if(
-
-        typeof TEST_MODE !== "undefined"
-
-        &&
-
-        TEST_MODE
-
-    ){
-
-
-
-        state.player.hand =
-
-            typeof getTestHand === "function"
-
-            ?
-
-            getTestHand()
-
-            :
-
-            [];
-
-
-
-
-
-        state.opponent.hand =
-
-            typeof getTestOpponentHand === "function"
-
-            ?
-
-            getTestOpponentHand()
-
-            :
-
-            [];
-
-
-
-
-
-        state.player.mana = 10;
-
-        state.player.maxMana = 10;
-
-
-
-
-
-        state.opponent.mana = 10;
-
-        state.opponent.maxMana = 10;
-
-
-
-
-
-        state.combatLog.push(
-
-            "🧪 Тестовый режим активирован."
-
-        );
-
-
-    }
-
-
-
-
-
-
-
     console.log(
 
         "STATE CREATED",
 
         {
 
-            playerHP:state.player.hp,
 
-            opponentHP:state.opponent.hp,
+            playerHP:
 
-            playerHero:state.player.hero,
+                state.player.hp,
 
-            opponentHero:state.opponent.hero
+
+
+            opponentHP:
+
+                state.opponent.hp
+
+
 
         }
 
     );
+
 
 
 
@@ -388,9 +466,12 @@ function createInitialGameState(){
 
 
 
+
+
 window.State =
 
 window.State || {};
+
 
 
 
