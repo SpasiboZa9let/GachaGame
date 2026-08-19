@@ -11,11 +11,6 @@ GameBoard.jsx
 - кнопки
 - лог
 
-Данные подготавливает GameData
-
-Отображение поля:
-Battlefield.jsx
-
 ============================
 */
 
@@ -51,119 +46,110 @@ function GameBoard({
         <GameData gameState={gameState}>
 
 
-            ({
+            {(data) => {
 
 
-                player,
+                const player = data.player;
 
-                opponent,
+                const opponent = data.opponent;
 
-                handCards,
+                const handCards = data.handCards;
 
-                opponentHandCards
+                const opponentHandCards = data.opponentHandCards;
 
 
-            }) => (
 
+                return (
 
 
-                <div style={window.gameStyles.game}>
+                    <div style={window.gameStyles.game}>
 
 
+                        <GameOver
 
+                            gameState={gameState}
 
+                            onRestart={onRestart}
 
-                    <GameOver
+                        />
 
-                        gameState={gameState}
 
-                        onRestart={onRestart}
 
-                    />
 
 
+                        <Battlefield
 
 
+                            player={player}
 
 
+                            opponent={opponent}
 
-                    <Battlefield
 
+                            handCards={handCards}
 
-                        player={player}
 
+                            opponentHandCards={opponentHandCards}
 
-                        opponent={opponent}
 
+                            selectedAttacker={selectedAttacker}
 
-                        handCards={handCards}
 
+                            onCardClick={onCardClick}
 
-                        opponentHandCards={opponentHandCards}
 
+                            onPlayerUnitClick={onPlayerUnitClick}
 
-                        selectedAttacker={selectedAttacker}
 
+                            onOpponentUnitClick={onOpponentUnitClick}
 
-                        onCardClick={onCardClick}
 
+                            onOpponentHeroClick={onOpponentHeroClick}
 
-                        onPlayerUnitClick={onPlayerUnitClick}
 
+                            turn={gameState.turn}
 
-                        onOpponentUnitClick={onOpponentUnitClick}
 
+                        />
 
-                        onOpponentHeroClick={onOpponentHeroClick}
 
 
-                        turn={gameState.turn}
 
 
-                    />
 
+                        <GameControls
 
 
+                            onEndTurn={onEndTurn}
 
 
+                            onTestBoard={onTestBoard}
 
 
+                        />
 
-                    <GameControls
 
 
-                        onEndTurn={onEndTurn}
 
 
-                        onTestBoard={onTestBoard}
 
 
-                    />
+                        <GameLog
 
 
+                            log={gameState.combatLog}
 
 
+                        />
 
 
+                    </div>
 
 
+                );
 
-                    <GameLog
 
-
-                        log={gameState.combatLog}
-
-
-                    />
-
-
-
-
-
-                </div>
-
-
-            )
+            }}
 
 
         </GameData>
@@ -173,7 +159,6 @@ function GameBoard({
 
 
 }
-
 
 
 
