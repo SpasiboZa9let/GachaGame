@@ -21,22 +21,21 @@ function Card({
 
     const size = isBoard
 
-        ?
+    ?
 
-        {
-            width:"60px",
-            height:"100px",
-            minWidth:"60px"
-        }
+    {
+        width:"110px",
+        height:"160px",
+        minWidth:"110px"
+    }
 
-        :
+    :
 
-        {
-            width:"180px",
-            height:"260px",
-            minWidth:"180px"
-        };
-
+    {
+        width:"180px",
+        height:"260px",
+        minWidth:"180px"
+    };
 
 
 
