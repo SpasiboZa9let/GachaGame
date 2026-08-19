@@ -108,87 +108,19 @@ function GameBoard({
 
 
 
-            <section>
+            <OpponentArea
 
+                opponent={opponent}
 
-                <h3>
+                opponentHandCards={opponentHandCards}
 
-                    Противник
+                selectedAttacker={selectedAttacker}
 
-                </h3>
+                onOpponentUnitClick={onOpponentUnitClick}
 
+                onOpponentHeroClick={onOpponentHeroClick}
 
-
-
-
-                <Hand
-
-                    cards={opponentHandCards}
-
-                />
-
-
-
-
-
-
-                <div
-
-                    onClick={onOpponentHeroClick}
-
-                    style={
-
-                        selectedAttacker
-
-                        ?
-
-                        gameStyles.target
-
-                        :
-
-                        {}
-
-                    }
-
-                >
-
-
-
-                    <Hero
-
-                        hero={opponent.hero}
-
-                        hp={opponent.hp}
-
-                        mana={opponent.mana}
-
-                        maxMana={opponent.maxMana}
-
-                    />
-
-
-
-                </div>
-
-
-
-
-
-
-
-                <Board
-
-                    units={opponent.board || []}
-
-                    onUnitClick={onOpponentUnitClick}
-
-                    selectedUnitId={null}
-
-                />
-
-
-
-            </section>
+            />
 
 
 
@@ -299,11 +231,11 @@ function GameBoard({
 
             <GameControls
 
-    onEndTurn={onEndTurn}
+                onEndTurn={onEndTurn}
 
-    onTestBoard={onTestBoard}
+                onTestBoard={onTestBoard}
 
-/>
+            />
 
 
 
