@@ -17,36 +17,26 @@
 
 
 
-
 function addModifier(
     unit,
     modifier
 ){
 
-
     return {
-
 
         ...unit,
 
-
         modifiers:[
-
 
             ...(unit.modifiers || []),
 
-
             modifier
-
 
         ]
 
-
     };
 
-
 }
-
 
 
 
@@ -60,12 +50,9 @@ function removeModifier(
     source
 ){
 
-
     return {
 
-
         ...unit,
-
 
         modifiers:
 
@@ -78,9 +65,7 @@ function removeModifier(
 
             )
 
-
     };
-
 
 }
 
@@ -97,13 +82,11 @@ function calculateStat(
     stat
 ){
 
-
-
     let base =
 
         unit.baseStats &&
 
-        unit.baseStats[stat]
+        typeof unit.baseStats[stat] === "number"
 
         ?
 
@@ -111,8 +94,7 @@ function calculateStat(
 
         :
 
-        unit[stat] || 0;
-
+        0;
 
 
 
@@ -129,27 +111,23 @@ function calculateStat(
         mod => {
 
 
-
             if(
                 mod.stat === stat
             ){
 
-                bonus += mod.value;
+                bonus += mod.value || 0;
 
             }
 
 
         }
 
-
     );
 
 
 
 
-
     return base + bonus;
-
 
 
 }
@@ -167,13 +145,27 @@ function refreshUnitStats(
 ){
 
 
+    const health =
+
+        calculateStat(
+            unit,
+            "health"
+        );
+
+
+
     return {
 
 
         ...unit,
 
 
+
         stats:{
+
+
+            ...(unit.stats || {}),
+
 
 
             attack:
@@ -185,12 +177,14 @@ function refreshUnitStats(
 
 
 
-            health:
 
-                calculateStat(
-                    unit,
-                    "health"
-                ),
+            health:health,
+
+
+
+
+            maxHealth:health,
+
 
 
 
@@ -199,11 +193,22 @@ function refreshUnitStats(
                 calculateStat(
                     unit,
                     "defense"
+                ),
+
+
+
+
+            strength:
+
+                calculateStat(
+                    unit,
+                    "strength"
                 )
 
 
 
         }
+
 
 
     };
@@ -224,27 +229,19 @@ function createAttackBuff(
     source
 ){
 
-
     return {
-
 
         type:"buff",
 
-
         stat:"attack",
-
 
         value:value,
 
-
         source:source
-
 
     };
 
-
 }
-
 
 
 
@@ -258,24 +255,17 @@ function createHealthBuff(
     source
 ){
 
-
     return {
-
 
         type:"buff",
 
-
         stat:"health",
-
 
         value:value,
 
-
         source:source
 
-
     };
-
 
 }
 
