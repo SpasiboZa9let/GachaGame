@@ -4,7 +4,7 @@ const RARE_CARDS = [
 
         id: "lesopatru",
 
-        name: "Лесопатрукеевна",
+        name: "Лиса Патрикеевна",
 
         rarity: "rare",
 
@@ -63,7 +63,7 @@ const RARE_CARDS = [
 
         id: "alysya",
 
-        name: "Алыся",
+        name: "Олыся",
 
         rarity: "rare",
 
@@ -122,7 +122,7 @@ const RARE_CARDS = [
 
         id: "yagmort",
 
-        name: "Ягморт",
+        name: "Яг-морт",
 
         rarity: "rare",
 
