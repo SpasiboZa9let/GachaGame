@@ -30,6 +30,7 @@ const gameStyles = {
 
 
 
+
     turn:{
 
 
@@ -39,6 +40,7 @@ const gameStyles = {
 
 
     },
+
 
 
 
@@ -141,136 +143,4 @@ const gameStyles = {
 
 
 
-
 window.gameStyles = gameStyles;
-
-
-
-
-
-
-
-/*
-============================
-CSS игровой сцены
-
-============================
-*/
-
-
-const style = document.createElement("style");
-
-
-style.innerHTML = `
-
-
-
-.game-table {
-
-
-    display:grid;
-
-
-    grid-template-columns:
-
-        250px
-
-        minmax(0,1fr)
-
-        180px;
-
-
-
-    height:100vh;
-
-
-    gap:15px;
-
-
-    padding:15px;
-
-
-    background:#171717;
-
-
-    overflow:hidden;
-
-
-}
-
-
-
-
-
-
-.combat-log-panel {
-
-
-    background:#111;
-
-
-    border-radius:12px;
-
-
-    padding:10px;
-
-
-    overflow:auto;
-
-
-}
-
-
-
-
-
-
-.battlefield-panel {
-
-
-    background:#222;
-
-
-    border-radius:20px;
-
-
-    padding:20px;
-
-
-    overflow:hidden;
-
-
-}
-
-
-
-
-
-
-.game-controls-panel {
-
-
-    display:flex;
-
-
-    flex-direction:column;
-
-
-    justify-content:center;
-
-
-    gap:15px;
-
-
-}
-
-
-
-
-
-
-`;
-
-
-
-document.head.appendChild(style);
