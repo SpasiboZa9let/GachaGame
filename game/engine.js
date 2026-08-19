@@ -2,23 +2,22 @@
     ============================
     ENGINE.JS
 
-    Главное ядро
+    Главное ядро игры
 
-    Остальные системы вынесены:
+    Здесь нет:
+    - боя
+    - эффектов
+    - карт
+    - ходов
 
-    state.js
-    units.js
-    cardPlay.js
-    combat.js
-    turns.js
-    effects.js
-    victory.js
+    Только общие системные функции
 
-    Здесь только общие функции
     ============================
 */
 
 
+window.Engine =
+window.Engine || {};
 
 
 
@@ -26,7 +25,6 @@ function addCombatLog(
     state,
     text
 ){
-
 
     return {
 
@@ -36,24 +34,18 @@ function addCombatLog(
 
         combatLog:[
 
-
             ...(state.combatLog || []),
 
-
             text
-
 
         ]
 
 
     };
 
-
 }
 
 
 
-
-
-window.addCombatLog =
+window.Engine.addCombatLog =
 addCombatLog;
