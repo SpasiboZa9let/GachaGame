@@ -41,112 +41,136 @@ function Battlefield({
     turn
 
 
+
 }){
 
 
+return (
 
-    return (
 
+<div className="battlefield">
 
-        <div>
 
 
 
 
+    <section className="opponent-zone">
 
-            <OpponentArea
 
+        <OpponentArea
 
-                opponent={opponent}
 
+            opponent={opponent}
 
-                opponentHandCards={opponentHandCards}
 
+            opponentHandCards={opponentHandCards}
 
-                selectedAttacker={selectedAttacker}
 
+            selectedAttacker={selectedAttacker}
 
-                onOpponentUnitClick={onOpponentUnitClick}
 
+            onOpponentUnitClick={onOpponentUnitClick}
 
-                onOpponentHeroClick={onOpponentHeroClick}
 
+            onOpponentHeroClick={onOpponentHeroClick}
 
-            />
 
 
+        />
 
 
+    </section>
 
 
 
 
 
-            <GameTurn
 
 
-                selectedAttacker={selectedAttacker}
 
 
-                turn={turn}
+    <section className="turn-zone">
 
 
-            />
+        <GameTurn
 
 
+            selectedAttacker={selectedAttacker}
 
 
+            turn={turn}
 
 
+        />
 
 
+    </section>
 
-            <PlayerArea
 
 
-                player={player}
 
 
-                selectedAttacker={selectedAttacker}
 
 
-                onPlayerUnitClick={onPlayerUnitClick}
 
 
-            />
+    <section className="player-zone">
 
 
+        <PlayerArea
 
 
+            player={player}
 
 
+            selectedAttacker={selectedAttacker}
 
 
+            onPlayerUnitClick={onPlayerUnitClick}
 
-            <PlayerHand
 
+        />
 
-                cards={handCards}
 
+    </section>
 
-                onCardClick={onCardClick}
 
 
-            />
 
 
 
 
 
-        </div>
 
+    <section className="hand-zone">
 
-    );
+
+        <PlayerHand
+
+
+            cards={handCards}
+
+
+            onCardClick={onCardClick}
+
+
+        />
+
+
+    </section>
+
+
+
+
+
+
+</div>
+
+
+);
 
 
 }
-
-
 
 
 
