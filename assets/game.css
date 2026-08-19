@@ -249,3 +249,142 @@ game.css
 
 
 }
+
+/*
+============================
+
+Центральное поле боя
+
+============================
+*/
+
+
+.battlefield {
+
+
+    width:100%;
+
+    height:100%;
+
+
+    display:flex;
+
+
+    flex-direction:column;
+
+
+    justify-content:space-between;
+
+
+    gap:10px;
+
+
+}
+
+
+
+
+
+
+/*
+    Зона противника
+*/
+
+
+.opponent-zone {
+
+
+    flex:1;
+
+
+    display:flex;
+
+
+    justify-content:center;
+
+
+    align-items:center;
+
+
+}
+
+
+
+
+
+
+/*
+    Индикатор хода
+*/
+
+
+.turn-zone {
+
+
+    display:flex;
+
+
+    justify-content:center;
+
+
+    align-items:center;
+
+
+    min-height:40px;
+
+
+}
+
+
+
+
+
+
+/*
+    Зона игрока
+*/
+
+
+.player-zone {
+
+
+    flex:1;
+
+
+    display:flex;
+
+
+    justify-content:center;
+
+
+    align-items:center;
+
+
+}
+
+
+
+
+
+
+/*
+    Рука игрока
+*/
+
+
+.hand-zone {
+
+
+    min-height:150px;
+
+
+    display:flex;
+
+
+    justify-content:center;
+
+
+    align-items:center;
+
+
+}
