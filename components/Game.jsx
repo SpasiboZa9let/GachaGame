@@ -94,6 +94,36 @@ function Game(){
 
 
 
+    const opponentHandCards =
+
+
+        (opponent.hand || [])
+
+        .map(
+
+
+            cardId =>
+
+
+            window.Cards.getCardById(
+
+                cardId
+
+            )
+
+
+        )
+
+
+        .filter(Boolean);
+
+
+
+
+
+
+
+
 
     /*
         Разыграть карту
@@ -640,6 +670,18 @@ style={gameStyles.restart}
 Противник
 
 </h3>
+
+
+
+<Hand
+
+cards={opponentHandCards}
+
+/>
+
+
+
+
 
 
 
