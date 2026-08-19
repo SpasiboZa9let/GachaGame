@@ -21,6 +21,13 @@
 
 
 
+window.State =
+window.State || {};
+
+
+
+
+
 
 
 function safeNumber(
@@ -62,8 +69,6 @@ function createInitialGameState(){
 
 
 
-
-
     const heroes =
 
         window.Heroes?.list
@@ -100,15 +105,12 @@ function createInitialGameState(){
 
             id:"unknown",
 
-
             name:"Неизвестный герой",
-
 
             maxHealth:10000
 
 
         };
-
 
 
 
@@ -134,9 +136,7 @@ function createInitialGameState(){
 
             id:"unknown",
 
-
             name:"Неизвестный герой",
-
 
             maxHealth:9000
 
@@ -150,15 +150,10 @@ function createInitialGameState(){
 
 
 
-
     const createDeckFunction =
 
 
-        window.Deck?.createDeck
-
-        ||
-
-        window.createDeck;
+        window.Deck?.createDeck;
 
 
 
@@ -168,12 +163,17 @@ function createInitialGameState(){
     const shuffleFunction =
 
 
-        window.Deck?.shuffleDeck
+        window.Deck?.shuffleDeck;
 
-        ||
 
-        window.shuffleDeck;
 
+
+
+
+    const drawHand =
+
+
+        window.Deck?.drawStartingHand;
 
 
 
@@ -184,11 +184,21 @@ function createInitialGameState(){
     const playerDeck =
 
 
+        createDeckFunction && shuffleFunction
+
+        ?
+
         shuffleFunction(
 
             createDeckFunction()
 
-        );
+        )
+
+        :
+
+        [];
+
+
 
 
 
@@ -198,27 +208,19 @@ function createInitialGameState(){
     const opponentDeck =
 
 
+        createDeckFunction && shuffleFunction
+
+        ?
+
         shuffleFunction(
 
             createDeckFunction()
 
-        );
+        )
 
+        :
 
-
-
-
-
-
-
-    const drawHand =
-
-
-        window.Deck?.drawStartingHand
-
-        ||
-
-        window.drawStartingHand;
+        [];
 
 
 
@@ -230,14 +232,27 @@ function createInitialGameState(){
     const playerStart =
 
 
+        drawHand
+
+        ?
+
         drawHand(
 
             playerDeck,
 
             5
 
-        );
+        )
 
+        :
+
+        {
+
+            hand:[],
+
+            deck:playerDeck
+
+        };
 
 
 
@@ -248,13 +263,27 @@ function createInitialGameState(){
     const opponentStart =
 
 
+        drawHand
+
+        ?
+
         drawHand(
 
             opponentDeck,
 
             5
 
-        );
+        )
+
+        :
+
+        {
+
+            hand:[],
+
+            deck:opponentDeck
+
+        };
 
 
 
@@ -267,17 +296,13 @@ function createInitialGameState(){
     const state = {
 
 
-
         turn:1,
-
 
 
         activePlayer:"player",
 
 
-
         gameOver:false,
-
 
 
         winner:null,
@@ -298,13 +323,10 @@ function createInitialGameState(){
 
 
 
-
         player:{
 
 
-
             hero:playerHero,
-
 
 
             hp:
@@ -320,34 +342,26 @@ function createInitialGameState(){
 
 
 
-
             mana:1,
-
 
 
             maxMana:1,
 
 
 
-
             deck:
-
 
                 playerStart.deck || [],
 
 
 
-
             hand:
-
 
                 playerStart.hand || [],
 
 
 
-
             board:[]
-
 
 
         },
@@ -360,12 +374,11 @@ function createInitialGameState(){
 
 
 
+
         opponent:{
 
 
-
             hero:opponentHero,
-
 
 
             hp:
@@ -381,42 +394,32 @@ function createInitialGameState(){
 
 
 
-
             mana:1,
-
 
 
             maxMana:1,
 
 
 
-
             deck:
-
 
                 opponentStart.deck || [],
 
 
 
-
             hand:
 
-
                 opponentStart.hand || [],
-
 
 
 
             board:[]
 
 
-
         }
 
 
-
     };
-
 
 
 
@@ -431,23 +434,18 @@ function createInitialGameState(){
 
         {
 
-
             playerHP:
 
                 state.player.hp,
-
 
 
             opponentHP:
 
                 state.opponent.hp
 
-
-
         }
 
     );
-
 
 
 
@@ -467,11 +465,9 @@ function createInitialGameState(){
 
 
 
+window.State.safeNumber =
 
-window.State =
-
-window.State || {};
-
+safeNumber;
 
 
 
