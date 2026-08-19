@@ -37,6 +37,7 @@ function playCard(
 
 
 
+
     if(!player){
 
         return state;
@@ -47,9 +48,22 @@ function playCard(
 
 
 
+
+    const getCard =
+
+        window.Cards?.getCardById
+
+        ||
+
+        window.getCardById;
+
+
+
+
+
     const card =
 
-        getCardById(cardId);
+        getCard(cardId);
 
 
 
@@ -64,11 +78,6 @@ function playCard(
 
 
 
-
-
-    /*
-        Проверка маны
-    */
 
 
     if(
@@ -86,13 +95,39 @@ function playCard(
 
 
     /*
-        Создаем боевую копию карты
+        Ограничение поля
     */
+
+
+    if(
+
+        player.board.length >= 5
+
+    ){
+
+        return state;
+
+    }
+
+
+
+
+
+
 
 
     const unit =
 
+        window.Units?.createCardInstance
+
+        ?
+
+        window.Units.createCardInstance(cardId)
+
+        :
+
         createCardInstance(cardId);
+
 
 
 
@@ -104,7 +139,6 @@ function playCard(
         return state;
 
     }
-
 
 
 
@@ -129,10 +163,7 @@ function playCard(
 
 
 
-
-
             mana:
-
 
                 player.mana -
 
@@ -142,21 +173,18 @@ function playCard(
 
 
 
-
-
             hand:
 
 
-                player.hand.filter(
+                (player.hand || [])
 
+                .filter(
 
-                    id => id !== cardId
+                    id =>
 
+                    id !== cardId
 
                 ),
-
-
-
 
 
 
@@ -165,7 +193,7 @@ function playCard(
             board:[
 
 
-                ...player.board,
+                ...(player.board || []),
 
 
                 unit
@@ -190,36 +218,51 @@ function playCard(
 
 
     /*
-        Будущие эффекты:
+        Эффекты при выходе
 
         onPlay
-        summon
         battlecry
-
+        summon
     */
 
 
+
+    const effectsSystem =
+
+        window.Effects?.triggerEffects
+
+        ||
+
+        window.triggerEffects;
+
+
+
+
+
+
+
     if(
-
-        typeof triggerEffects === "function"
-
+        typeof effectsSystem === "function"
     ){
 
 
 
         newState[playerId].board =
 
+
             newState[playerId].board.map(
 
                 item =>
 
 
+
                 item.instanceId === unit.instanceId
+
 
                 ?
 
 
-                triggerEffects(
+                effectsSystem(
 
                     newState,
 
@@ -237,6 +280,7 @@ function playCard(
 
 
             );
+
 
 
     }
@@ -259,5 +303,12 @@ function playCard(
 
 
 
-window.playCard =
+window.CardPlay =
+
+window.CardPlay || {};
+
+
+
+window.CardPlay.playCard =
+
 playCard;
