@@ -6,9 +6,16 @@ function Board({
 
 
     const safeUnits =
+
         Array.isArray(units)
-            ? units
-            : [];
+
+        ?
+
+        units
+
+        :
+
+        [];
 
 
 
@@ -17,29 +24,21 @@ function Board({
     function getUnitStats(unit){
 
 
-        if(unit.stats){
-
-            return unit.stats;
-
-        }
+        return unit.stats || {
 
 
-        return {
+            attack: unit.attack || 0,
 
-            attack:
-                unit.attack || 0,
+            health: unit.health || 0,
 
+            defense: unit.defense || 0
 
-            health:
-                unit.health || 0,
-
-
-            defense:
-                unit.defense || 0
 
         };
 
+
     }
+
 
 
 
@@ -50,111 +49,24 @@ function Board({
     function getRarityColor(rarity){
 
 
-        switch(rarity){
+        const colors = {
 
 
-            case "legendary":
+            legendary:"#ffd700",
 
-                return "#ffd700";
+            epic:"#b84dff",
 
+            rare:"#3d8cff",
 
-            case "epic":
+            uncommon:"#4caf50",
 
-                return "#b84dff";
-
-
-            case "rare":
-
-                return "#3d8cff";
+            common:"#888"
 
 
-            case "uncommon":
-
-                return "#4caf50";
+        };
 
 
-            case "common":
-
-                return "#888";
-
-
-            default:
-
-                return "#777";
-
-        }
-
-
-    }
-
-
-
-
-
-
-
-
-
-    function getStatusText(unit){
-
-
-        if(
-            !unit.status ||
-            unit.status.length===0
-        ){
-
-            return null;
-
-        }
-
-
-
-        return unit.status.map(
-
-            (status,index)=>{
-
-
-                switch(status.type){
-
-
-                    case "shield":
-
-                        return (
-                            <div key={index}>
-                                🛡 Щит {status.value}
-                            </div>
-                        );
-
-
-                    case "stun":
-
-                        return (
-                            <div key={index}>
-                                💫 Оглушение
-                            </div>
-                        );
-
-
-                    case "fear":
-
-                        return (
-                            <div key={index}>
-                                😨 Страх
-                            </div>
-                        );
-
-
-                    default:
-
-                        return null;
-
-
-                }
-
-
-            }
-
-        );
+        return colors[rarity] || "#777";
 
 
     }
@@ -171,45 +83,39 @@ function Board({
         <div style={styles.board}>
 
 
-            <div style={styles.cardsArea}>
-
-
             {
-            safeUnits.length===0
+
+            safeUnits.length === 0
+
 
             ?
 
+
             <div style={styles.empty}>
+
                 Поле пусто
+
             </div>
 
 
             :
 
 
-            safeUnits.map(function(unit){
+            <div style={styles.cardsArea}>
 
 
+            {
 
-                if(!unit){
-
-                    return null;
-
-                }
-
-
+            safeUnits.map(unit=>{
 
 
                 const card =
 
                     CARDS.find(
 
-                        item =>
-
-                            item.id === unit.cardId
+                        c => c.id === unit.cardId
 
                     );
-
 
 
 
@@ -221,12 +127,9 @@ function Board({
 
 
 
-
-
-
                 const stats =
-                    getUnitStats(unit);
 
+                    getUnitStats(unit);
 
 
 
@@ -234,9 +137,7 @@ function Board({
 
                 const selected =
 
-                    unit.instanceId ===
-                    selectedUnitId;
-
+                    unit.instanceId === selectedUnitId;
 
 
 
@@ -245,42 +146,38 @@ function Board({
 
                 return (
 
-
-                <div
-
-
-                    key={
-                        unit.instanceId
-                    }
+                    <div
 
 
-                    onClick={()=>{
+                        key={unit.instanceId}
 
 
-                        if(onUnitClick){
-
-                            onUnitClick(unit);
-
-                        }
+                        onClick={()=>{
 
 
-                    }}
+                            if(onUnitClick){
+
+                                onUnitClick(unit);
+
+                            }
+
+
+                        }}
 
 
 
-                    style={{
+                        style={{
+
+                            ...styles.unit,
 
 
-                        ...styles.unit,
-
-
-                        border:
+                            border:
 
                             selected
 
                             ?
 
-                            "3px solid #ffd700"
+                            "3px solid #fff"
 
                             :
 
@@ -291,9 +188,7 @@ function Board({
                             ),
 
 
-
-
-                        opacity:
+                            opacity:
 
                             unit.canAttack
 
@@ -306,173 +201,116 @@ function Board({
                             0.65,
 
 
-
-                        boxShadow:
+                            transform:
 
                             selected
 
                             ?
 
-                            "0 0 15px rgba(255,215,0,0.8)"
+                            "translateY(-8px)"
 
                             :
 
-                            "0 5px 12px rgba(0,0,0,0.5)"
+                            "translateY(0)"
 
 
-                    }}
-
-
-
-                >
+                        }}
 
 
 
+                    >
 
 
+                        <div style={styles.name}>
 
+                            {card.name}
 
-                    <div style={styles.cost}>
-
-                        {card.cost}
-
-                    </div>
-
-
-
-
-
-
-
-
-                    <div style={styles.name}>
-
-                        {
-                            card.name
-                        }
-
-                    </div>
-
-
-
-
-
-
-
-
-                    <div style={styles.imageBox}>
-
-
-                        {
-                        card.image
-
-                        ?
-
-                        <img
-
-                            src={card.image}
-
-                            alt={card.name}
-
-                            style={styles.image}
-
-                        />
-
-
-                        :
-
-                        <div style={styles.noImage}>
-                            АРТ
                         </div>
 
-                        }
+
+
+
+
+                        <div style={styles.imageBox}>
+
+
+                            {
+
+                            card.image
+
+                            ?
+
+                            <img
+
+                                src={card.image}
+
+                                alt=""
+
+                                style={styles.image}
+
+                            />
+
+                            :
+
+                            "АРТ"
+
+                            }
+
+
+                        </div>
+
+
+
+
+
+
+
+                        <div style={styles.status}>
+
+                            {
+
+                            unit.canAttack
+
+                            ?
+
+                            "⚔️"
+
+                            :
+
+                            "💤"
+
+                            }
+
+                        </div>
+
+
+
+
+
+
+
+                        <div style={styles.stats}>
+
+
+                            <span>
+
+                                ⚔️{stats.attack}
+
+                            </span>
+
+
+                            <span>
+
+                                ❤️{stats.health}
+
+                            </span>
+
+
+                        </div>
+
 
 
                     </div>
-
-
-
-
-
-
-
-
-
-                    <div style={styles.status}>
-
-
-                        {
-                        unit.canAttack
-
-                        ?
-
-                        "⚔️ Готов"
-
-                        :
-
-                        "💤 Ждет"
-
-                        }
-
-
-                    </div>
-
-
-
-
-
-
-
-
-
-                    {
-                    getStatusText(unit)
-
-                    &&
-
-                    <div style={styles.effects}>
-
-                        {
-                            getStatusText(unit)
-                        }
-
-                    </div>
-
-                    }
-
-
-
-
-
-
-
-
-                    <div style={styles.stats}>
-
-
-                        <span>
-                            ⚔️ {stats.attack}
-                        </span>
-
-
-                        <span>
-                            ❤️ {stats.health}
-                        </span>
-
-
-                        <span>
-                            🛡️ {stats.defense || 0}
-                        </span>
-
-
-                    </div>
-
-
-
-
-
-                </div>
-
 
                 );
 
@@ -482,14 +320,15 @@ function Board({
             }
 
 
-
             </div>
+
+
+            }
 
 
         </div>
 
     );
-
 
 }
 
@@ -510,19 +349,23 @@ board:{
     width:"100%",
 
 
-    height:"210px",
+    height:"190px",
 
 
-    background:"#202020",
+    background:
+
+    "linear-gradient(#242424,#111)",
 
 
-    border:"1px solid #444",
+    border:
+
+    "2px solid #555",
 
 
-    borderRadius:"10px",
+    borderRadius:"16px",
 
 
-    padding:"10px",
+    padding:"12px",
 
 
     boxSizing:"border-box",
@@ -547,13 +390,10 @@ cardsArea:{
     justifyContent:"center",
 
 
-    gap:"8px",
+    gap:"12px",
 
 
-    height:"100%",
-
-
-    overflow:"hidden"
+    height:"100%"
 
 
 },
@@ -566,22 +406,16 @@ cardsArea:{
 empty:{
 
 
-    width:"100%",
-
-
     height:"100%",
 
 
     display:"flex",
 
+    justifyContent:"center",
 
     alignItems:"center",
 
-
-    justifyContent:"center",
-
-
-    color:"#555"
+    color:"#666"
 
 
 },
@@ -594,80 +428,35 @@ empty:{
 unit:{
 
 
-    width:"100px",
+    width:"90px",
 
 
-    height:"165px",
+    height:"155px",
 
 
     background:"#292929",
 
 
-    borderRadius:"10px",
+    borderRadius:"12px",
 
 
     padding:"5px",
 
 
-    display:"flex",
+    cursor:"pointer",
 
+
+    display:"flex",
 
     flexDirection:"column",
 
 
-    position:"relative",
+    transition:"0.2s",
 
 
-    boxSizing:"border-box",
+    boxShadow:
 
-
-    cursor:"pointer"
-
-
-},
-
-
-
-
-
-
-cost:{
-
-
-    position:"absolute",
-
-
-    top:"3px",
-
-
-    left:"3px",
-
-
-    width:"22px",
-
-
-    height:"22px",
-
-
-    borderRadius:"50%",
-
-
-    background:"#3478db",
-
-
-    display:"flex",
-
-
-    justifyContent:"center",
-
-
-    alignItems:"center",
-
-
-    fontSize:"11px",
-
-
-    fontWeight:"bold"
+    "0 5px 15px rgba(0,0,0,0.5)"
 
 
 },
@@ -683,13 +472,13 @@ name:{
     textAlign:"center",
 
 
-    fontSize:"11px",
+    fontSize:"10px",
 
 
     fontWeight:"bold",
 
 
-    height:"20px",
+    height:"22px",
 
 
     overflow:"hidden"
@@ -705,14 +494,12 @@ name:{
 imageBox:{
 
 
-    height:"80px",
+    height:"90px",
 
 
-    background:"#111",
+    background:"#000",
 
-
-    borderRadius:"6px",
-
+    borderRadius:"8px",
 
     overflow:"hidden"
 
@@ -743,60 +530,12 @@ image:{
 
 
 
-noImage:{
-
-
-    height:"100%",
-
-
-    display:"flex",
-
-
-    justifyContent:"center",
-
-
-    alignItems:"center",
-
-
-    color:"#555"
-
-
-},
-
-
-
-
-
-
 status:{
 
 
     textAlign:"center",
 
-
-    fontSize:"8px",
-
-
-    color:"#aaa"
-
-
-},
-
-
-
-
-
-
-effects:{
-
-
-    color:"#ffd700",
-
-
-    fontSize:"8px",
-
-
-    textAlign:"center"
+    height:"15px"
 
 
 },
@@ -814,14 +553,11 @@ stats:{
 
     display:"flex",
 
+    justifyContent:"space-around",
 
-    justifyContent:"space-between",
+    fontWeight:"bold",
 
-
-    fontSize:"10px",
-
-
-    fontWeight:"bold"
+    fontSize:"11px"
 
 
 }
