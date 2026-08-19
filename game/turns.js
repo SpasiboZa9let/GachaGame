@@ -5,6 +5,12 @@
     Ходы игроков
     AI
     смена хода
+
+    Изменения:
+    - защита AI от бесконечных циклов
+    - проверка статусов перед атакой
+    - лог действий AI
+    - сохранена совместимость window.*
     ============================
 */
 
@@ -15,8 +21,10 @@
 function preparePlayerTurn(state){
 
 
-
-    if(!state || !state.player){
+    if(
+        !state ||
+        !state.player
+    ){
 
         return state;
 
@@ -26,11 +34,9 @@ function preparePlayerTurn(state){
 
 
 
-
     let maxMana =
 
         state.player.maxMana || 0;
-
 
 
 
@@ -53,11 +59,7 @@ function preparePlayerTurn(state){
         ...state,
 
 
-
         activePlayer:"player",
-
-
-
 
 
 
@@ -69,7 +71,6 @@ function preparePlayerTurn(state){
 
 
             maxMana:maxMana,
-
 
 
             mana:maxMana,
@@ -87,8 +88,25 @@ function preparePlayerTurn(state){
                         ...unit,
 
 
-                        canAttack:true
+                        canAttack:
 
+                            !window.Effects?.hasStatus
+
+                            ?
+
+                            true
+
+                            :
+
+                            !window.Effects.hasStatus(
+                                unit,
+                                "stun"
+                            )
+                            &&
+                            !window.Effects.hasStatus(
+                                unit,
+                                "fear"
+                            )
 
 
                     })
@@ -97,9 +115,7 @@ function preparePlayerTurn(state){
                 )
 
 
-
         }
-
 
 
     };
@@ -118,8 +134,10 @@ function preparePlayerTurn(state){
 function prepareOpponentTurn(state){
 
 
-
-    if(!state || !state.opponent){
+    if(
+        !state ||
+        !state.opponent
+    ){
 
         return state;
 
@@ -129,11 +147,9 @@ function prepareOpponentTurn(state){
 
 
 
-
     let maxMana =
 
         state.opponent.maxMana || 0;
-
 
 
 
@@ -156,11 +172,7 @@ function prepareOpponentTurn(state){
         ...state,
 
 
-
         activePlayer:"opponent",
-
-
-
 
 
 
@@ -172,7 +184,6 @@ function prepareOpponentTurn(state){
 
 
             maxMana:maxMana,
-
 
 
             mana:maxMana,
@@ -190,8 +201,25 @@ function prepareOpponentTurn(state){
                         ...unit,
 
 
-                        canAttack:true
+                        canAttack:
 
+                            !window.Effects?.hasStatus
+
+                            ?
+
+                            true
+
+                            :
+
+                            !window.Effects.hasStatus(
+                                unit,
+                                "stun"
+                            )
+                            &&
+                            !window.Effects.hasStatus(
+                                unit,
+                                "fear"
+                            )
 
 
                     })
@@ -200,9 +228,7 @@ function prepareOpponentTurn(state){
                 )
 
 
-
         }
-
 
 
     };
@@ -231,11 +257,8 @@ function getRandomPlayableCard(state){
 
 
     if(
-
         !opponent ||
-
         !Array.isArray(opponent.hand)
-
     ){
 
         return null;
@@ -249,7 +272,6 @@ function getRandomPlayableCard(state){
 
 
     const getCard =
-
 
         window.Cards?.getCardById
 
@@ -278,13 +300,11 @@ function getRandomPlayableCard(state){
 
             card =>
 
-
                 card &&
 
                 card.cost <= opponent.mana &&
 
                 opponent.board.length < 5
-
 
 
         );
@@ -333,27 +353,27 @@ function getRandomPlayableCard(state){
 function opponentPlayCards(state){
 
 
-
     let newState = state;
 
 
 
+    let actions = 0;
 
 
 
-    while(true){
+    while(actions < 10){
+
+
+        actions++;
+
 
 
 
         const card =
 
-
             getRandomPlayableCard(
-
                 newState
-
             );
-
 
 
 
@@ -363,8 +383,6 @@ function opponentPlayCards(state){
             break;
 
         }
-
-
 
 
 
@@ -380,9 +398,23 @@ function opponentPlayCards(state){
 
 
 
-
         newState =
 
+            window.CardPlay?.playCard
+
+            ?
+
+            window.CardPlay.playCard(
+
+                newState,
+
+                "opponent",
+
+                card.id
+
+            )
+
+            :
 
             window.playCard(
 
@@ -408,9 +440,19 @@ function opponentPlayCards(state){
 
 
 
+
+
+
+        newState.combatLog.push(
+
+            "Василиса сыграла карту: " +
+
+            card.name
+
+        );
+
+
     }
-
-
 
 
 
@@ -431,16 +473,22 @@ function opponentPlayCards(state){
 function opponentAttack(state){
 
 
-
     let newState = state;
 
 
 
+    let attacks = 0;
 
 
 
 
-    while(true){
+
+    while(attacks < 10){
+
+
+        attacks++;
+
+
 
 
 
@@ -453,7 +501,7 @@ function opponentAttack(state){
 
                 unit =>
 
-                unit.canAttack === true
+                    unit.canAttack === true
 
             );
 
@@ -500,8 +548,6 @@ function opponentAttack(state){
 
 
 
-
-
         if(
             newState.player.board.length > 0
         ){
@@ -530,6 +576,7 @@ function opponentAttack(state){
 
 
 
+
             newState =
 
 
@@ -551,16 +598,11 @@ function opponentAttack(state){
 
 
 
-
-
-
-
         else {
 
 
 
             const damage =
-
 
                 attacker.stats?.attack || 0;
 
@@ -596,11 +638,7 @@ function opponentAttack(state){
                         )
 
 
-
                 },
-
-
-
 
 
 
@@ -621,7 +659,6 @@ function opponentAttack(state){
                     " урона."
 
 
-
                 ]
 
 
@@ -638,11 +675,7 @@ function opponentAttack(state){
 
 
 
-
-        newState =
-
-
-        {
+        newState = {
 
 
             ...newState,
@@ -681,13 +714,10 @@ function opponentAttack(state){
                         unit
 
 
-
                     )
 
 
-
             }
-
 
 
         };
@@ -698,8 +728,8 @@ function opponentAttack(state){
 
 
 
-        newState =
 
+        newState =
 
             window.Victory?.checkGameOver
 
@@ -717,8 +747,9 @@ function opponentAttack(state){
 
 
 
-
-        if(newState.gameOver){
+        if(
+            newState.gameOver
+        ){
 
             break;
 
@@ -727,9 +758,6 @@ function opponentAttack(state){
 
 
     }
-
-
-
 
 
 
@@ -761,13 +789,11 @@ function opponentTurn(state){
 
     newState =
 
-
         prepareOpponentTurn(
 
             newState
 
         );
-
 
 
 
@@ -790,7 +816,6 @@ function opponentTurn(state){
 
 
             "Ход Василисы."
-
 
 
         ]
@@ -884,9 +909,7 @@ function endTurn(state){
             "Игрок завершает ход."
 
 
-
         ]
-
 
 
     };
@@ -897,9 +920,7 @@ function endTurn(state){
 
 
 
-
     newState =
-
 
         opponentTurn(
 
@@ -913,8 +934,9 @@ function endTurn(state){
 
 
 
-
-    if(newState.gameOver){
+    if(
+        newState.gameOver
+    ){
 
         return newState;
 
@@ -928,13 +950,11 @@ function endTurn(state){
 
     newState =
 
-
         preparePlayerTurn(
 
             newState
 
         );
-
 
 
 
@@ -956,7 +976,6 @@ function endTurn(state){
 
 
         activePlayer:"player"
-
 
 
     };
@@ -1005,7 +1024,6 @@ opponentTurn;
 
 window.Turns.endTurn =
 endTurn;
-
 
 
 
