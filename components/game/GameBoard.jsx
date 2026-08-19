@@ -305,7 +305,11 @@ onClick={onTestBoard}
 
 
 
-<div style={gameStyles.log}>
+<GameLog
+
+    log={gameState.combatLog}
+
+/>
 
 
 <h4>
