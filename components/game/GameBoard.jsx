@@ -90,6 +90,7 @@ function GameBoard({
 
 
 
+
     return (
 
 
@@ -182,7 +183,7 @@ function GameBoard({
 
 
 
-            <Hand
+            <PlayerHand
 
                 cards={handCards}
 
@@ -232,6 +233,7 @@ function GameBoard({
 
 
 }
+
 
 
 
@@ -297,9 +299,7 @@ const gameStyles = {
 
         cursor:"crosshair",
 
-        filter:"drop-shadow(" +
-        
-        "0 0 15px red)"
+        filter:"drop-shadow(0 0 15px red)"
 
 
     },
