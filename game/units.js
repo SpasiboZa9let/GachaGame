@@ -18,14 +18,14 @@
 
 
 
-
-
 function createCardInstance(id){
 
 
 
     const card =
+
         getCardById(id);
+
 
 
 
@@ -45,33 +45,35 @@ function createCardInstance(id){
     const baseStats = {
 
 
+
         attack:
 
-            card.attack || 0,
+            Number(card.attack) || 0,
 
 
 
         health:
 
-            card.health || 0,
+            Number(card.health) || 0,
 
 
 
         maxHealth:
 
-            card.health || 0,
+            Number(card.health) || 0,
 
 
 
         defense:
 
-            card.defense || 0,
+            Number(card.defense) || 0,
 
 
 
         strength:
 
-            card.strength || 0
+            Number(card.strength) || 0
+
 
 
     };
@@ -84,7 +86,6 @@ function createCardInstance(id){
 
 
     let unit = {
-
 
 
 
@@ -110,6 +111,7 @@ function createCardInstance(id){
 
 
         cardId:id,
+
 
 
 
@@ -148,14 +150,18 @@ function createCardInstance(id){
 
 
 
-        /*
-            Начальные характеристики
-        */
-
         baseStats:{
 
 
-            ...baseStats
+            attack:baseStats.attack,
+
+            health:baseStats.health,
+
+            maxHealth:baseStats.maxHealth,
+
+            defense:baseStats.defense,
+
+            strength:baseStats.strength
 
 
         },
@@ -165,14 +171,20 @@ function createCardInstance(id){
 
 
 
-        /*
-            Текущие характеристики
-        */
+
 
         stats:{
 
 
-            ...baseStats
+            attack:baseStats.attack,
+
+            health:baseStats.health,
+
+            maxHealth:baseStats.maxHealth,
+
+            defense:baseStats.defense,
+
+            strength:baseStats.strength
 
 
         },
@@ -184,18 +196,6 @@ function createCardInstance(id){
 
 
 
-        /*
-            Баффы
-
-            пример:
-
-            {
-                stat:"attack",
-                value:50,
-                source:"Ярость берлоги"
-            }
-
-        */
 
         modifiers:[],
 
@@ -203,30 +203,13 @@ function createCardInstance(id){
 
 
 
-
-
-
-        /*
-            Экипировка
-
-        */
-
         equipment:[],
 
 
 
 
 
-
-
-
-        /*
-            Эффекты карты
-
-        */
-
         effects:
-
 
             card.effects || [],
 
@@ -234,22 +217,15 @@ function createCardInstance(id){
 
 
 
-
-
-
-
-        /*
-            Состояния
-
-            stun
-            fear
-            shield
-
-        */
-
         status:[],
 
 
+
+
+
+        abilities:
+
+            card.abilities || [],
 
 
 
@@ -269,13 +245,6 @@ function createCardInstance(id){
 
 
 
-    /*
-        Пересчет модификаторов
-
-        если система существует
-    */
-
-
     if(
 
         typeof refreshUnitStats === "function"
@@ -283,12 +252,15 @@ function createCardInstance(id){
     ){
 
 
+
         unit =
 
             refreshUnitStats(unit);
 
 
+
     }
+
 
 
 
@@ -308,5 +280,12 @@ function createCardInstance(id){
 
 
 
-window.createCardInstance =
+window.Units =
+
+window.Units || {};
+
+
+
+window.Units.createCardInstance =
+
 createCardInstance;
