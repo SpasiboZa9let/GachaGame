@@ -20,6 +20,7 @@
 <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
 
 
+
 <style>
 
 * {
@@ -79,12 +80,16 @@ button {
 
 
 
+
+
+
 <!-- =====================
-     DATA
+        DATA
 ===================== -->
 
 
-<!-- Карты по редкости -->
+
+<!-- Карты -->
 
 <script
 type="text/babel"
@@ -116,7 +121,10 @@ src="./data/cards/legendary.js">
 </script>
 
 
-<!-- Сборщик карт -->
+
+
+
+<!-- Сборщик всех карт -->
 
 <script
 type="text/babel"
@@ -146,16 +154,35 @@ src="./data/effects.js">
 
 
 
+
+
+
+
 <!-- =====================
-     GAME ENGINE
+        GAME CORE
 ===================== -->
 
 
+
+<!-- вспомогательные -->
+
 <script
 type="text/babel"
-src="./game/combat.js">
+src="./game/utils.js">
 </script>
 
+
+
+<!-- поиск карт -->
+
+<script
+type="text/babel"
+src="./game/cards.js">
+</script>
+
+
+
+<!-- колоды -->
 
 <script
 type="text/babel"
@@ -163,15 +190,99 @@ src="./game/deck.js">
 </script>
 
 
+
+
+
+
+<!-- тестовый режим -->
+
+<script
+type="text/babel"
+src="./game/testMode.js">
+</script>
+
+
+
+
+
+
+<!-- состояние игры -->
+
+<script
+type="text/babel"
+src="./game/state.js">
+</script>
+
+
+
+
+
+
+<!-- создание существ -->
+
+<script
+type="text/babel"
+src="./game/units.js">
+</script>
+
+
+
+
+
+
+<!-- модификаторы -->
+
+<script
+type="text/babel"
+src="./game/modifiers.js">
+</script>
+
+
+
+
+
+
+<!-- эффекты -->
+
 <script
 type="text/babel"
 src="./game/effects.js">
 </script>
 
 
+
+
+
+
+<!-- розыгрыш карт -->
+
 <script
 type="text/babel"
-src="./game/engine.js">
+src="./game/cardPlay.js">
+</script>
+
+
+
+
+
+
+<!-- бой -->
+
+<script
+type="text/babel"
+src="./game/combat.js">
+</script>
+
+
+
+
+
+
+<!-- ходы -->
+
+<script
+type="text/babel"
+src="./game/turnManager.js">
 </script>
 
 
@@ -184,9 +295,38 @@ src="./game/turns.js">
 
 
 
+
+<!-- победа -->
+
+<script
+type="text/babel"
+src="./game/victory.js">
+</script>
+
+
+
+
+
+
+<!-- ядро -->
+
+<script
+type="text/babel"
+src="./game/engine.js">
+</script>
+
+
+
+
+
+
+
+
+
 <!-- =====================
-     COMPONENTS
+        COMPONENTS
 ===================== -->
+
 
 
 <script
@@ -235,8 +375,9 @@ src="./components/Game.jsx">
 
 
 
+
 <!-- =====================
-     APP
+        APP
 ===================== -->
 
 
